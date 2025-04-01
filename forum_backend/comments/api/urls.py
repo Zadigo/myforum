@@ -1,0 +1,35 @@
+from django.urls import re_path
+
+from comments.api import views
+
+app_name = 'comments_api'
+
+urlpatterns = [
+    re_path(
+        r'^(?P<pk>\d+)/bookmark',
+        views.BookmarkComment.as_view(),
+        name='bookamark'
+    ),
+    # re_path(r'^(?P<pk>\d+)/delete', views.delete_view),
+    # re_path(r'^(?P<pk>\d+)/update$', views.update_view),
+
+    re_path(
+        r'^latest$',
+        views.LatestComments.as_view(),
+        name='latest_comments'
+    ),
+    re_path(
+        r'^whats-new',
+        views.whats_new_view
+    ),
+    re_path(
+        r'^(?P<pk>\d+)$',
+        views.GetUpdateDeleteComment.as_view(),
+        name='get_update_delete_comment'
+    ),
+    re_path(
+        r'^create$',
+        views.CreateComment.as_view(),
+        name='create'
+    )
+]

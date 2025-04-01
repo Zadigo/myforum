@@ -1,0 +1,4 @@
+{
+    "vue.server.maxOldSpaceSize": 4096,
+    "vue3snippets.enable-compile-vue-file-on-did-save-code": false
+}

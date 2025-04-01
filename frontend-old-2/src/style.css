@@ -1,0 +1,14 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.card-actions {
+  align-items: center;
+  display: flex;
+  padding: 8px;
+}
+
+.card-actions>.btn {
+  padding: 0 8px;
+}

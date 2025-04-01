@@ -1,0 +1,11 @@
+[
+    {
+        "model": "accounts.MyUser",
+        "fields": {
+            "id": 1,
+            "username": "lucile",
+            "email": "lucile@gmail.com",
+            "password": "touparet"
+        }
+    }
+]

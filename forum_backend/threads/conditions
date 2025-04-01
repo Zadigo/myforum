@@ -1,0 +1,19 @@
+[
+  {
+    "condition_id": "con_enfoienfu2",
+    "operator": "if",
+    "conditions": [
+      {
+        "name": "user",
+        "action": "posts",
+        "operator": "equals",
+        "value": "we are going",
+        "expected": [
+          "post thread",
+          "alert someone"
+        ]
+      }
+    ]
+  }
+
+]
