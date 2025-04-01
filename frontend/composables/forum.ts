@@ -1,5 +1,5 @@
-import type { Forum, Thread } from "~/types"
 import { z } from 'zod'
+import type { Forum, ForumThread } from "~/types"
 import { useSessionStorage } from "@vueuse/core"
 
 const ForumSchema = z.object({
@@ -57,17 +57,8 @@ export function useForumsComposable () {
     }
 }
 
-// const ThreadSchema = z.object({
-//     id: z.number().int().positive()
-// })
-
-// type ValidateThread = z.infer<typeof ThreadSchema>
-
 export function useThreadsComposable () {
-    const { $client } = useNuxtApp()
-    const { handleError } = useErrorHandler()
     const { forumThreads } = storeToRefs(useForums())
-    const route = useRoute()
 
     const categories = computed(() => {
         const result = forumThreads.value.map(thread => {
@@ -77,33 +68,33 @@ export function useThreadsComposable () {
     })
 
 
-    const cachedThreads = useSessionStorage('threads', null, {
-        serializer: {
-            read(raw) {
-                return JSON.parse(raw)
-            },
-            write(value) {
-                return JSON.stringify(value)
-            }
-        }
-    })
+    // const cachedThreads = useSessionStorage('threads', null, {
+    //     serializer: {
+    //         read(raw) {
+    //             return JSON.parse(raw)
+    //         },
+    //         write(value) {
+    //             return JSON.stringify(value)
+    //         }
+    //     }
+    // })
 
-    async function getThreads(id: string, sort = 0) {
-        try {
-            const response = await $client.get<Thread[]>(`/forums/${id}`, { params: { sort } })
-            forumThreads.value = response.data
-            cachedThreads.value = response.data
-        } catch (e) {
-            handleError(e)
-        }
-    }
+    // async function getThreads(id: string, sort = 0) {
+    //     try {
+    //         const response = await $client.get<Thread[]>(`/forums/${id}`, { params: { sort } })
+    //         forumThreads.value = response.data
+    //         cachedThreads.value = response.data
+    //     } catch (e) {
+    //         handleError(e)
+    //     }
+    // }
 
     async function sortThreads (index: number) {
-        await getThreads(route.params.id, index)
+        // await getThreads(route.params.id, index)
     }
 
     return {
-        getThreads,
+        // getThreads,
         sortThreads,
         categories
     }

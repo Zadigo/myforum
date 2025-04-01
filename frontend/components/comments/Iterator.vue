@@ -8,7 +8,7 @@
             {{ comment.title }}
           </span>
 
-          <v-btn v-if="authStore.isAuthenticated" color="dark" variant="text">
+          <v-btn v-if="authStore.isAuthenticated" color="dark" variant="text" rounded>
             <font-awesome icon="ellipsis-vertical" />
 
             <v-menu activator="parent">
@@ -43,7 +43,7 @@
         <div class="mb-4">
           <span class="fw-bold text-muted">#{{ comment.id }}</span> 
           <span class="mx-2">-</span> by <span class="fw-bold">{{ comment.user?.username }}</span> 
-          <span class="text-muted">{{ comment.created_on }}</span>
+          <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
         </div>
         <div v-html="comment.content_html" />
       </div>
@@ -96,7 +96,9 @@
 
 <script setup lang="ts">
 import type { Comment } from '~/types'
-import type { PropType } from 'vue';
+import type { PropType } from 'vue'
+
+
 
 const emit = defineEmits({
   reply (_comment: Comment) {
@@ -118,6 +120,7 @@ defineProps({
   }
 })
 
+const { $dayjs } = useNuxtApp()
 const authStore = useAuthentication()
 const { handleError } = useErrorHandler()
 

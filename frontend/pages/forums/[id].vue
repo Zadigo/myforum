@@ -35,7 +35,8 @@
         </div>
 
         <!-- Pagination -->
-        <BasePagination :pagination="currentPage" />
+        <!-- <BasePagination :pagination="currentPage" /> -->
+        Pagination
       </div>
 
       <!-- Threads -->
@@ -59,5 +60,5 @@ const AsyncThreadsIterator = defineAsyncComponent({
 
 const { sortThreads, categories } = useThreadsComposable()
 
-const currentPage = ref(1)
+// const currentPage = ref(1)
 </script>

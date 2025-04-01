@@ -18,14 +18,16 @@
           <div class="row">
             <div class="col-12 d-flex justify-content-between mb-3">
               <span>Left</span>
-              <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" />
+              Pagination
+              <!-- <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" /> -->
             </div>
 
             <!-- Comments -->
             <CommentsIterator :comments="threadComments" @reply="handleReply" />
 
             <div class="col-12 d-flex justify-content-end mt-3">
-              <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" />
+            Pagination
+              <!-- <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" /> -->
             </div>
           </div>
 
@@ -47,31 +49,19 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment, Thread, ThreadApiResponse } from '~/types';
-import { useSessionStorage } from '@vueuse/core';
-
+import type { Comment } from '~/types';
 
 const store = useForums()
 const { threadComments, currentThread } = storeToRefs(store)
-const { handleError } = useErrorHandler()
-const { $client } = useNuxtApp()
+
+
+useHead({
+  title: currentThread.value?.title || 'Thread name'
+})
+
 const { id } = useRoute().params
 
-const cachedResponse = ref<ThreadApiResponse>()
-// const showCreateCommentForm = ref(false)
-const currentPagination = ref(1)
 const replyingToComment = ref<Comment>()
-
-const threads = useSessionStorage<Thread[]>('threads', null, {
-  serializer: {
-    read (raw) {
-      return JSON.parse(raw)
-    },
-    write (value) {
-      return JSON.stringify(value)
-    }
-  }
-})
 
 provide('replyingToComment', replyingToComment)
 
@@ -84,17 +74,24 @@ function handleEditorContent(data: { text: string }) {
   console.log(data)
 }
 
-async function getComments(page = 1) {
-  try {
-    if (currentThread.value) {  
-      const response = await $client.get<ThreadApiResponse>(`threads/${currentThread.value.id}/comments`, { params: { page } })
-      threadComments.value = response.data.results
-      cachedResponse.value = response.data
-    }
-  } catch (e) {
-    handleError(e)
+// async function getComments(page = 1) {
+//   try {
+//     if (currentThread.value) {  
+//       const response = await $client.get<ThreadApiResponse>(`threads/${currentThread.value.id}/comments`, { params: { page } })
+//       threadComments.value = response.data.results
+//       cachedResponse.value = response.data
+//     }
+//   } catch (e) {
+//     handleError(e)
+//   }
+// }
+
+useFetch(`/api/threads/${id}`, {
+  transform(data) {
+    threadComments.value = data
+    return data
   }
-}
+})
 
 async function handlePagination (page: number) {
   await getComments(page)
@@ -113,8 +110,6 @@ function handleReply(comment: Comment) {
 }
 
 onBeforeMount(async () => {
-  store.forumThreads = threads.value
   store.setCurrentThread(id)
-  await getComments()
 })
 </script>

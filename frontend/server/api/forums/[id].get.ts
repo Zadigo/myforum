@@ -1,7 +1,7 @@
 // import { useAxiosClient } from "~/composables/django_client"
-import type { ForumThread } from "~/types"
+import type { ForumThread } from '~/types'
 
-export default defineEventHandler(async event => {
+export default defineCachedEventHandler(async _event => {
     // const { sort } = getQuery(event)
     // const id = getRouterParam(event, 'id')
     // const { client } = useAxiosClient()
@@ -11,6 +11,7 @@ export default defineEventHandler(async event => {
     //     }
     // })
     // return response.data
+
     const data: ForumThread[] = [
         {
             active: true,
@@ -66,4 +67,10 @@ export default defineEventHandler(async event => {
         }
     ]
     return data
+}, {
+    base: 'fs',
+    maxAge: 1 * 60,
+    getKey() {
+        return 'forums'
+    }
 })

@@ -1,14 +1,14 @@
 import { defineStore } from "pinia";
-import type { Forum, Comment, Thread } from "~/types/forums";
+import type { Forum, Comment, ForumThread } from "~/types/forums";
 
 export default defineStore('forums', () => {
     const forumsList = ref<Forum[]>([])
-    const forumThreads = ref<Thread[]>([])
+    const forumThreads = ref<ForumThread[]>([])
     const threadComments = ref<Comment[]>([])
     const openSearchModal = ref(false)
     
     const currentForum = ref<Forum | undefined>()
-    const currentThread = ref<Thread | undefined>()
+    const currentThread = ref<ForumThread | undefined>()
     const showCreateCommentForm = ref(false)
 
     const forumsByCategory = computed((): Record<string, Forum[]> => {
