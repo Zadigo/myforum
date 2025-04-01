@@ -95,6 +95,7 @@ const requestData = ref<RequestData>({
   include_subforums: false
 })
 
+const { $dayjs } = useNuxtApp()
 const { history, last } = useRefHistory(search)
 const searchHistory = useSessionStorage<string[]>('searchHistory', [], {
   serializer: {
@@ -106,8 +107,6 @@ const searchHistory = useSessionStorage<string[]>('searchHistory', [], {
     }
   }
 })
-const { $dayjs } = useNuxtApp()
-
 const currentDate = $dayjs().format('YYYY-MM-DD')
 
 const route = useRoute()

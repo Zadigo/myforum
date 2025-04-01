@@ -2,10 +2,10 @@
   <!-- Latest posts -->
   <section id="latest-posts">
     <div class="col-12 d-flex justify-content-between">
-      <h3>Latest posts</h3>
+      <h3>{{ $t('Latest posts') }}</h3>
   
       <NuxtLink to="/whats-new" class="lh-lg">
-        All new posts
+        {{ $t('All new posts') }}
       </NuxtLink>
     </div>
   

@@ -27,10 +27,10 @@
 </template>
 
 <script setup lang="ts">
+const { $dayjs } = useNuxtApp()
 const { id } = useRoute().params
 const forumStore = useForums()
 const { forumThreads } = storeToRefs(forumStore)
-const { $dayjs } = useNuxtApp()
 
 useFetch(`/api/forums/${id}`, {
   transform(data) {
@@ -40,6 +40,6 @@ useFetch(`/api/forums/${id}`, {
 })
 
 function formatData(value: string) {
-  return $dayjs(value).format('YYYY MM DD')
+  return $dayjs(value).fromNow()
 }
 </script>

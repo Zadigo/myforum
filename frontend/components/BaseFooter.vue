@@ -10,7 +10,7 @@
 
     <!-- Copyright -->
     <div class="text-center text-light p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      © {{ $dayjs().year() }} Copyright:
+      © {{ currentYear }} Copyright:
       <NuxtLink to="/" class="text-light">
         My forum
       </NuxtLink>
@@ -20,4 +20,5 @@
 
 <script setup lang="ts">
 const { $dayjs } = useNuxtApp()
+const currentYear = ref<number>($dayjs().year())
 </script>

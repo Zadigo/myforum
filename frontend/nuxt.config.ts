@@ -39,7 +39,9 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/image',
     '@nuxtjs/i18n',
-    '@artmizu/nuxt-prometheus',
+    '@nuxt/icon',
+    // '@artmizu/nuxt-prometheus',
+    '@nuxtjs/tailwindcss',
     'nuxt-gtag',
     'nuxt-clarity-analytics',
     'nuxt-openapi-docs-module',
@@ -59,6 +61,7 @@ export default defineNuxtConfig({
   },
   css: [
     '@/assets/style.scss',
+    '~/assets/css/style.css',
     '~/node_modules/bootstrap/dist/css/bootstrap.min.css',
     '~/node_modules/mdb-ui-kit/css/mdb.min.css',
     '~/node_modules/animate.css/animate.min.css'

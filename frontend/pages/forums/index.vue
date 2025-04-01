@@ -8,7 +8,7 @@
         <!-- Forums -->
         <div class="col-12 my-3">
           <Suspense>
-            <AsyncForumsDetailCard />
+            <AsyncIterationBlock />
 
             <template #fallback>
               Loading...
@@ -19,7 +19,7 @@
         <!-- Latest Comments -->
         <div class="col-12">
           <Suspense>
-            <AsyncForumLatest />
+            <AsyncForumLatestBlock />
 
             <template #fallback>
               Loading...
@@ -31,11 +31,15 @@
 </template>
 
 <script setup lang="ts">
-const AsyncForumsDetailCard = defineAsyncComponent({
-  loader: async () => import('~/components/forums/DetailCard.vue')
+useHead({
+  title: 'Forums'
 })
 
-const AsyncForumLatest = defineAsyncComponent({
-  loader: async () => import('~/components/forums/Latest.vue')
+const AsyncIterationBlock = defineAsyncComponent({
+  loader: async () => import('~/components/forums/IterationBlock.vue')
+})
+
+const AsyncForumLatestBlock = defineAsyncComponent({
+  loader: async () => import('~/components/forums/LatestBlock.vue')
 })
 </script>

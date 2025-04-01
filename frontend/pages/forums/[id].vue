@@ -40,9 +40,7 @@
 
       <!-- Threads -->
       <Suspense>
-        <template #default>
-          <AsyncThreadsList />
-        </template>
+        <AsyncThreadsIterator />
 
         <template #fallback>
           Loading...
@@ -53,24 +51,12 @@
 </template>
 
 <script setup lang="ts">
-const sortMethods = [
-  {
-    name: 'Sort alphabetically A-Z'
-  },
-  {
-    name: 'Sort alphabetically Z-A'
-  },
-  {
-    name: 'Most recent'
-  },
-  {
-    name: 'Number of comments'
-  }
-]
+import { sortMethods } from '~/data'
 
-const AsyncThreadsList = defineAsyncComponent({
+const AsyncThreadsIterator = defineAsyncComponent({
   loader: async () => import('~/components/threads/Iterator.vue')
 })
+
 const { sortThreads, categories } = useThreadsComposable()
 
 const currentPage = ref(1)

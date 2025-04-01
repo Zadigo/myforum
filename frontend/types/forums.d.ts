@@ -12,7 +12,7 @@ export interface Forum {
     created_on: string
 }
 
-export interface Thread {
+export interface ForumThread {
     id: number
     forum: Forum
     user: User

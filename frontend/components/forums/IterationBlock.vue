@@ -9,7 +9,7 @@
         <div class="card-body">
           <NuxtLink :to="`/forums/${forum.id}`" class="text-dark">
             <div class="card-body">
-              <h3 class="card-title">
+              <h3 :aria-label="forum.title" class="card-title">
                 {{ forum.title }}
               </h3>
 
@@ -18,7 +18,7 @@
               <div class="card-info">
                 <span class="badge bg-info p-2">{{ forum.number_of_threads }} <font-awesome icon="users" /></span>
                 <span class="badge bg-info p-2 ms-2">200000 <font-awesome icon="eye" /></span>
-                <span class="badge bg-info p-2 ms-2">{{ forum.created_on }}</span>
+                <span class="badge bg-info p-2 ms-2">{{ $dayjs(forum.created_on).fromNow() }}</span>
               </div>
             </div>
           </NuxtLink>
@@ -29,11 +29,6 @@
 </template>
 
 <script setup lang="ts">
-// const { getForums } = useForumsComposable()
-// const { forumCategories, forumsByCategory } = storeToRefs(useForums())
-
-// onBeforeMount(getForums)
-
 const { forumsList, forumCategories, forumsByCategory } = storeToRefs(useForums())
 
 useFetch('/api/forums', {
