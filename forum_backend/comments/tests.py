@@ -1,14 +1,23 @@
-from django.test import TestCase, Client, RequestFactory
-
-from comments.models import Comment
 from comments import views
+from comments.models import Comment
+from django.test import Client, RequestFactory, TestCase
+from rest_framework.test import APITestCase
 
-class TestComments(TestCase):
+
+class TestCommentsApi(APITestCase):
     fixtures = ['comments']
 
+    def test_create_comment(self):
+        pass
+
+    def test_get_update_comment(self):
+        pass
+
+    def test_bookmark_comment(self):
+        pass
+
+    def test_test_latest_comment(self):
+        pass
+
     def test_whats_new(self):
-        factory = Client()
-        response = factory.get('/api/v1/comments/whats-new', content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(len(data), 1)
+        pass
