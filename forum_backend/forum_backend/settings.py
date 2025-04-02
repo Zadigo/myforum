@@ -295,31 +295,23 @@ CKEDITOR_5_CONFIGS = {
 # Celery
 # https://docs.celeryq.dev/en/stable/
 
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+
+REDIS_USER = os.getenv('REDIS_USER')
+
 REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 
-if not DEBUG:
-    # Use Redis as backend for caching instead of
-    # the file system caching that we use for debugging
+REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379'
 
-    REDIS_URL = f'redis://:{REDIS_PASSWORD}@redis:6379'
+RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'guest')
 
-    RABBITMQ_HOST = os.getenv('RABBITMQ_HOST')
+RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER', 'guest')
 
-    RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER')
+RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS')
 
-    RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS')
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:5672'
 
-    CELERY_BROKER_URL = 'amqp://{user}:{password}@rabbitmq:5672'.format(
-        user=RABBITMQ_USER,
-        password=RABBITMQ_PASSWORD
-    )
-
-    CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@redis:6379'
-else:
-    CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
-
-    CELERY_RESULT_BACKEND = 'rpc://'
-
+CELERY_RESULT_BACKEND = REDIS_URL
 
 CELERY_ACCEPT_CONTENT = ['json']
 
@@ -334,22 +326,20 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Caching
 
-if DEBUG:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-            'LOCATION': BASE_DIR / 'cache'
-        }
-    }
-else:
-    CACHES = {
+CACHES = {
+    'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': f'redis://:{REDIS_PASSWORD}@redis:6379',
         'OPTIONS': {
             'CLIENT_CLASS': "django_redis.client.DefaultClient"
         },
         'KEY_PREFIX': 'ecommerce'
+    },
+    'file': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / 'cache'
     }
+}
 
 
 # HTTPS

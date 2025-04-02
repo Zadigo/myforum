@@ -3,8 +3,8 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 from comments.models import Comment
-from threads.models import SubThread
 from django.utils import timezone
+from threads.models import SubThread
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'forum_backend.settings')
 
@@ -69,28 +69,46 @@ app.conf.beat_schedule = {
 
 @app.task(queue='statistics', ignore_result=True)
 def gather_statistics():
+    """Gather global statistics for the forum
+    and eventually publish them to an endpoint"""
     return NotImplemented
 
 
 @app.task(queue='moderation', ignore_result=True)
 def unban_users():
+    """List the users that were scheduled to be
+    banned and deactivate their account"""
     return NotImplemented
 
 
 @app.task(queue='moderation', ignore_result=True)
 def ban_users():
+    """List the users that were scheduled to be
+    unbanned and deactivate their account"""
     return NotImplemented
 
 
 @app.task(queue='publication')
 def publish_scheduled_comments():
-    comments = Comment.objects.filter(pulish_on_isnone=False, published=False)
-    if comments.exists():
-        current_date = timezone.now()
-        qs = comments.filter(publish_on=current_date)
-        qs.update(published=True)
+    """List the comments that are scheduled to be publised
+    and activate their status"""
+    # comments = Comment.objects.filter(pulish_on_isnone=False, published=False)
+    # if comments.exists():
+    #     current_date = timezone.now()
+    #     qs = comments.filter(publish_on=current_date)
+    #     qs.update(published=True)
+    pass
 
 
 @app.task(queue='publication')
 def publish_scheduled_threads():
+    """List the threads that are scheduled to be publised
+    and activate their status"""
     return NotImplemented
+
+
+@app.task(queue='polls')
+def close_polls():
+    """List the polls that are scheduled to be closed
+    and deactivate their status"""
+    pass
