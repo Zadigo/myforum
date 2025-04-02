@@ -4,7 +4,7 @@
 
     <!-- Header -->
     <component  :is="pageHeader" v-if="pageHeader" />
-
+    
     <div class="container">
       <div class="row my-5">
         <div class="col-sm-12 col-md-8 offset-md-1" role="main">
@@ -25,16 +25,19 @@
 </template>
 
 <script setup lang="ts">
-const HeadersForum = resolveComponent('HeadersForum')
-const HeadersThread = resolveComponent('HeadersThread')
+import HeadersForum from '~/components/headers/Forum.vue'
+import HeadersThread from '~/components/headers/Thread.vue'
+
+const headersForum = markRaw(HeadersForum)
+const headersThread = markRaw(HeadersThread)
 
 const route = useRoute()
 
 const pageHeader = computed(() => {
-  if (route.name === 'forums-id') {
-    return HeadersForum
-  } else if (route.name === 'threads-id') {
-    return HeadersThread
+  if (route.name.includes('threads-id__')) {
+    return headersThread
+  } else if (route.name.includes('forums-id__')) {
+    return headersForum
   } else {
     return null
   }

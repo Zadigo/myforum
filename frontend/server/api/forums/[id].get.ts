@@ -17,7 +17,7 @@ export default defineCachedEventHandler(async _event => {
             active: true,
             category: 'General',
             created_on: '2025-1-1',
-            description: 'Some forum description',
+            description: 'Some thread description',
             forum: {
                 active: true,
                 admin: false,

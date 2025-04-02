@@ -1,6 +1,7 @@
 <template>
   <section id="comments">
-    <Transition enter-to-class="animate__animated animate__zoomIn" mode="out-in">
+    <!-- enter-to-class="animate__animated animate__zoomIn" -->
+    <Transition mode="out-in">
       <!-- Editor -->
       <CommentsForm v-if="store.showCreateCommentForm" @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
 
@@ -16,19 +17,19 @@
 
         <div class="col-12">
           <div class="row">
-            <div class="col-12 d-flex justify-content-between mb-3">
+            <!-- <div class="col-12 d-flex justify-content-between mb-3">
               <span>Left</span>
               Pagination
-              <!-- <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" /> -->
-            </div>
+              <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" />
+            </div> -->
 
             <!-- Comments -->
-            <CommentsIterator :comments="threadComments" @reply="handleReply" />
+            <CommentsWrapper :comments="threadComments" @reply="handleReply" />
 
-            <div class="col-12 d-flex justify-content-end mt-3">
-            Pagination
-              <!-- <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" /> -->
-            </div>
+            <!-- <div class="col-12 d-flex justify-content-end mt-3">
+              Pagination
+              <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" />
+            </div> -->
           </div>
 
           <div class="row">
@@ -94,11 +95,11 @@ useFetch(`/api/threads/${id}`, {
 })
 
 async function handlePagination (page: number) {
-  await getComments(page)
+  // await getComments(page)
 }
 
 async function handleCommentCreated () {
-  await getComments()
+  // await getComments()
   store.showCreateCommentForm = false
 }
 
@@ -110,6 +111,6 @@ function handleReply(comment: Comment) {
 }
 
 onBeforeMount(async () => {
-  store.setCurrentThread(id)
+  // store.setCurrentThread(id)
 })
 </script>

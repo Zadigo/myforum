@@ -1,7 +1,7 @@
 <template>
   <section id="create-thread" class="my-5">
     <div class="container">
-      <div class="col-sm-12 col-md-8 offset-md-2">
+      <div class="col-sm-12 col-md-10 offset-md-2">
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="row">
@@ -203,6 +203,10 @@ const requestData = ref<RequestData>({
   is_draft: false,
   add_poll: false,
   poll: null
+})
+
+useHead({
+  title: 'Create a new thread'
 })
 
 const showSchedulingModal = ref(false)

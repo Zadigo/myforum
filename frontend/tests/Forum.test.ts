@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { config, mount } from "@vue/test-utils";
 
-import ForumPage from '~/pages/forums/index.vue';
+import ForumPage from '~/pages/forums/[id]/[id].vue';
 
 config.global.mocks = {}
 

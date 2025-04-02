@@ -41,7 +41,7 @@
 
       <!-- Threads -->
       <Suspense>
-        <AsyncThreadsIterator />
+        <AsyncThreadsIterator @load-current-forum="handleLoadForumInfo" />
 
         <template #fallback>
           Loading...
@@ -58,7 +58,18 @@ const AsyncThreadsIterator = defineAsyncComponent({
   loader: async () => import('~/components/threads/Iterator.vue')
 })
 
+const { id } = useRoute().params
+const forumStore = useForums()
+const { currentForum } = storeToRefs(forumStore)
 const { sortThreads, categories } = useThreadsComposable()
 
-// const currentPage = ref(1)
+
+const { data, execute } = useFetch(`/api/forums/${id}/infos`, {
+  immediate: false
+})
+
+async function handleLoadForumInfo() {
+  execute()
+  currentForum.value = data.value
+}
 </script>

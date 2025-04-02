@@ -1,5 +1,5 @@
 <template>
-  <BasePageHeader>
+  <BasePageHeader class="bg-red-100">
     <template #title>
       {{ forumStore.currentThread?.title }}
     </template>
@@ -17,20 +17,20 @@
     </template>
 
     <template #actions>
-      <div class="btn-group">
-        <button type="button" class="btn btn-lg btn-info" @click="emit('jump-to-latest')">
+      <div class="btn-group shadow-none">
+        <button type="button" class="btn btn-lg btn-info btn-sm" @click="emit('jump-to-latest')">
           Jump to latest
         </button>
         
-        <button type="button" class="btn btn-lg btn-info" @click="emit('follow')">
+        <button type="button" class="btn btn-lg btn-info btn-sm" @click="emit('follow')">
           Follow thread
         </button>
         
-        <button type="button" class="btn btn-lg btn-danger" @click="emit('delete')">
+        <button type="button" class="btn btn-lg btn-danger btn-sm" @click="emit('delete')">
           Delete
         </button>
         
-        <button type="button" class="btn btn-lg btn-primary" @click="forumStore.showCreateCommentForm=true">
+        <button type="button" class="btn btn-lg btn-primary btn-sm" @click="forumStore.showCreateCommentForm=true">
           New comment
         </button>
       </div>
@@ -40,8 +40,9 @@
 
 <script setup lang="ts">
 import { useSessionStorage } from '@vueuse/core';
-import type { Forum, Thread } from '~/types';
+import type { Forum, ForumThread } from '~/types';
 
+const { id } = useRoute().params
 const forumStore = useForums()
 const route = useRoute()
 
@@ -56,7 +57,7 @@ const cachedForums = useSessionStorage<Forum[]>('forums', null, {
   }
 })
 
-const cachedThreads = useSessionStorage<Thread[]>('threads', null, {
+const cachedThreads = useSessionStorage<ForumThread[]>('threads', null, {
   serializer: {
     read (raw) {
       return JSON.parse(raw)
@@ -84,11 +85,11 @@ const emit = defineEmits({
 
 onBeforeMount(() => {
   if (cachedForums.value) {
-    forumStore.currentForum = cachedForums.value.find(forum => forum.id === parseInt(route.params.id))
+    forumStore.currentForum = cachedForums.value.find(forum => forum.id === parseInt(id))
   }
 
   if (cachedThreads.value) {
-    forumStore.currentThread = cachedThreads.value.find(thread => thread.id === parseInt(route.params.id))
+    forumStore.currentThread = cachedThreads.value.find(thread => thread.id === parseInt(id))
   }
 })
 

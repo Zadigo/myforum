@@ -1,5 +1,5 @@
 <template>
-  <header ref="pageHeaderEl" class="page-header mb-5 bg-light border-bottom">
+  <header ref="pageHeaderEl" class="page-header mb-5">
     <div class="container">
       <div class="row p-4 align-items-center">
         <div class="col-11 p-3 offset-1">
@@ -28,4 +28,5 @@
 </template>
 
 <script setup lang="ts">
+const pageHeaderEl = ref<HTMLElement>()
 </script>

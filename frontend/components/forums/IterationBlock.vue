@@ -29,10 +29,22 @@
 </template>
 
 <script setup lang="ts">
+import type { Forum } from '~/types'
 const { forumsList, forumCategories, forumsByCategory } = storeToRefs(useForums())
 
-useFetch('/api/forums', {
-  transform(data: Forum) {
+const emit = defineEmits({
+  'load-current-forum'() {
+    return true
+  }
+})
+
+const { status } = useFetch('/api/forums', {
+  onResponse() {
+    // Get the actual forum information from the
+    // database once the load is complete
+    emit('load-current-forum')
+  },
+  transform(data: Forum[]) {
     forumsList.value = data
     return data
   }
