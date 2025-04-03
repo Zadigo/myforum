@@ -16,21 +16,28 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types/forums';
+import type { Comment } from '~/types';
 
 const { $client } = useNuxtApp()
 const { handleError } = useErrorHandler()
 
 const comments = ref<Comment[]>([])
 
-async function getLatestComments () {
-  try {
-    const response = await $client.get<Comment>('/comments/latest')
-    comments.value = response.data
-  } catch (e) {
-    handleError(e)
-  }
-}
+// async function getLatestComments () {
+//   try {
+//     const response = await $client.get<Comment>('/comments/latest')
+//     comments.value = response.data
+//   } catch (e) {
+//     handleError(e)
+//   }
+// }
 
-onBeforeMount(getLatestComments)
+// onBeforeMount(getLatestComments)
+
+useFetch(`/api/comments/latest`, {
+  transform(data: Comment[]) {
+    comments.value = data
+    return data
+  }
+})
 </script>

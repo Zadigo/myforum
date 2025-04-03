@@ -71,6 +71,6 @@ export default defineCachedEventHandler(async _event => {
     base: 'fs',
     maxAge: 1 * 60,
     getKey() {
-        return 'forums'
+        return 'forums-threads'
     }
 })

@@ -13,7 +13,7 @@
       <li v-if="currentForum" class="breadcrumb-item active" aria-current="page">
         {{ currentForum.title }}
       </li>
-
+      
       <li v-else class="breadcrumb-item active" aria-current="page">
         Loading...
       </li>

@@ -1,73 +1,63 @@
 <template>
   <div id="pagination" class="d-flex gap-1">
-    <v-btn variant="tonal" :disabled="!canPaginate" @click="emit('paginate', 1)">First</v-btn>
-    <v-btn variant="tonal" :disabled="!canPaginate" @click="paginateLeft">Left</v-btn>
-    <v-btn variant="tonal" :disabled="!canPaginate" @click="paginateRight">Right</v-btn>
-    <v-btn variant="tonal" :disabled="!canPaginate" @click="emit('paginate', cachedResponse?.pages || 1)">Last</v-btn>
+    <v-btn variant="tonal" :disabled="!canPaginate" @click="paginateTo(0, callbackFunction)">
+      <Icon name="fa-solid:angle-double-left" />
+    </v-btn>
+    <v-btn variant="tonal" :disabled="!canPaginatePrevious" @click="paginatPrevious(callbackFunction)">
+      <Icon name="fa-solid:angle-left" />
+    </v-btn>
+    <v-btn variant="tonal" :disabled="!canPaginateNext" @click="paginateNext(callbackFunction)">
+      <Icon name="fa-solid:angle-right" />
+    </v-btn>
+    <v-btn variant="tonal" :disabled="!canPaginate" @click="paginateTo(itemsCount, callbackFunction)">
+      <Icon name="fa-solid:angle-double-right" />
+    </v-btn>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
-import type { ThreadApiResponse } from '~/types';
-
-const { builLimitOffset } = useDjangoUtilies()
-
 const props = defineProps({
-  cachedResponse: {
-    type: Object as PropType<ThreadApiResponse>,
-    required: true
-  },
-  pagination: {
+  modelValue: {
     type: Number,
     required: true
+  },
+  previousUrl: {
+    type: [String, null],
+    required: true
+  },
+  nextUrl: {
+    type: [String, null],
+    required: true
+  },
+  itemsCount: {
+    type: Number,
+    default: 30
   }
 })
 
 const emit = defineEmits({
-  paginate(_value: number) {
+  'update:modelValue'(_page: number) {
+    return true
+  },
+  'paginate'() {
     return true
   }
 })
 
-const limits = computed(() => {
-  if (props.cachedResponse) {
-    return builLimitOffset(props.cachedResponse.next)
-  } else {
-    return null
-  }
-})
+const { canPaginate, paginateTo, paginatPrevious, paginateNext, nextPaginationUrl, previousPaginationUrl, canPaginateNext, canPaginatePrevious } = usePagination()
 
-const currentPagination = computed({
-  get: () => props.pagination,
+const internalValue = computed({
+  get: () => props.modelValue,
   set: (value) => {
-    emit('paginate', value)
+    emit('update:modelValue', value)
+    emit('paginate')
   }
 })
 
-const canPaginate = computed(() => {
-  if (props.cachedResponse) {
-    return props.cachedResponse.pages > 1
-  } else {
-    return false
-  }
-})
+nextPaginationUrl.value = props.nextUrl
+previousPaginationUrl.value = props.previousUrl
 
-function paginateLeft () {
-  const result = props.pagination - 1
-  if (result < 0) {
-    currentPagination.value = props.cachedResponse.pages
-  } else {
-    currentPagination.value = result
-  }
-}
-
-function paginateRight () {
-  const result = currentPagination.value + 1
-  if (result > props.cachedResponse.pages) {
-    currentPagination.value = 1
-  } else {
-    currentPagination.value = currentPagination.value + 1
-  }
+function callbackFunction(page: number) {
+  internalValue.value = page
 }
 </script>

@@ -36,7 +36,7 @@
 
         <!-- Pagination -->
         <!-- <BasePagination :pagination="currentPage" /> -->
-        Pagination
+        Pagination Forums
       </div>
 
       <!-- Threads -->
@@ -64,12 +64,16 @@ const { currentForum } = storeToRefs(forumStore)
 const { sortThreads, categories } = useThreadsComposable()
 
 
-const { data, execute } = useFetch(`/api/forums/${id}/infos`, {
-  immediate: false
+const { data, execute } = useFetch(`/api/forums/${id}`, {
+  immediate: false,
+  transform(data) {
+    currentForum.value = data
+    return data
+  }
 })
 
 async function handleLoadForumInfo() {
   execute()
-  currentForum.value = data.value
+  console.log('forum detail')
 }
 </script>

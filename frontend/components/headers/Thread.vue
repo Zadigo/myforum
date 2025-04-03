@@ -7,7 +7,7 @@
     <template #breadcrumbs>
       <li class="breadcrumb-item">
         <NuxtLink to="/forums/1">
-          {{ forumStore.currentForum?.title }}
+          {{ forumStore.currentThread?.forum.title }}
         </NuxtLink>
       </li>
 

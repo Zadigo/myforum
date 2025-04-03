@@ -17,7 +17,7 @@
             <div class="card-info">
               <span class="badge bg-light text-dark p-2"><span class="mdi mdi-comment ms-2" /> {{ thread.number_of_comments }}</span>
               <span class="badge bg-light text-dark p-2 ms-2"><span class="mdi mdi-calendar ms-2" /> {{ formatData(thread.created_on) }}</span>
-              <span class="badge bg-light text-dark p-2 ms-2">{{ formatData(thread.latest_comment.created_on) }}</span>
+              <!-- <span class="badge bg-light text-dark p-2 ms-2">{{ formatData(thread.latest_comment.created_on) }}</span> -->
             </div>
           </div>
         </div>
@@ -32,7 +32,16 @@ const { id } = useRoute().params
 const forumStore = useForums()
 const { forumThreads } = storeToRefs(forumStore)
 
-useFetch(`/api/forums/${id}`, {
+const emit = defineEmits({
+  'load-current-forum' () {
+    return true
+  }
+})
+
+useFetch(`/api/forums/${id}/threads`, {
+  onResponse() {
+    emit('load-current-forum')
+  },
   transform(data) {
     forumThreads.value = data
     return data

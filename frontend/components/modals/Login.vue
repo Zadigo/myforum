@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="authStore.openLoginModal" transition="dialog-top-transition" width="300" @close="authStore.openLoginModal=false">
+  <v-dialog v-model="authStore.openLoginModal" width="400" @close="authStore.openLoginModal=false">
     <v-card>
       <v-card-text>
         <v-form @submit.prevent>
-          <v-text-field v-model="username" type="text" autocomplete="username" variant="solo-filled" placeholder="Username" flat />
+          <v-text-field v-model="username" type="username" autocomplete="username" variant="solo-filled" placeholder="Username" flat />
           <v-text-field v-model="password" type="password" autocomplete="current-password" variant="solo-filled" placeholder="Password" flat />
           
           <v-btn variant="tonal" rounded @click="handleLogin">
@@ -16,9 +16,11 @@
           <v-text-field v-model="password" type="password" autocomplete="new-password" variant="solo-filled" placeholder="Password 1" flat />
           <v-text-field v-model="password" type="password" autocomplete="new-password" variant="solo-filled" placeholder="Password 2" flat />
           
-          <v-btn variant="tonal" rounded @click="handleSignup">
-            Signup
-          </v-btn>          
+          <div class="flex justify-end">
+            <v-btn variant="tonal" rounded @click="handleSignup">
+              Signup
+            </v-btn>          
+          </div>
         </v-form>
       </v-card-text>
     </v-card>

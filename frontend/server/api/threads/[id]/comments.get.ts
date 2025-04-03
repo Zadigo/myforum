@@ -17,7 +17,7 @@ export default defineCachedEventHandler(async _event => {
             title: 'Some title',
             user: {
                 id: 1,
-                email: 'user@gmail.com', 
+                email: 'user@gmail.com',
                 username: 'some-user',
                 userprofile: {
                     blocked_users: 'user-1',
@@ -56,6 +56,6 @@ export default defineCachedEventHandler(async _event => {
     base: 'fs',
     maxAge: 1 * 60,
     getKey() {
-        return 'comments'
+        return 'thread-comments'
     },
 })

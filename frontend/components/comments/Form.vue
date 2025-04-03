@@ -73,6 +73,9 @@ const replyingToComment = inject<Comment>('replyingToComment')
 const { handleError } = useErrorHandler()
 const { $client } = useNuxtApp()
 
+/**
+ * 
+ */
 async function createNewPost () {
   try {
     $client.post('/comments/create', requestData.value)
@@ -82,6 +85,9 @@ async function createNewPost () {
   }
 }
 
+/**
+ * 
+ */
 async function saveDraft () {}
 
 function handleEditorContent (data: EditorData) {

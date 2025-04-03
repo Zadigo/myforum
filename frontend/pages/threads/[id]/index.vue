@@ -7,36 +7,36 @@
 
       <div v-else class="row">
         <!-- Poll -->
-        <!-- <suspense>
-          <async-poll-section class="mb-5" />
-        </suspense> -->
+        <Suspense>
+          <AsyncPollSection class="mb-3" />
 
-        <!-- <keep-alive>
-          <async-poll-section-vue class="mb-5" />
-        </keep-alive> -->
-
+          <template #loading>
+            Loading...
+          </template>
+        </Suspense>
+        
         <div class="col-12">
           <div class="row">
-            <!-- <div class="col-12 d-flex justify-content-between mb-3">
+            <!-- Pagination -->
+            <div class="col-12 d-flex justify-content-between mb-3">
               <span>Left</span>
-              Pagination
-              <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" />
-            </div> -->
+              <BasePagination v-model="currentOffset" :previous-url="`http://example.com?limit=1&offset=0`" :next-url="`http://example.com?limit=1&offset=1`" @paginate="handlePagination" />
+            </div>
 
             <!-- Comments -->
             <CommentsWrapper :comments="threadComments" @reply="handleReply" />
-
-            <!-- <div class="col-12 d-flex justify-content-end mt-3">
-              Pagination
-              <BasePagination :pagination="currentPagination" :cached-response="cachedResponse" @paginate="handlePagination" />
-            </div> -->
+            
+            <!-- Pagination -->
+            <div class="col-12 d-flex justify-content-end mt-3">
+              <BasePagination v-model="currentOffset" :previous-url="`http://example.com?limit=1&offset=0`" :next-url="`http://example.com?limit=1&offset=1`" @paginate="handlePagination" />
+            </div>
           </div>
 
           <div class="row">
             <div class="col-12">
               <h1 class="fw-bold display-6 my-5">Recommended reading</h1>
 
-              <div v-for="i in 5" :key="i" class="card mb-2">
+              <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
                 <div class="card-body">
                   {{ i }}
                 </div>
@@ -50,28 +50,23 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types';
+import type { Comment, ForumThread } from '~/types';
 
-const store = useForums()
-const { threadComments, currentThread } = storeToRefs(store)
-
-
-useHead({
-  title: currentThread.value?.title || 'Thread name'
+const AsyncPollSection = defineAsyncComponent({
+  loader: async () => import('~/components/threads/Poll.vue')
 })
 
 const { id } = useRoute().params
+const store = useForums()
+const { threadComments, currentThread } = storeToRefs(store)
 
+const currentOffset = ref<number>(1)
 const replyingToComment = ref<Comment>()
 
 provide('replyingToComment', replyingToComment)
 
-function handleEditorContent(data: { text: string }) {
-  // Sets the Quill content to the final
-  // request data for the API
-  // requestData.content = data.text
-  // requestData.content_delta = data.delta
-  // requestData.content_html = data.html
+function handleEditorContent(data: { text: string, delta: string, html: string }) {
+  // Do something
   console.log(data)
 }
 
@@ -87,15 +82,27 @@ function handleEditorContent(data: { text: string }) {
 //   }
 // }
 
-useFetch(`/api/threads/${id}`, {
+const { refresh } = useFetch(`/api/threads/${id}/comments`, {
+  query: {
+    limit: 30,
+    offset: currentOffset.value 
+  },
   transform(data) {
     threadComments.value = data
     return data
   }
 })
 
-async function handlePagination (page: number) {
-  // await getComments(page)
+const { execute } = useFetch(`/api/threads/${id}`, {
+  immediate: false,
+  transform(data: ForumThread) {
+    currentThread.value = data
+    return data
+  }
+})
+
+async function handlePagination() {
+  refresh()
 }
 
 async function handleCommentCreated () {
@@ -110,7 +117,9 @@ function handleReply(comment: Comment) {
   store.showCreateCommentForm = true
 }
 
-onBeforeMount(async () => {
-  // store.setCurrentThread(id)
+useHead({
+  title: currentThread.value?.title || '...'
 })
+
+execute()
 </script>
