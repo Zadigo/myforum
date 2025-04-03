@@ -26,7 +26,7 @@ class CustomPageNumberPagination(PageNumberPagination):
         return response
 
 
-class MainThreadSerializer(Serializer):
+class ThreadSerializer(Serializer):
     """A serializer for a thread that was
     created by a user - MainThread model"""
 
@@ -46,10 +46,6 @@ class MainThreadSerializer(Serializer):
     active = fields.BooleanField(default=True)
     modified_on = fields.DateTimeField()
     created_on = fields.DateTimeField()
-
-
-class SubThreadSerializer(MainThreadSerializer):
-    pass
 
 
 # Validators

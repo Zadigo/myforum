@@ -104,13 +104,6 @@ class CommentSerializer(Serializer):
         return instance
 
 
-class SavedCommentSerializer(Serializer):
-    id = fields.IntegerField()
-    comment = CommentSerializer()
-
-
-# Validators
-
 class ValidateComment(Serializer):
     title = fields.CharField(allow_null=True)
     content = fields.CharField()

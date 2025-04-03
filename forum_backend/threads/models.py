@@ -14,8 +14,6 @@ from threads.choices import ThreadCategories
 from threads.validators import validate_title
 from threads.managers import MainThreadManager
 
-MYUSER = get_user_model()
-
 # Forum -> Threads [Main -> Sub] -> Comments
 
 
@@ -23,7 +21,7 @@ class AbstractThread(models.Model):
     """A thread regroups a set of comments"""
 
     user = models.ForeignKey(
-        MYUSER,
+        get_user_model(),
         on_delete=models.SET_NULL,
         null=True
     )
@@ -64,15 +62,25 @@ class AbstractThread(models.Model):
         blank=True,
         null=True
     )
-    pinned = models.BooleanField(default=False)
-    highlighted = models.BooleanField(default=False)
+    pinned = models.BooleanField(
+        default=False
+    )
+    highlighted = models.BooleanField(
+        default=False
+    )
     published = models.BooleanField(
         help_text=_("Indicates that a thread was published"),
         default=True
     )
-    active = models.BooleanField(default=False)
-    modified_on = models.DateTimeField(auto_now=True)
-    created_on = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(
+        default=False
+    )
+    modified_on = models.DateTimeField(
+        auto_now=True
+    )
+    created_on = models.DateTimeField(
+        auto_now_add=True
+    )
 
     objects = MainThreadManager()
 
@@ -178,14 +186,14 @@ class MainThread(AbstractThread):
 class SubThread(AbstractThread):
     """A sub-thread is a child of a main thread"""
 
-    main_thread = models.ForeignKey(MainThread, on_delete=models.CASCADE)
+    main_thread = models.ForeignKey(
+        MainThread,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f"SubThread: {self.title}"
-
-    def get_absolute_url(self):
-        return reverse('threads:sub_thread', args=[self.main_thread.pk, self.pk])
-
+    
 
 @receiver(pre_save, sender=MainThread)
 def run_conditions_for_main_thread(instance, **kwargs):

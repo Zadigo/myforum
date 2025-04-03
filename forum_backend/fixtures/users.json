@@ -1,0 +1,13 @@
+[
+    {
+        "model": "accounts.MyUser",
+        "pk": 1,
+        "fields": {
+            "id": 1,
+            "email": "lucile@gmail.com",
+            "username": "testuser",
+            "first_name": "Lucie",
+            "last_name": "Marie"
+        }
+    }
+]

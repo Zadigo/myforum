@@ -1,13 +1,21 @@
-from comments import views
-from comments.models import Comment
-from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
+from threads.models import SubThread
+
+from forum_backend.mixins import AuthenticatedTestCase
 
 
-class TestThreadsApi(TestCase):
-    fixtures = ['threads']
+class TestThreadsApi(AuthenticatedTestCase):
+    fixtures = [
+        'fixtures/users',
+        'fixtures/forums',
+        'fixtures/threads'
+    ]
 
     def test_get_comments(self):
-        pass
+        obj = SubThread.objects.first()
+        path = reverse('threads_api:detail', args=[obj.id])
+        response = self.client.get(path)
+        print(response.content)
 
     def test_create(self):
         pass

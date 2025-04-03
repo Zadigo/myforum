@@ -6,13 +6,15 @@ app_name = 'comments_api'
 
 urlpatterns = [
     re_path(
-        r'^(?P<pk>\d+)/bookmark',
+        r'^(?P<pk>\d+)/bookmark$',
         views.BookmarkComment.as_view(),
-        name='bookamark'
+        name='bookmark'
     ),
-    # re_path(r'^(?P<pk>\d+)/delete', views.delete_view),
-    # re_path(r'^(?P<pk>\d+)/update$', views.update_view),
-
+    re_path(
+        r'^(?P<pk>\d+)$',
+        views.GetUpdateDeleteComment.as_view(),
+        name='get_update_delete_comment'
+    ),
     re_path(
         r'^latest$',
         views.LatestComments.as_view(),
@@ -21,11 +23,6 @@ urlpatterns = [
     re_path(
         r'^whats-new',
         views.whats_new_view
-    ),
-    re_path(
-        r'^(?P<pk>\d+)$',
-        views.GetUpdateDeleteComment.as_view(),
-        name='get_update_delete_comment'
     ),
     re_path(
         r'^create$',

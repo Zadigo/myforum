@@ -2,12 +2,19 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+ENV_PATH = Path('.env').absolute()
+if ENV_PATH.exists():
+    dotenv.load_dotenv(ENV_PATH)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'rfpn+3c*ftsqmn9c+=6*6pu5an97j5&4mvz^72wk^3csx(1@!)'
@@ -328,12 +335,13 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://:{REDIS_PASSWORD}@redis:6379',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'TIMEOUT': 60 * 15,
         'OPTIONS': {
-            'CLIENT_CLASS': "django_redis.client.DefaultClient"
-        },
-        'KEY_PREFIX': 'ecommerce'
+            'PASSWORD': REDIS_PASSWORD,
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        }
     },
     'file': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -350,3 +358,12 @@ if os.getenv('USES_HTTP_SCHEME', 'http') == 'https':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     SECURE_PROXY_SSL_HEADERSSL_REDIRECT = True
+
+
+# Fixtures
+
+FIXTURES_DIRS = [
+    'fixtures/users',
+    'fixtures/forum',
+    'fixtures/threads',
+]

@@ -14,6 +14,12 @@ from threads.models import MainThread, SubThread
 from threads.permissions import HasMainThreadPermissions
 
 
+class ThreadDetail(generics.RetrieveUpdateAPIView):
+    serializer_class = threads_serializers.ThreadSerializer
+    queryset = SubThread.objects.filter(active=True)
+    permission_classes = [IsAuthenticated]
+
+
 @api_view(['get'])
 def paginated_comments_view(request, pk, **kwargs):
     """Return all the comments for a given thread"""

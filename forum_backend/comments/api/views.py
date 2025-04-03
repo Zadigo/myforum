@@ -1,25 +1,16 @@
-from rest_framework import generics
-import datetime
-
+from comments.api import serializers
+from comments.api.serializers import ValidateComment
+from comments.models import Comment, SavedComment
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from django.utils import timezone
+from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from django.utils import timezone
-from django.db.models.functions import ExtractDay
-
-from comments.api import serializers
-from comments.api.serializers import CommentSerializer, ValidateComment
-from comments.models import Comment, Quote, SavedComment
-from comments.permissions import HasCommentPermissions
-from threads.api.serializers import MainThreadSerializer
+from threads.api.serializers import ThreadSerializer
 from threads.models import MainThread
-
-USER_MODEL = get_user_model()
 
 
 def edit_comment_helper(request, instance=None):
@@ -42,30 +33,25 @@ class GetUpdateDeleteComment(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BookmarkComment(generics.GenericAPIView):
-    queryset = SavedComment.objects.all()
-    serializer_class = serializers.SavedCommentSerializer
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk, *args, **kwargs):
-        status_code = status.HTTP_201_CREATED
-        comment = get_object_or_404(Comment, id=pk)
+        qs = super().get_queryset()
 
-        queryset = self.get_queryset().filter(
+        comment = get_object_or_404(qs, id=pk)
+        status_code = status.HTTP_201_CREATED
+
+        obj, state = SavedComment.objects.get_or_create(
             user=request.user,
             comment=comment
         )
 
-        if queryset.exists():
-            status_code = status.HTTP_204_NO_CONTENT
-            saved_comment = queryset.get()
-            saved_comment.delete()
-        else:
-            saved_comment = SavedComment.objects.create(
-                user=request.user,
-                comment=comment
-            )
+        if state:
+            obj.delete()
 
-        serializer = self.get_serializer(instance=queryset, many=True)
+        serializer = self.get_serializer(instance=comment)
         return Response(data=serializer.data, status=status_code)
 
 
@@ -76,7 +62,7 @@ def whats_new_view(request, **kwargs):
     if queryset is None:
         threads = MainThread.objects.all()
         cache.set('whats_new', queryset, 3600)
-    serializer = MainThreadSerializer(instance=threads, many=True)
+    serializer = ThreadSerializerh(instance=threads, many=True)
     return Response(serializer.data)
 
 

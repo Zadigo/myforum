@@ -1,13 +1,9 @@
 from comments.api.serializers import CommentSerializer
 from comments.models import Comment
 from django.db.models import Q
-from django.shortcuts import render
-from django.views.decorators.cache import cache_page
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from threads.api.serializers import SubThreadSerializer
-from threads.models import SubThread
 
 
 class Search(generics.GenericAPIView):

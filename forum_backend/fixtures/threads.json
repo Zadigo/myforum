@@ -1,0 +1,27 @@
+[
+    {
+        "model": "threads.MainThread",
+        "fields": {
+            "user": 1,
+            "title": "Some title",
+            "pinned": false,
+            "highlighted": false,
+            "active": true,
+            "modified_on": "2022-06-04 11:50:07.320523+00:00",
+            "created_on": "2022-06-04 11:50:07.320523+00:00"
+        }
+    },
+    {
+        "model": "threads.SubThread",
+        "fields": {
+            "user": 1,
+            "main_thread": 1,
+            "title": "Simple subthread",
+            "pinned": false,
+            "highlighted": false,
+            "active": true,
+            "modified_on": "2022-06-04 11:50:07.320523+00:00",
+            "created_on": "2022-06-04 11:50:07.320523+00:00"
+        }
+    }
+]

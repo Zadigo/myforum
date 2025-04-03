@@ -1,36 +1,5 @@
 [
     {
-        "model": "accounts.MyUser",
-        "fields": {
-            "id": 1,
-            "email": "lucile@gmail.com", 
-            "username": "lucile",
-            "password": "touparet"
-        }
-    },
-    {
-        "model": "forums.Forum",
-        "fields": {
-            "user": 1,
-            "title": "General forum",
-            "admin": true,
-            "active": true,
-            "created_on": "2022-06-04 11:50:07.320523+00:00"
-        }
-    },
-    {
-        "model": "threads.MainThread",
-        "fields": {
-            "user": 1,
-            "title": "Some title",
-            "pinned": false,
-            "highlighted": false,
-            "active": true,
-            "modified_on": "2022-06-04 11:50:07.320523+00:00",
-            "created_on": "2022-06-04 11:50:07.320523+00:00"
-        }
-    },
-    {
         "model": "comments.Comment",
         "fields": {
             "id": 1,

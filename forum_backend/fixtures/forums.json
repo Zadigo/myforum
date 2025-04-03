@@ -1,0 +1,12 @@
+[
+    {
+        "model": "forums.Forum",
+        "fields": {
+            "user": 1,
+            "title": "General forum",
+            "admin": true,
+            "active": true,
+            "created_on": "2022-06-04 11:50:07.320523+00:00"
+        }
+    }
+]
