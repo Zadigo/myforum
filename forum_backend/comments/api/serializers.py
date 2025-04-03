@@ -1,17 +1,12 @@
-import pathlib
-
-from django.conf import settings
-from django.core.cache import cache
-from django.shortcuts import get_object_or_404
-from nltk.tokenize import TweetTokenizer
-from rest_framework import fields
-from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
-from rest_framework.serializers import Serializer
 
 from accounts.api.serializers import UserSerializer
+from comments import tasks
+from celery import group
 from comments.models import Comment, Quote
-from moderation.utils import moderate_text
+from django.shortcuts import get_object_or_404
+from rest_framework import fields
+from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 from threads.models import MainThread
 
 
@@ -34,23 +29,9 @@ class CommentSerializer(Serializer):
     # quote_set = QuoteSerializer(many=True, required=False)
     active = fields.BooleanField(default=True)
     pinned = fields.BooleanField(read_only=True, default=False)
-    bookmarked = fields.BooleanField(read_only=True, default=False)
     highlighted = fields.BooleanField(read_only=True, default=False)
     modified_on = fields.DateTimeField(read_only=True)
     created_on = fields.DateTimeField(read_only=True)
-
-    def analyze(self, comment):
-        instance = TweetTokenizer()
-        tokens = instance.tokenize(comment)
-
-        moderate_text(tokens=tokens)
-
-        # Map the mentions so that we can send notifications
-        # to the people that were mentionned
-        mentions = map(lambda x: x.startswith('@'), tokens)
-        hashtags = map(lambda x: x.startswith('#'), tokens)
-
-        return comment, list(mentions), list(hashtags)
 
     def create(self, validated_data):
         request = self._context['request']
@@ -60,16 +41,6 @@ class CommentSerializer(Serializer):
             id=validated_data['thread']
         )
 
-        # Extract the mentions so that we can eventually
-        # notify the users that were mentionned - also,
-        # save the hashtags
-        content, mentions, hashtags = self.analyze(validated_data['content'])
-
-        # other_params = {'initial_comment': False}
-        # count = Comment.objects.count()
-        # if count == 0:
-        #     other_params['initial_comment'] = True
-
         new_comment = Comment.objects.create(
             thread=thread,
             user=request.user,
@@ -78,6 +49,8 @@ class CommentSerializer(Serializer):
             content_delta=validated_data['content_delta'],
             content_html=validated_data['content_html'],
         )
+
+        tasks.analyze_comment.apply_async((1, new_comment.content), countdown=15)
 
         quotes = validated_data.get('quotes', [])
         if quotes:
@@ -112,24 +85,8 @@ class ValidateComment(Serializer):
     thread = fields.IntegerField()
     quotes = fields.ListField()
 
-    def analyze(self, comment):
-        instance = TweetTokenizer()
-        tokens = instance.tokenize(comment)
-
-        moderate_text(tokens=tokens)
-
-        # Map the mentions so that we can send notifications
-        # to the people that were mentionned
-        mentions = map(lambda x: x.startswith('@'), tokens)
-        hashtags = map(lambda x: x.startswith('#'), tokens)
-
-        return comment, list(mentions), list(hashtags)
-
-    def save(self, request, **kwargs):
-        setattr(self, 'request', request)
-        return super().save(**kwargs)
-
     def create(self, validated_data):
+        request = self._context['request']
         thread = get_object_or_404(
             MainThread,
             id=validated_data['thread']
@@ -141,12 +98,21 @@ class ValidateComment(Serializer):
         content, mentions, hashtags = self.analyze(validated_data['content'])
         new_comment = Comment.objects.create(
             thread=thread,
-            user=self.request.user,
+            user=request.user,
             title=validated_data['title'],
             content=validated_data['content'],
             content_delta=validated_data['content_delta'],
             content_html=validated_data['content_html'],
         )
+
+        t1 = group(
+            [
+                tasks.analyze_comment_with_ai.s(new_comment.content),
+                tasks.moderate_comment.s(new_comment.content)
+            ]
+        )
+
+        t1.apply_async(countdown=40)
 
         quotes = validated_data['quotes']
         if quotes:

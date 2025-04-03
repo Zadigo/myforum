@@ -26,8 +26,12 @@ class Notification(models.Model):
         choices=NotificationTypes.choices,
         default=NotificationTypes.FOLLOW
     )
-    read = models.BooleanField(default=False)
-    created_on = models.DateField(auto_now_add=True)
+    read = models.BooleanField(
+        default=False
+    )
+    created_on = models.DateField(
+        auto_now_add=True
+    )
 
     class Meta:
         ordering = ['created_on']

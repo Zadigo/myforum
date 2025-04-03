@@ -1,7 +1,6 @@
 from django.db.utils import IntegrityError
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.utils import timezone
-from moderation.utils import moderate_text_validator
 from rest_framework import fields
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
@@ -15,7 +14,7 @@ from polls.validators import validate_possibility
 
 class PollPossibilitiesSerializer(Serializer):
     id = fields.IntegerField(read_only=True)
-    text = fields.CharField(validators=[moderate_text_validator])
+    text = fields.CharField()
 
 
 class PollSerializer(Serializer):
@@ -35,9 +34,9 @@ class PollSerializer(Serializer):
     
 class ValidatePollSerializer(Serializer):
     thread = fields.IntegerField()
+    # TODO: Moderate the question through a task
     question = fields.CharField(
-        max_length=100,
-        validators=[moderate_text_validator]
+        max_length=100
     )
     possibilities = PollPossibilitiesSerializer(
         many=True,

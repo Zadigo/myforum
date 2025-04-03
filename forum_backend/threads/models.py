@@ -179,12 +179,10 @@ class MainThread(AbstractThread):
     def __str__(self):
         return f"MainThread: {self.title}"
 
-    def get_absolute_url(self):
-        return reverse('threads:main_thread', args=[self.pk])
-
 
 class SubThread(AbstractThread):
-    """A sub-thread is a child of a main thread"""
+    """A sub-thread is a child of a main thread the mainly
+    regroup comments. It is attached to a main parent thread"""
 
     main_thread = models.ForeignKey(
         MainThread,

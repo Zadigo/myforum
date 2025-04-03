@@ -1,12 +1,12 @@
 import datetime
 
 from accounts.serializers import UserSerializer
+from comments import tasks as comments_tasks
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from forums.api.serializers import ForumSerializer
 from forums.models import Forum
-from moderation.utils import moderate_text_validator
-from polls.api.serializers import ValidatePollSerializer
+from polls.api.serializers import PollSerializer, ValidatePollSerializer
 from polls.models import Poll, Possibility
 from rest_framework import fields
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -38,7 +38,7 @@ class ThreadSerializer(Serializer):
     title = fields.CharField()
     category = fields.ChoiceField(
         ThreadCategories.choices,
-        default=ThreadCategories.GENERAL_DISCUSSION
+        default='General discussions'
     )
     description = fields.CharField()
     owned_by_user = fields.BooleanField(default=False)
@@ -47,8 +47,20 @@ class ThreadSerializer(Serializer):
     modified_on = fields.DateTimeField()
     created_on = fields.DateTimeField()
 
+    def update(self, instance, validated_data):
+        skip_keys = [
+            'id', 'owned_by_user', 'participants', 'forum',
+            'modified_on', 'created_on', 'owned_by_user',
+            'number_of_comments', 'latest_comment'
+        ]
 
-# Validators
+        for key, value in validated_data.items():
+            if key in skip_keys:
+                continue
+            setattr(instance, key, value)
+        instance.save()
+        return instance
+
 
 class ValidateMainPostSerializer(Serializer):
     """Validates an incoming comment for
@@ -64,9 +76,7 @@ class ValidateMainThreadSerializer(Serializer):
     thread in the database given a forum ID"""
 
     forum_id = fields.CharField(write_only=True)
-    title = fields.CharField(
-        validators=[moderate_text_validator]
-    )
+    title = fields.CharField()
     content = ValidateMainPostSerializer(write_only=True)
     result_thread_title = fields.JSONField(write_only=True)
     category = fields.ChoiceField(
@@ -83,15 +93,19 @@ class ValidateMainThreadSerializer(Serializer):
     add_poll = fields.BooleanField(default=False)
     poll = ValidatePollSerializer(allow_null=True)
 
-    def validate(self, attrs):
-        title = attrs['title']
+    def validate_title(self, text):
+        return text
 
+    def validate(self, attrs):
         poll = attrs.get('poll', None)
         if poll is not None:
             number_of_possibilities = len(attrs['poll']['possibilities'])
             if attrs['poll']['choices_limit'] > number_of_possibilities:
                 raise ValidationError(
-                    details={'choices_limit': 'Cannot be greater than the number of possibilities'})
+                    details={
+                        'choices_limit': 'Cannot be greater than the number of possibilities'
+                    }
+                )
 
             if attrs['add_poll'] and attrs['poll'] is None:
                 raise ValidationError(detail={'poll': 'Poll cannot be None'})
@@ -110,12 +124,16 @@ class ValidateMainThreadSerializer(Serializer):
             category=validated_data['category'],
             forum=forum
         )
+
         comment = thread.comment_set.create(
             user=request.user,
             content=validated_data['content']['text'],
             content_delta=validated_data['content']['delta'],
             content_html=validated_data['content']['html']
         )
+
+        comments_tasks.analyze_comment.apply_async(
+            (comment.id, comment.content), countdown=30)
 
         if validated_data['add_poll']:
             if validated_data['poll'] is None:

@@ -7,28 +7,23 @@ app_name = 'threads_api'
 urlpatterns = [
     re_path(
         r'^(?P<pk>\d+)/comments$',
-        views.paginated_comments_view,
+        views.ThreadComments.as_view(),
         name='comments'
     ),
     re_path(
         r'^(?P<pk>\d+)/follow$',
-        views.follow_thread,
+        views.FollowThread.as_view(),
         name='follow'
     ),
     re_path(
         r'^(?P<pk>\d+)/delete$',
-        views.delete_view,
+        views.DeleteThread.as_view(),
         name='delete'
-    ),
-    re_path(
-        r'^(?P<pk>\d+)/update$',
-        views.update_view,
-        name='update'
     ),
     re_path(
         r'^(?P<pk>\d+)$',
         views.ThreadDetail.as_view(),
-        name='detail'
+        name='detail_update'
     ),
     re_path(
         r'^create$',

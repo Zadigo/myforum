@@ -1,15 +1,14 @@
 from django.shortcuts import get_list_or_404, get_object_or_404
-from rest_framework import fields
-from rest_framework.serializers import Serializer
-
-from moderation.utils import moderate_text_validator
 from polls.choices import PollType
 from polls.models import Poll, Possibility
+from rest_framework import fields
+from rest_framework.serializers import Serializer
 
 
 class PollPossibilitiesSerializer(Serializer):
     id = fields.IntegerField(read_only=True)
-    text = fields.CharField(validators=[moderate_text_validator])
+    # TODO: Moderate poll possibilities
+    text = fields.CharField()
 
 
 class PollSerializer(Serializer):
@@ -32,10 +31,12 @@ class PollSerializer(Serializer):
     created_on = fields.DateTimeField()
 
 
-# Validators
-
 class ValidatePollPossibilitySerializer(Serializer):
     text = fields.CharField()
+
+    def validate_text(self, value):
+        # TODO: Schedule moderation via task
+        return value
 
 
 class ValidatePollSerializer(Serializer):
@@ -45,21 +46,28 @@ class ValidatePollSerializer(Serializer):
     possibilities = ValidatePollPossibilitySerializer(many=True)
     choice_selection = fields.ChoiceField(
         PollType.choices,
-        default=PollType.SINGLE
+        default='Single'
     )
     choices_limit = fields.IntegerField(default=1)
     allow_vote_change = fields.BooleanField(default=True)
     display = fields.JSONField()
     closing = fields.JSONField()
 
+    def validate_question(self, value):
+        # TODO: Schedule moderation via task
+        return value
+
 
 class ValidateAnswer(Serializer):
     answers = fields.ListField()
 
-    def save(self, request, poll):
+    def create(self):
+        request = self._context['request']
         answers = self.validated_data['answers']
 
         poll = get_object_or_404(Poll, thread__id=poll)
         possibilities = get_list_or_404(Possibility, id__in=answers)
+
         instance = poll.answer_set.create(user=request.user)
         instance.possibilities.add(*possibilities)
+        return instance
