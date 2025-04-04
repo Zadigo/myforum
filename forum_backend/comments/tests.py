@@ -1,6 +1,7 @@
+from comments import tasks
+from django.test import override_settings
 from comments.models import Comment
 from django.urls import reverse
-from rest_framework.test import APITestCase
 from forum_backend.mixins import AuthenticatedTestCase
 
 
@@ -58,3 +59,28 @@ class TestCommentsApi(AuthenticatedTestCase):
         response = self.client.get(path)
         for item in response.json():
             self.assertIn('id', item)
+
+
+@override_settings(CELERY_TASK_ALWAYS_EAGER=True, CELERY_TASK_EAGER_PROPAGATES=True)
+class TestTasks(AuthenticatedTestCase):
+    fixtures = [
+        'fixtures/users',
+        'fixtures/forums',
+        'fixtures/threads',
+        'comments'
+    ]
+
+    def test_comment_analysis(self):
+        comment = Comment.objects.first()
+        comment.content = (
+            "This is a complexe text that can be used "
+            "to shoutout @testuser in order to send some "
+            "interesting notifications"
+        )
+        comment.save()
+
+        t = tasks.analyze_comment.apply((comment.id, comment.content))
+        t.get()
+
+        notifications = comment.user.notification_set.all()
+        # self.assertTrue(notifications.exists())

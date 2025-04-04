@@ -32,7 +32,7 @@ def analyze_comment(comment_id: int, text: str):
         lambda x: x.replace('@', '').strip(),
         filter(lambda x: x.startswith('@'), tokens)
     )
-    hashtags = map(
+    hashtags: Iterator[str] = map(
         lambda x: x.replace('#', '').strip(),
         filter(lambda x: x.startswith('#'), tokens)
     )
@@ -42,7 +42,7 @@ def analyze_comment(comment_id: int, text: str):
 
     notification_tasks.create_message_notifications.apply_async(
         (
-            comment_id, 
+            comment_id,
             user_ids
         )
     )

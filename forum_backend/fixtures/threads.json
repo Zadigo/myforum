@@ -1,9 +1,23 @@
 [
     {
         "model": "threads.MainThread",
+        "pk": 1,
         "fields": {
             "user": 1,
-            "title": "Some title",
+            "title": "Main thread n°1",
+            "pinned": false,
+            "highlighted": false,
+            "active": true,
+            "modified_on": "2022-06-04 11:50:07.320523+00:00",
+            "created_on": "2022-06-04 11:50:07.320523+00:00"
+        }
+    },
+    {
+        "model": "threads.MainThread",
+        "pk": 2,
+        "fields": {
+            "user": 1,
+            "title": "Main thread n°2",
             "pinned": false,
             "highlighted": false,
             "active": true,
@@ -13,6 +27,7 @@
     },
     {
         "model": "threads.SubThread",
+        "pk": 1,
         "fields": {
             "user": 1,
             "main_thread": 1,

@@ -48,17 +48,34 @@ urlpatterns = [
         drf_views.SpectacularRedocView.as_view(url_name='schema'),
         name='redoc'
     ),
-    path('api/v1/polls/', include('polls.urls')),
-    path('api/v1/accounts/', include('accounts.api.urls')),
-    path('api/v1/forums/', include('forums.api.urls')),
-    path('api/v1/comments/', include('comments.api.urls')),
-    path('api/v1/threads/', include('threads.api.urls')),
+    path(
+        'api/v1/polls/',
+        include('polls.api.urls')),
+    path(
+        'api/v1/accounts/',
+        include('accounts.api.urls')
+    ),
+    path(
+        'api/v1/forums/',
+        include('forums.api.urls')
+    ),
+    path(
+        'api/v1/comments/',
+        include('comments.api.urls')
+    ),
+    path(
+        'api/v1/threads/',
+        include('threads.api.urls')
+    ),
     re_path(
         r'^api/v1/search$',
         views.Search.as_view(),
         name='search'
     ),
-    path('admin/', admin.site.urls),
+    path(
+        'admin/',
+        admin.site.urls
+    )
 ]
 
 

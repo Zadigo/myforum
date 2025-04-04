@@ -1,0 +1,72 @@
+[
+    {
+        "model": "polls.Possibility",
+        "pk": 1,
+        "fields": {
+            "poll": 1,
+            "text": "Option 1",
+            "created_on": "2025-04-03"
+        }
+    },
+    {
+        "model": "polls.Possibility",
+        "pk": 2,
+        "fields": {
+            "poll": 1,
+            "text": "Option 2",
+            "created_on": "2025-04-03"
+        }
+    },
+    {
+        "model": "polls.Poll",
+        "pk": 1,
+        "fields": {
+            "thread": 1,
+            "question": "This is a question?",
+            "poll_type": "Single",
+            "choices_limit": 2,
+            "allow_vote_change": true,
+            "closes": false,
+            "closing_date": "2025-03-19",
+            "public": true,
+            "voters_alone": true,
+            "active": true,
+            "created_on": "2025-04-03 22:28:04.804332+00:00"
+        }
+    },
+    {
+        "model": "polls.Possibility",
+        "pk": 3,
+        "fields": {
+            "poll": 2,
+            "text": "Yes",
+            "created_on": "2025-04-03"
+        }
+    },
+    {
+        "model": "polls.Possibility",
+        "pk": 4,
+        "fields": {
+            "poll": 2,
+            "text": "No",
+            "created_on": "2025-04-03"
+        }
+    },
+    {
+        "model": "polls.Poll",
+        "pk": 2,
+        "fields": {
+            "thread": 2,
+            "question": "Does this poll close?",
+            "poll_type": "Single",
+            "choices_limit": 2,
+            "allow_vote_change": true,
+            "closes": true,
+            "closing_date": "2025-03-19",
+            "public": true,
+            "voters_alone": true,
+            "active": true,
+            "created_on": "2025-04-03 22:28:04.804332+00:00"
+        }
+    }
+]

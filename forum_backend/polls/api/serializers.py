@@ -1,8 +1,10 @@
-from django.shortcuts import get_list_or_404, get_object_or_404
+from django.core.exceptions import ValidationError
+from django.shortcuts import get_list_or_404
+from django.utils import timezone
 from polls.choices import PollType
-from polls.models import Poll, Possibility
+from polls.models import Answer, Poll, Possibility
 from rest_framework import fields
-from rest_framework.serializers import Serializer
+from rest_framework.serializers import Serializer, ModelSerializer, RelatedField, ReadOnlyField
 
 
 class PollPossibilitiesSerializer(Serializer):
@@ -29,6 +31,15 @@ class PollSerializer(Serializer):
     voters_alone = fields.BooleanField()
     active = fields.BooleanField()
     created_on = fields.DateTimeField()
+
+
+class AnswerSerializer(ModelSerializer):
+    user__username = ReadOnlyField(source='user.username')
+    possibilities = PollPossibilitiesSerializer(many=True)
+
+    class Meta:
+        model = Answer
+        fields = ['id', 'possibilities', 'user__username']
 
 
 class ValidatePollPossibilitySerializer(Serializer):
@@ -59,15 +70,43 @@ class ValidatePollSerializer(Serializer):
 
 
 class ValidateAnswer(Serializer):
-    answers = fields.ListField()
+    answers = fields.ListField(write_only=True)
 
-    def create(self):
+    def create(self, validated_data):
         request = self._context['request']
-        answers = self.validated_data['answers']
+        poll: Poll = self._context['poll']
 
-        poll = get_object_or_404(Poll, thread__id=poll)
-        possibilities = get_list_or_404(Possibility, id__in=answers)
+        answer_ids = validated_data['answers']
+        possibilities = get_list_or_404(
+            Possibility,
+            id__in=answer_ids,
+            poll=poll
+        )
 
-        instance = poll.answer_set.create(user=request.user)
-        instance.possibilities.add(*possibilities)
-        return instance
+        # 1.= Check that the poll is active
+        if not poll.active:
+            raise ValidationError('Poll is closed')
+
+        # 2. Check that the poll allows vote change
+
+        # 3. Check that the poll accepts only
+        # one or multiple answers
+        number_of_answers = len(validated_data['answers'])
+        if poll.poll_type == 'Single':
+            if number_of_answers > 1:
+                raise ValidationError("Poll accepts only single answers")
+        elif poll.poll_type == 'Multiple':
+            if number_of_answers > poll.choices_limit:
+                raise ValidationError(
+                    f"Poll only accepts {poll.choices_limit} answers")
+
+        # 4. Check that the poll closes and that the answer
+        # respects the closing date
+        d = timezone.now()
+        if poll.closes:
+            if d > poll.closing_date:
+                raise ValidationError('Poll is closed')
+
+        new_answer = poll.answer_set.create(user=request.user)
+        new_answer.possibilities.add(*possibilities)
+        return new_answer

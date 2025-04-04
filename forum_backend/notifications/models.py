@@ -4,15 +4,13 @@ from django.db import models
 from comments.models import Comment
 from notifications.choices import NotificationTypes
 
-USER_MODEL = get_user_model()
-
 
 class Notification(models.Model):
     """Represents a notification for an event
     that occured on the forum"""
 
     user = models.ForeignKey(
-        USER_MODEL,
+        get_user_model(),
         on_delete=models.CASCADE
     )
     message = models.ForeignKey(
@@ -34,7 +32,6 @@ class Notification(models.Model):
     )
 
     class Meta:
-        ordering = ['created_on']
         ordering = ['-created_on', '-pk']
 
     def __str__(self):
