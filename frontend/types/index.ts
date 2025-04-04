@@ -1,5 +1,7 @@
 export * from './forums'
 export * from './user'
+export * from './threads'
+export * from './comments'
 
 export type StringNull = string | null | undefined
 

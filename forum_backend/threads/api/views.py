@@ -18,7 +18,7 @@ from threads.permissions import HasMainThreadPermissions
 
 
 class ThreadDetail(generics.RetrieveUpdateAPIView):
-    queryset = SubThread.objects.filter(active=True)
+    queryset = MainThread.objects.filter(active=True)
     serializer_class = threads_serializers.ThreadSerializer
 
 
@@ -27,7 +27,7 @@ class ThreadComments(generics.RetrieveAPIView):
     a specific thread with a statistics wrapper around the comments
     e.g. number of participants, participants etc"""
 
-    queryset = SubThread.objects.filter(active=True)
+    queryset = MainThread.objects.filter(active=True)
     serializer_class = threads_serializers.ThreadSerializer
 
     def apply_query_factors(self, comments):

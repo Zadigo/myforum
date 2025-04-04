@@ -17,8 +17,6 @@ from threads.models import MainThread, SubThread
 
 from forum_backend import utils
 
-USER_MODEL = get_user_model()
-
 
 class MediaContent(models.Model):
     """Contains different media contained for
@@ -108,7 +106,7 @@ class Comment(models.Model):
     a givent thread"""
 
     user = models.ForeignKey(
-        USER_MODEL,
+        get_user_model(),
         on_delete=models.CASCADE
     )
     thread = models.ForeignKey(
@@ -174,13 +172,13 @@ class Comment(models.Model):
         default=True
     )
     # ghost_readers = models.ManyToManyField(
-    #     USER_MODEL,
+    #     get_user_model(),
     #     related_name='comment_gost_readers',
     #     blank=True
     # )
     # is_ghost_comment = models.BooleanField(
     #     default=False,
-    #     help_text=_("A comment visible to only a specific set of users")
+    #     help_text=_("A comment visible to only a specific set of users that have ghost abilities")
     # )
     # initial_comment = models.BooleanField(
     #     default=False
@@ -223,7 +221,7 @@ class SavedComment(models.Model):
     """Represents a bookmarked comment"""
 
     user = models.ForeignKey(
-        USER_MODEL,
+        get_user_model(),
         on_delete=models.CASCADE
     )
     comment = models.ForeignKey(

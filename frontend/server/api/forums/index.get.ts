@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios'
+import axios from 'axios'
 import { useAxiosClient } from '~/composables/client'
 import type { Forum } from '~/types'
 
@@ -9,10 +9,10 @@ export default defineCachedEventHandler(async _event => {
         const response = await client.get<Forum[]>('/v1/forums/')
         return response.data
     } catch (e) {
-        if (e instanceof AxiosError && e.response) {
+        if (axios.isAxiosError(e)) {
             throw createError({
                 statusCode: 500,
-                statusMessage: e.response.data,
+                statusMessage: e.response?.data,
                 data: { field: 'email' }
             })
         }

@@ -22,11 +22,11 @@ const props = defineProps({
     required: true
   },
   previousUrl: {
-    type: [String, null],
+    type: [String, null, undefined],
     required: true
   },
   nextUrl: {
-    type: [String, null],
+    type: [String, null, undefined],
     required: true
   },
   itemsCount: {

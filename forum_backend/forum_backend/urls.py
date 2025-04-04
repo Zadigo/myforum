@@ -60,11 +60,11 @@ urlpatterns = [
         include('forums.api.urls')
     ),
     path(
-        'api/v1/comments/',
+        'v1/comments/',
         include('comments.api.urls')
     ),
     path(
-        'api/v1/threads/',
+        'v1/threads/',
         include('threads.api.urls')
     ),
     re_path(

@@ -8,7 +8,9 @@
         <!-- Forums -->
         <div class="col-12 my-3">
           <Suspense>
-            <AsyncIterationBlock />
+            <template #default>
+              <AsyncIterationBlock />
+            </template>
 
             <template #fallback>
               Loading...
@@ -19,7 +21,9 @@
         <!-- Latest Comments -->
         <div class="col-12">
           <Suspense>
-            <AsyncForumLatestBlock />
+            <template #default>
+              <AsyncForumLatestBlock />
+            </template>
 
             <template #fallback>
               Loading...
@@ -36,10 +40,12 @@ useHead({
 })
 
 const AsyncIterationBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/IterationBlock.vue')
+  loader: async () => import('~/components/forums/IterationBlock.vue'),
+  timeout: 10000
 })
 
 const AsyncForumLatestBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/LatestBlock.vue')
+  loader: async () => import('~/components/forums/LatestBlock.vue'),
+  timeout: 10000
 })
 </script>

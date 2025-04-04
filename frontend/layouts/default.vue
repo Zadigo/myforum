@@ -34,7 +34,7 @@ const headersThread = markRaw(HeadersThread)
 const route = useRoute()
 
 const pageHeader = computed(() => {
-  if (route.name.includes('threads-id__')) {
+  if (route.name.includes('threads-id__fr')) {
     return headersThread
   } else if (route.name.includes('forums-id__')) {
     return headersForum

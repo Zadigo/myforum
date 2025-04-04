@@ -22,7 +22,10 @@ SECRET_KEY = 'rfpn+3c*ftsqmn9c+=6*6pu5an97j5&4mvz^72wk^3csx(1@!)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost'
+]
 
 
 # Application definition

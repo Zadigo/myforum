@@ -1,6 +1,6 @@
-import { AxiosError } from 'axios'
+import axios from 'axios'
 import { useAxiosClient } from '~/composables/client'
-import type { ForumThread } from '~/types'
+import type { ThreadApiResponse } from '~/types'
 
 export default defineCachedEventHandler(async event => {
     const { client } = useAxiosClient()
@@ -8,17 +8,17 @@ export default defineCachedEventHandler(async event => {
     const id = getRouterParam(event, 'id')
 
     try {
-        const response = await client.get<ForumThread[]>(`/v1/forums/${id}`, {
+        const response = await client.get<ThreadApiResponse[]>(`/v1/forums/${id}/threads`, {
             params: {
                 sort
             }
         })
         return response.data
     } catch (e) {
-        if (e instanceof AxiosError && e.response) {
+        if (axios.isAxiosError(e)) {
             throw createError({
                 statusCode: 500,
-                statusMessage: e.response.data,
+                statusMessage: e.response?.data,
                 data: { field: 'email' }
             })
         }

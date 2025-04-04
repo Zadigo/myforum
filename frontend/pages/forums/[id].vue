@@ -41,7 +41,9 @@
 
       <!-- Threads -->
       <Suspense>
-        <AsyncThreadsIterator @load-current-forum="handleLoadForumInfo" />
+        <template #default>
+          <AsyncThreadsIterator @load-current-forum="handleLoadForumInfo" />
+        </template>
 
         <template #fallback>
           Loading...
@@ -74,6 +76,5 @@ const { data, execute } = useFetch(`/api/forums/${id}`, {
 
 async function handleLoadForumInfo() {
   execute()
-  console.log('forum detail')
 }
 </script>

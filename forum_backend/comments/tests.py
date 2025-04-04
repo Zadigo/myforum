@@ -1,7 +1,10 @@
+import json
+
 from comments import tasks
-from django.test import override_settings
 from comments.models import Comment
+from django.test import override_settings
 from django.urls import reverse
+
 from forum_backend.mixins import AuthenticatedTestCase
 
 
@@ -24,16 +27,23 @@ class TestCommentsApi(AuthenticatedTestCase):
 
     def test_create_comment(self):
         path = reverse('comments_api:create')
-        data = {
+        data = json.dumps({
+            'title': None,
+            'quotes': [],
             'thread': 1,
             'content': 'Quick content',
             'content_delta': '[]',
             'content_html': '<p>Quick content</p>'
-        }
-        response = self.client.post(path, data=data)
+        })
+        response = self.client.post(
+            path, 
+            data=data, 
+            content_type='application/json'
+        )
 
         data = response.json()
         self.assertIn('id', data)
+        self.assertEqual(response.status_code, 200)
 
     def test_get_update_comment(self):
         path = reverse('comments_api:create')

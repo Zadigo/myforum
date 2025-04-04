@@ -1,14 +1,14 @@
-export interface UserProfile {
-    preferred_topics: string
+export interface Userprofile {
     blocked_users: string
     is_premium: boolean
+    preferred_topics: string
 }
 
 export interface User {
     id: number
-    username: string
     email: string
-    userprofile: UserProfile
+    username: string
+    userprofile: Userprofile
 }
 
 export interface UserForComment extends User {

@@ -1,56 +1,62 @@
 <template>
   <section id="comments">
-    <!-- enter-to-class="animate__animated animate__zoomIn" -->
-    <Transition mode="out-in">
+    <ClientOnly>
       <!-- Editor -->
       <CommentsForm v-if="store.showCreateCommentForm" @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+    </ClientOnly>
 
-      <div v-else class="row">
-        <!-- Poll -->
-        <Suspense>
+    <div v-if="!store.showCreateCommentForm" class="row">
+      <!-- Poll -->
+      <Suspense>
+        <template #default>
           <AsyncPollSection class="mb-3" />
+        </template>
 
-          <template #loading>
-            Loading...
-          </template>
-        </Suspense>
-        
-        <div class="col-12">
-          <div class="row">
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
+      
+      <!-- Comments -->
+      <div class="col-12">
+        <div class="row">
+          <ClientOnly>
             <!-- Pagination -->
             <div class="col-12 d-flex justify-content-between mb-3">
               <span>Left</span>
-              <BasePagination v-model="currentOffset" :previous-url="`http://example.com?limit=1&offset=0`" :next-url="`http://example.com?limit=1&offset=1`" @paginate="handlePagination" />
+              <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
             </div>
+          </ClientOnly>
 
-            <!-- Comments -->
-            <CommentsWrapper :comments="threadComments" @reply="handleReply" />
-            
+          <!-- Comments -->
+          <CommentsWrapper :comments="threadComments" @reply="handleReply" />
+          
+          <ClientOnly>
             <!-- Pagination -->
             <div class="col-12 d-flex justify-content-end mt-3">
-              <BasePagination v-model="currentOffset" :previous-url="`http://example.com?limit=1&offset=0`" :next-url="`http://example.com?limit=1&offset=1`" @paginate="handlePagination" />
+              <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
             </div>
-          </div>
+          </ClientOnly>
+        </div>
 
-          <div class="row">
-            <div class="col-12">
-              <h1 class="fw-bold display-6 my-5">Recommended reading</h1>
+        <div class="row">
+          <div class="col-12">
+            <h1 class="fw-bold display-6 my-5">Recommended reading</h1>
 
-              <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
-                <div class="card-body">
-                  {{ i }}
-                </div>
+            <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
+              <div class="card-body">
+                {{ i }}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </Transition>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { Comment, ForumThread } from '~/types';
+import type { Comment, ForumThread, ThreadCommentsApiResponse } from '~/types';
 
 const AsyncPollSection = defineAsyncComponent({
   loader: async () => import('~/components/threads/Poll.vue')
@@ -60,6 +66,7 @@ const { id } = useRoute().params
 const store = useForums()
 const { threadComments, currentThread } = storeToRefs(store)
 
+const cachedResponse = ref<ThreadCommentsApiResponse>()
 const currentOffset = ref<number>(1)
 const replyingToComment = ref<Comment>()
 
@@ -87,8 +94,9 @@ const { refresh } = useFetch(`/api/threads/${id}/comments`, {
     limit: 30,
     offset: currentOffset.value 
   },
-  transform(data) {
-    threadComments.value = data
+  transform(data: ThreadCommentsApiResponse) {
+    cachedResponse.value = data
+    threadComments.value = data.results
     return data
   }
 })

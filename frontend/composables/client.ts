@@ -123,7 +123,7 @@ function authenticationInterceptors(client: AxiosInstance, access?: string | nul
 
                     try {
                         const authClient = axios.create({ baseURL: getDomain() })
-                        const response = await authClient.post<RefreshApiResposne>('/auth/v1/refresh', { refresh })
+                        const response = await authClient.post<RefreshApiResposne>('/auth/v1/token/refresh/', { refresh })
 
                         if (refreshCallback) {
                             refreshCallback(response.data.access)
@@ -131,7 +131,7 @@ function authenticationInterceptors(client: AxiosInstance, access?: string | nul
 
                         return authClient
                     } catch (refreshError) {
-                        if (errorCallback && refreshError instanceof AxiosError) {
+                        if (axios.isAxiosError(refreshError) && errorCallback) {
                             errorCallback(refreshError)
                         }
                         return Promise.reject(refreshError)

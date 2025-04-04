@@ -1,3 +1,4 @@
+import type { Comment } from './comments'
 import type { User } from './user'
 
 export interface Forum {
@@ -33,31 +34,6 @@ export interface ForumThread {
     active: boolean
     modified_on: string
     created_on: string 
-}
-
-export interface Comment {
-    id: number
-    user: User
-    title: string | null
-    content: string
-    content_delta: null
-    content_html: string
-    bookmarked_by_user: boolean
-    active: boolean
-    pinned: boolean
-    bookmarked: boolean
-    highlighted: boolean
-    modified_on: string
-    created_on: string
-}
-
-export interface ThreadApiResponse {
-    count: number
-    next: string | null
-    previous: string | null
-    results: Comment[]
-    pages: number
-    participants: number
 }
 
 export interface SearchApiResponse {

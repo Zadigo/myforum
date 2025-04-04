@@ -1,7 +1,6 @@
 from comments.api import serializers
-from comments.api.serializers import ValidateComment
+from comments.api.serializers import CommentSerializer, ValidateComment
 from comments.models import Comment, SavedComment
-from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -9,7 +8,6 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from threads.api.serializers import ThreadSerializer
 from threads.models import MainThread
 
 
@@ -22,13 +20,24 @@ def edit_comment_helper(request, instance=None):
 
 class CreateComment(generics.CreateAPIView):
     queryset = Comment.objects.all()
-    serializer_class = serializers.CommentSerializer
+    serializer_class = serializers.ValidateComment
     permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        validator = self.get_serializer(data=request.data)
+        validator.is_valid(raise_exception=True)
+
+        self.perform_create(validator)
+
+        serializer = CommentSerializer(instance=validator.instance)
+        headers = self.get_success_headers(serializer.data)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class GetUpdateDeleteComment(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
-    serializer_class = serializers.CommentSerializer
+    serializer_class = serializers.ValidateComment
     permission_classes = [IsAuthenticated]
 
 

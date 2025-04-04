@@ -5,7 +5,7 @@
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="d-flex justify-content-start align-items-center gap-2 mb-4">
-              <img src="http://via.placeholder.com/200x200" class="rounded-circle" width="50" height="50">
+              <img src="https://via.placeholder.com/200x200" class="rounded-circle" width="50" height="50">
               <h3 class="card-title m-0 h4">{{ thread.title }}</h3>
               <font-awesome v-if="thread.owned_by_user" icon="bolt-lightning" class="text-warning" />
             </div>
@@ -27,6 +27,8 @@
 </template>
 
 <script setup lang="ts">
+import type  { ForumThreadsApiResponse } from '~/types'
+
 const { $dayjs } = useNuxtApp()
 const { id } = useRoute().params
 const forumStore = useForums()
@@ -38,12 +40,15 @@ const emit = defineEmits({
   }
 })
 
+const cachedResponse = ref<ForumThreadsApiResponse>()
+
 useFetch(`/api/forums/${id}/threads`, {
   onResponse() {
     emit('load-current-forum')
   },
-  transform(data) {
-    forumThreads.value = data
+  transform(data: ForumThreadsApiResponse) {
+    cachedResponse.value = data
+    forumThreads.value = data.results
     return data
   }
 })

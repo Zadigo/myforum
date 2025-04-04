@@ -1,6 +1,5 @@
 <template>
-  <div v-if="comments" id="comments">
-    <!-- TODO: :class="{ 'bg-light mb-5': comment.initial_comment }" -->
+  <div v-if="comments.length > 0" id="comments">
     <article v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="card shadow-sm mb-2">
       <div v-if="showActions" class="card-toolbar border-bottom">
         <div class="card-toolbar-content d-flex justify-content-between align-items-center">
@@ -14,21 +13,18 @@
             <v-menu activator="parent">
               <v-list>
                 <v-list-item>
-                  <!-- <font-awesome-icon :icon="['fas', 'bookmark']" /> -->
                   <v-list-item-title @click="emit('edit', comment)">
                     Edit
                   </v-list-item-title>
                 </v-list-item>
 
                 <v-list-item @click="handleReport">
-                  <!-- <font-awesome-icon :icon="['fas', 'bookmark']" /> -->
                   <v-list-item-title>
                     Report
                   </v-list-item-title>
                 </v-list-item>
 
                 <v-list-item @click="handleDeletion(comment)">
-                  <!-- <font-awesome-icon :icon="['fas', 'bookmark']" /> -->
                   <v-list-item-title>
                     Delete
                   </v-list-item-title>
@@ -90,15 +86,17 @@
   </div>
 
   <div v-else>
-    No comments
+    <div class="card">
+      <div class="card-body">
+        No comments
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Comment } from '~/types'
 import type { PropType } from 'vue'
-
-
 
 const emit = defineEmits({
   reply (_comment: Comment) {
@@ -111,7 +109,7 @@ const emit = defineEmits({
 
 defineProps({
   comments: {
-    type: Array as PropType<Comment[] | undefined>,
+    type: Array as PropType<Comment[]>,
     required: true
   },
   showActions: {
@@ -124,69 +122,56 @@ const { $dayjs } = useNuxtApp()
 const authStore = useAuthentication()
 const { handleError } = useErrorHandler()
 
-function useCommentActions() {
-  const store = useForums()
-  const { $client } = useNuxtApp()
+const store = useForums()
+const { $client } = useNuxtApp()
 
-  /**
-   * Checks that the author of the comment
-   * is from the current authenticated user 
-   */
-  function isAuthor(comment: Comment) {
-    if (!authStore.isAuthenticated) {
+/**
+ * Checks that the author of the comment
+ * is from the current authenticated user 
+ */
+function isAuthor(comment: Comment) {
+  if (!authStore.isAuthenticated) {
+    return false
+  } else {
+    if (!authStore.userProfile) {
       return false
     } else {
-      if (!authStore.userProfile) {
-        return false
-      } else {
-        if (comment.user.id === authStore.userProfile.id) {
-          return true
-        }
+      if (comment.user.id === authStore.userProfile.id) {
+        return true
       }
     }
   }
+}
 
-  async function handleQuoteFrom () {
-    // pass
-  }
-  
-  async function handleBookmark (comment: Comment) {
-    try {
-      await $client.post(`comments/${comment.id}/bookmark`)
-    } catch (e) {
-      handleError(e)
-    }
-  }
-  
-  async function handleShare () {
-    // pass
-  }
-  
-  async function handleDeletion (comment: Comment) {
-    try {
-      await $client.delete(`comments/${comment.id}`)
-      const index = store.threadComments.findIndex(oldComment => oldComment.id === comment.id)
-      store.threadComments.splice(index, 1)
-    } catch (e) {
-      handleError(e)
-    }
-  }
-  
-  async function handleReport () {
-    // pass 
-  }
+async function handleQuoteFrom () {
+  // pass
+}
 
-  return {
-    isAuthor,
-    handleQuoteFrom,
-    handleBookmark,
-    handleShare,
-    handleDeletion,
-    handleReport
+async function handleBookmark (comment: Comment) {
+  try {
+    await $client.post(`comments/${comment.id}/bookmark`)
+  } catch (e) {
+    handleError(e)
   }
 }
 
-const { handleQuoteFrom, handleDeletion, handleReport, handleShare, handleBookmark } = useCommentActions()
+async function handleShare () {
+  // pass
+}
+
+async function handleDeletion (comment: Comment) {
+  try {
+    await $client.delete(`comments/${comment.id}`)
+    const index = store.threadComments.findIndex(oldComment => oldComment.id === comment.id)
+    store.threadComments.splice(index, 1)
+  } catch (e) {
+    handleError(e)
+  }
+}
+
+async function handleReport () {
+  // pass 
+}
 </script>
 
 <style lang="scss" scoped>

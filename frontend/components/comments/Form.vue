@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <div class="card">
+      <div class="card shadow-sm">
         <div v-if="replyingToComment" class="card-header">
           Replying to <span class="fw-bold">@{{ replyingToComment.user.username }}</span>
         </div>
@@ -58,10 +58,10 @@ const emit = defineEmits({
   }
 })
 
-const route = useRoute()
+const { id } = useRoute().params
 
 const requestData = ref<RequestData>({
-  thread: route.params.id,
+  thread: id,
   title: '',
   content: '',
   content_delta: {},
@@ -71,14 +71,17 @@ const requestData = ref<RequestData>({
 
 const replyingToComment = inject<Comment>('replyingToComment')
 const { handleError } = useErrorHandler()
-const { $client } = useNuxtApp()
+
+const access = useCookie('access')
+const refresh = useCookie('refresh')
+const { authenticatedClient: client } = useAuthenticatedAxiosClient(access.value, refresh.value)
 
 /**
  * 
  */
 async function createNewPost () {
   try {
-    $client.post('/comments/create', requestData.value)
+    client.post('v1/comments/create', requestData.value)
     emit('created')
   } catch (e) {
     handleError(e)
