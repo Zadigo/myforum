@@ -3,7 +3,9 @@
     <!-- Editor -->
     <div v-if="store.showCreateCommentForm" class="row">
       <div class="col-12">
-        <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+        <KeepAlive>
+          <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+        </KeepAlive>
       </div>
     </div>
 
@@ -55,7 +57,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment, ForumThread, ThreadCommentsApiResponse } from '~/types';
+import type { Comment, ForumThread, ThreadCommentsApiResponse } from '~/types'
+
+definePageMeta({
+  layout: 'threads'
+})
 
 const AsyncPollSection = defineAsyncComponent({
   loader: async () => import('~/components/threads/Poll.vue')
@@ -71,22 +77,6 @@ const replyingToComment = ref<Comment>()
 
 provide('replyingToComment', replyingToComment)
 
-function handleEditorContent(data: { text: string, delta: string, html: string }) {
-  // Do something
-  console.log(data)
-}
-
-// async function getComments(page = 1) {
-//   try {
-//     if (currentThread.value) {  
-//       const response = await $client.get<ThreadApiResponse>(`threads/${currentThread.value.id}/comments`, { params: { page } })
-//       threadComments.value = response.data.results
-//       cachedResponse.value = response.data
-//     }
-//   } catch (e) {
-//     handleError(e)
-//   }
-// }
 
 const { refresh } = useFetch(`/api/threads/${id}/comments`, {
   query: {
@@ -107,6 +97,11 @@ const { execute } = useFetch(`/api/threads/${id}`, {
     return data
   }
 })
+
+function handleEditorContent(data: { text: string, delta: string, html: string }) {
+  // Do something
+  console.log(data)
+}
 
 async function handlePagination() {
   refresh()

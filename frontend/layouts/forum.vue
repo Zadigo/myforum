@@ -2,6 +2,9 @@
   <section id="forum">
     <!-- Navbar -->
     <BaseNavbar />
+
+    <!-- Header -->
+    <HeadersForum />
     
     <div class="container">
       <div class="row my-5">

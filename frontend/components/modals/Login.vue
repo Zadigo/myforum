@@ -28,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-// import createDjangoClient from '~/composables/django_client';
 import type { LoginAPIResponse } from '~/types';
 
 const { client } = useAxiosClient()
@@ -43,7 +42,7 @@ const cookieRefreshToken = useCookie<string>('refresh')
 
 async function handleLogin () {
   try {
-    const response = await client.post<LoginAPIResponse>('/token/', {
+    const response = await client.post<LoginAPIResponse>('/auth/v1/token/', {
       username: username.value,
       password: password.value
     })

@@ -2,6 +2,9 @@
   <section id="forum">
     <!-- Navbar -->
     <BaseNavbar />
+
+    <!-- Header -->
+    <HeadersThread />
     
     <div class="container">
       <div class="row my-5">
@@ -10,7 +13,7 @@
         </div>
 
         <aside class="col-sm-12 col-md-3">
-          <ForumsAside />
+          <ThreadsAside />
         </aside>
       </div>
     </div>

@@ -56,6 +56,10 @@
 <script setup lang="ts">
 import { sortMethods } from '~/data'
 
+definePageMeta({
+  layout: 'forum'
+})
+
 const AsyncThreadsIterator = defineAsyncComponent({
   loader: async () => import('~/components/threads/Iterator.vue')
 })
