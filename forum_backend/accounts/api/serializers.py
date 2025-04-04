@@ -1,32 +1,20 @@
-from rest_framework import fields
-from rest_framework.response import Response
-from rest_framework.serializers import Serializer
+from accounts.models import UserProfile
+from django.contrib.auth import get_user_model
+from rest_framework.serializers import ModelSerializer
 
 
-class UserProfileSerializer(Serializer):
-    preferred_topics = fields.CharField()
-    blocked_users = fields.CharField()
-    # followers = models.ManyToManyField(
-    #     MyUser,
-    #     related_name='',
-    #     symmetrical=False
-    # )
-    is_premium = fields.BooleanField()
+class UserProfileSerializer(ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'preferred_topics', 'blocked_users',
+            'followers', 'is_premium'
+        ]
 
 
-class UserSerializer(Serializer):
-    id = fields.IntegerField(read_only=True)
-    username = fields.CharField()
-    email = fields.EmailField()
+class UserSerializer(ModelSerializer):
     userprofile = UserProfileSerializer()
 
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
-    def get_response(self):
-        if self.instance is None:
-            self.is_valid(raise_exception=True)
-        return Response(self.data)
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'email', 'userprofile']
