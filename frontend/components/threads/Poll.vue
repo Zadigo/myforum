@@ -1,6 +1,6 @@
 <template>
-  <div class="col-md-12">
-    <div v-if="poll" class="card shadow-sm bg-light">
+  <div  class="col-md-12">
+    <div v-if="poll" class="card shadow-sm bg-yellow-100">
       <div class="card-body">
         <h5 class="card-title">
           {{ poll.question }}
@@ -37,6 +37,7 @@
         </div>
       </div>
     </div>
+
     <div v-else>
       Loading...
     </div>
@@ -49,13 +50,14 @@ import type { PollApiResponse } from '~/types'
 const { id } = useRoute().params
 const answered = ref<boolean>(false)
 const poll = ref<PollApiResponse>()
-// const messagesStore = useMessages()
+
 const requestData = ref({
   single_answer: null,
   answers: []
 })
 
 useFetch(`/api/threads/${id}/poll`, {
+  server: false,
   transform(data) {
     poll.value = data
     return data

@@ -1,36 +1,32 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div v-if="replyingToComment" class="card-header">
-          Replying to <span class="fw-bold">@{{ replyingToComment.user.username }}</span>
-        </div>
+  <div class="card shadow-sm">
+    <div v-if="replyingToComment" class="card-header">
+      Replying to <span class="fw-bold">@{{ replyingToComment.user.username }}</span>
+    </div>
 
-        <div class="card-body">
-          <v-text-field v-model="requestData.title" type="text" placeholder="Title" variant="solo-filled" flat />
+    <div class="card-body">
+      <v-text-field v-model="requestData.title" type="text" placeholder="Title" variant="solo-filled" flat />
 
-          <BaseEditor @editor-content="handleEditorContent" />
+      <BaseEditor @editor-content="handleEditorContent" />
 
-          <div v-for="quote in requestData.quotes" :key="quote" class="alert alert-info">
-            {{ quote }}
-          </div>
-        </div>
+      <div v-for="quote in requestData.quotes" :key="quote" class="alert alert-info">
+        {{ quote }}
+      </div>
+    </div>
 
-        <div class="card-footer d-flex">
-          <div class="ms-auto d-flex gap-2">
-            <v-btn color="primary" variant="tonal" rounded @click="createNewPost">
-              Post
-            </v-btn>
+    <div class="card-footer d-flex">
+      <div class="ms-auto d-flex gap-2">
+        <v-btn color="primary" variant="tonal" rounded @click="createNewPost">
+          Post
+        </v-btn>
 
-            <v-btn color="info" variant="tonal" rounded @click="saveDraft">
-              Save draft
-            </v-btn>
-            
-            <v-btn color="info" variant="tonal" rounded @click="emit('close')">
-              Cancel
-            </v-btn>
-          </div>
-        </div>
+        <v-btn color="info" variant="tonal" rounded @click="saveDraft">
+          Save draft
+        </v-btn>
+        
+        <v-btn color="info" variant="tonal" rounded @click="emit('close')">
+          Cancel
+        </v-btn>
       </div>
     </div>
   </div>

@@ -1,11 +1,13 @@
 <template>
   <section id="comments">
-    <ClientOnly>
-      <!-- Editor -->
-      <CommentsForm v-if="store.showCreateCommentForm" @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
-    </ClientOnly>
+    <!-- Editor -->
+    <div v-if="store.showCreateCommentForm" class="row">
+      <div class="col-12">
+        <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+      </div>
+    </div>
 
-    <div v-if="!store.showCreateCommentForm" class="row">
+    <div v-else class="row">
       <!-- Poll -->
       <Suspense>
         <template #default>
@@ -16,38 +18,35 @@
           Loading...
         </template>
       </Suspense>
-      
+
       <!-- Comments -->
       <div class="col-12">
         <div class="row">
-          <ClientOnly>
-            <!-- Pagination -->
-            <div class="col-12 d-flex justify-content-between mb-3">
-              <span>Left</span>
-              <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
-            </div>
-          </ClientOnly>
+          <!-- Pagination -->
+          <!-- <div class="d-flex justify-content-between mb-3">
+            <span>Left</span>
+            <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
+          </div> -->
 
           <!-- Comments -->
           <CommentsWrapper :comments="threadComments" @reply="handleReply" />
-          
-          <ClientOnly>
-            <!-- Pagination -->
-            <div class="col-12 d-flex justify-content-end mt-3">
-              <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
-            </div>
-          </ClientOnly>
+
+          <!-- Pagination -->
+          <!-- <div class="d-flex justify-content-between mb-3">
+            <span>Left</span>
+            <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
+          </div> -->
         </div>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="col-12">
-            <h1 class="fw-bold display-6 my-5">Recommended reading</h1>
+    <div class="row">
+      <div class="col-12">
+        <h1 class="fw-bold display-6 my-5">Recommended reading</h1>
 
-            <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
-              <div class="card-body">
-                {{ i }}
-              </div>
-            </div>
+        <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
+          <div class="card-body">
+            {{ i }}
           </div>
         </div>
       </div>
