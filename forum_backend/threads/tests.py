@@ -1,11 +1,13 @@
-from django.test import override_settings
+import json
+
 from comments.models import SavedComment
 from django.contrib.auth import get_user_model
+from django.test import override_settings
 from django.urls import reverse
 from forums.models import Forum
 from moderation.models import UserModerationPreference
 from threads.models import MainThread, SubThread
-import json
+
 from forum_backend.mixins import AuthenticatedTestCase
 
 
@@ -14,6 +16,7 @@ class TestThreadsApi(AuthenticatedTestCase):
         'fixtures/users',
         'fixtures/forums',
         'fixtures/threads',
+        'fixtures/polls',
         'comments'
     ]
 
@@ -161,6 +164,13 @@ class TestThreadsApi(AuthenticatedTestCase):
         path = reverse('threads_api:follow', args=[obj.id])
         response = self.client.post(path)
         self.assertIn('number_of_followers', response.json())
+
+    def test_get_thread_poll(self):
+        instance = MainThread.objects.first()
+        path = reverse('threads_api:poll', args=[instance.id])
+        response = self.client.get(path)
+        print(response.content)
+        # self.assertEqual(response.status_code, 200)
 
 
 @override_settings(CELERY_TASK_ALWAYS_EAGER=True, CELERY_TASK_EAGER_PROPAGATES=True)

@@ -21,6 +21,11 @@ urlpatterns = [
         name='delete'
     ),
     re_path(
+        r'^(?P<pk>\d+)/poll$',
+        views.ThreadPoll.as_view(),
+        name='poll'
+    ),
+    re_path(
         r'^(?P<pk>\d+)$',
         views.ThreadDetail.as_view(),
         name='detail_update'

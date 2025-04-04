@@ -4,7 +4,16 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: true,
   routeRules: {
-    '/': { redirect: '/forums' }
+    '/': {
+      redirect: '/forums',
+      swr: true
+    },
+    'forums/**': {
+      swr: true
+    },
+    'threads/**': {
+      swr: true
+    }
   },
   runtimeConfig: {
     public: {

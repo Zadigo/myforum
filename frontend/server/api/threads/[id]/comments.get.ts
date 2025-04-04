@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useAxiosClient } from '~/composables/client'
 import type { ThreadApiResponse } from '~/types'
 
-export default defineCachedEventHandler(async event => {
+export default defineEventHandler(async event => {
     const { sort } = getQuery(event)
     const id = getRouterParam(event, 'id')
     const { client } = useAxiosClient()
@@ -74,10 +74,4 @@ export default defineCachedEventHandler(async event => {
     //     }
     // ]
     // return data
-}, {
-    base: 'fs',
-    maxAge: 1 * 60,
-    getKey() {
-        return 'thread-comments'
-    },
 })

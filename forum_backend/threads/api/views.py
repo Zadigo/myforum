@@ -1,3 +1,6 @@
+from rest_framework import generics
+from polls.models import Answer, Poll
+from polls.api import serializers
 from celery import group
 from comments.api.serializers import CommentSerializer
 from django.core.cache import cache
@@ -141,3 +144,25 @@ class FollowThread(generics.GenericAPIView):
             thread.followers.add(request.user)
         number_of_followers = thread.followers.count()
         return Response({'number_of_followers': number_of_followers})
+
+
+class ThreadPoll(generics.RetrieveAPIView):
+    """Return the specific poll for the given thread"""
+
+    queryset = Poll.objects.all()
+    serializer_class = serializers.PollSerializer
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        
+        try:
+            obj = queryset.get()
+        except:
+            return None   
+        else:         
+            self.check_object_permissions(self.request, obj)
+            return obj
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(thread__id=self.kwargs['pk'])
