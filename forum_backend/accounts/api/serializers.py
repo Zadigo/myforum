@@ -1,17 +1,6 @@
-
-from django.contrib.auth import get_user_model
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from rest_framework import fields
-from rest_framework.authtoken.models import Token
-from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
-
-from accounts.models import MyUser, PermanentBan, TemporaryBan
-
-USER_MODEL = get_user_model()
 
 
 class UserProfileSerializer(Serializer):

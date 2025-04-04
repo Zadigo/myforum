@@ -46,6 +46,8 @@ class UserProfile(models.Model):
         blank=True,
         null=True
     )
+    # TODO: Is this useful when we have the modereation center
+    # for the user
     blocked_users = models.CharField(
         max_length=300,
         blank=True,

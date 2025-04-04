@@ -1,17 +1,14 @@
 
+from accounts.models import MyUser, PermanentBan, TemporaryBan
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework import fields
 from django.utils import timezone
+from rest_framework import fields
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
-
-from accounts.models import MyUser, PermanentBan, TemporaryBan
-
-USER_MODEL = get_user_model()
 
 
 class UserProfileSerializer(Serializer):
@@ -87,7 +84,7 @@ class Login(Serializer):
                         detail=f"User is banned from {temporary_ban.start_date} "
                         f"to {temporary_ban.end_date}"
                     )
-                
+
             token, _ = Token.objects.get_or_create(user=user)
             setattr(self, 'credentials', {'token': str(token)})
         else:

@@ -17,10 +17,9 @@ class Profile(generics.RetrieveAPIView):
         user = get_object_or_404(queryset, id=self.request.user.id)
         self.check_object_permissions(self.request, user)
 
-        # TODO: Check the user is active, not banned or does not
-        # exceed a certain quantity of strikes
-        permaban_qs = PermanentBan.objects.filter(user=self.request.user)
-        temporary_ban_qs = TemporaryBan.objects.filter(user=self.request.user)
+        params = {'user': self.request.user}
+        permaban_qs = PermanentBan.objects.filter(**params)
+        temporary_ban_qs = TemporaryBan.objects.filter(**params)
 
         is_banned = [
             permaban_qs.exists(),
