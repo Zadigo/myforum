@@ -8,10 +8,10 @@ logger = get_logger('comments')
 
 
 @shared_task
-def create_notifications(data: dict[str, str | int]):
+def create_notifications(**kwargs: dict[str, str | int]):
     # Message, Follow, Like, Shoutout
-    user_ids = data['user_ids']
-    comment_id = data.get('comment', None)
+    user_ids = kwargs['user_ids']
+    comment_id = kwargs.get('comment', None)
 
     comment = None
 
@@ -30,7 +30,7 @@ def create_notifications(data: dict[str, str | int]):
         Notification.objects.create(**{
             'user': user,
             'message': comment,
-            'notification_type': data['notification_type']
+            'notification_type': kwargs['notification_type']
         })
 
     return user_ids
