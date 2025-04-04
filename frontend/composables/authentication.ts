@@ -1,5 +1,5 @@
 import type { LoginAPIResponse, StringNull } from "~/types"
-import createDjangoClient from '~/composables/django_client'
+import createDjangoClient from '~/composables/client'
 
 export function useAuthencationComposable() {
     const nuxtApp = tryUseNuxtApp()

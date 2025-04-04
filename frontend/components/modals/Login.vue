@@ -28,16 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import createDjangoClient from '~/composables/django_client';
+// import createDjangoClient from '~/composables/django_client';
 import type { LoginAPIResponse } from '~/types';
 
+const { client } = useAxiosClient()
 const authStore = useAuthentication()
 const { $toast } = useNuxtApp()
 
 const username = ref<string>('')
 const password = ref<string>('')
-
-const client = createDjangoClient('/auth/v1/')
 
 const cookieAccessToken = useCookie<string>('access')
 const cookieRefreshToken = useCookie<string>('refresh')
@@ -56,6 +55,7 @@ async function handleLogin () {
     authStore.openLoginModal = false
     username.value = ''
     password.value = ''
+    
     $toast('Connected')
   } catch {
     // Handle error

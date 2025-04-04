@@ -56,7 +56,7 @@ urlpatterns = [
         include('accounts.api.urls')
     ),
     path(
-        'api/v1/forums/',
+        'v1/forums/',
         include('forums.api.urls')
     ),
     path(

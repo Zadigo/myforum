@@ -1,6 +1,29 @@
+import { AxiosError } from 'axios'
+import { useAxiosClient } from '~/composables/client'
 import type { Comment, ThreadApiResponse } from '~/types'
 
-export default defineCachedEventHandler(async _event => {
+export default defineCachedEventHandler(async event => {
+    const { sort } = getQuery(event)
+    const id = getRouterParam(event, 'id')
+    const { client } = useAxiosClient()
+
+    try {
+        const response = await client.get<ThreadApiResponse[]>(`/v1/forums/${id}`, {
+            params: {
+                sort
+            }
+        })
+        console.log(response.data)
+    } catch (e) {
+        if (e instanceof AxiosError && e.response) {
+            throw createError({
+                statusCode: 500,
+                statusMessage: e.response.data,
+                data: { field: 'email' }
+            })
+        }
+    }
+
     const data: Comment[] = [
         {
             active: true,
