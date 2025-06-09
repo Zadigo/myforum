@@ -1,13 +1,13 @@
 <template>
   <div v-if="comments.length > 0" id="comments">
-    <article v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="card shadow-sm mb-2">
-      <div v-if="showActions" class="card-toolbar border-bottom">
-        <div class="card-toolbar-content d-flex justify-content-between align-items-center">
+    <VoltCard v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="mb-2">
+      <template v-if="showActions" #header>
+        <div class="flex justify-between items-center">
           <span :aria-label="comment.title || ''">
             {{ comment.title }}
           </span>
 
-          <v-btn v-if="authStore.isAuthenticated" color="dark" variant="text" rounded>
+          <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
             <font-awesome icon="ellipsis-vertical" />
 
             <v-menu activator="parent">
@@ -33,56 +33,56 @@
             </v-menu>
           </v-btn>
         </div>
-      </div>
+      </template>
 
-      <div class="card-body">
+      <template #content>
         <div class="mb-4">
           <span class="fw-bold text-muted">#{{ comment.id }}</span> 
           <span class="mx-2">-</span> by <span class="fw-bold">{{ comment.user?.username }}</span> 
           <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
         </div>
         <div v-html="comment.content_html" />
-      </div>
+      </template>
 
-      <div v-if="showActions" class="card-footer ms-auto ">
+      <template v-if="showActions" #footer>
         <div v-if="authStore.isAuthenticated" class="d-flex gap-2">
-          <v-btn color="primary" variant="tonal" @click="emit('reply', comment)">
+          <VoltButton variant="tonal" @click="emit('reply', comment)">
             <font-awesome icon="reply" class="me-2" />Reply
-          </v-btn>
+          </VoltButton>
 
-          <v-btn color="primary" variant="tonal" @click="handleQuoteFrom">
+          <VoltButton variant="tonal" @click="handleQuoteFrom">
             <font-awesome icon="quote-left" class="me-2" />Quote from
-          </v-btn>
+          </VoltButton>
           
-          <v-btn color="primary" variant="tonal" @click="handleBookmark(comment)">
+          <VoltButton variant="tonal" @click="handleBookmark(comment)">
             <font-awesome v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
             <font-awesome v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
-          </v-btn>
+          </VoltButton>
           
-          <v-btn color="primary" variant="tonal" @click="handleShare">
+          <VoltButton variant="tonal" @click="handleShare">
             <font-awesome icon="share" class="me-2" />Share
-          </v-btn>
+          </VoltButton>
         </div>
 
         <div v-else class="d-flex gap-2">
-          <v-btn color="dark" variant="tonal" @click="authStore.openLoginModal=true">
+          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
             <font-awesome icon="reply" class="me-2" />Reply
-          </v-btn>
+          </VoltButton>
 
-          <v-btn color="dark" variant="tonal" @click="authStore.openLoginModal=true">
+          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
             <font-awesome icon="quote-left" class="me-2" />Quote from
-          </v-btn>
+          </VoltButton>
           
-          <v-btn color="dark" variant="tonal" @click="authStore.openLoginModal=true">
+          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
             <font-awesome icon="bookmark" class="me-2" />Bookmark
-          </v-btn>
+          </VoltButton>
           
-          <v-btn color="dark" variant="tonal" @click="authStore.openLoginModal=true">
+          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
             <font-awesome icon="share" class="me-2" />Share
-          </v-btn>
+          </VoltButton>
         </div>
-      </div>
-    </article>
+      </template>
+    </VoltCard>
   </div>
 
   <div v-else>
@@ -173,33 +173,3 @@ async function handleReport () {
   // pass 
 }
 </script>
-
-<style lang="scss" scoped>
-.card-toolbar {
-  contain: layout;
-  display: block;
-  flex: 1 1 auto;
-  max-width: 100%;
-  transition: transform .2s cubic-bezier(.4, 0, .2, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), left .2s cubic-bezier(.4, 0, .2, 1), right .2s cubic-bezier(.4, 0, .2, 1), box-shadow .28s cubic-bezier(.4, 0, .2, 1), max-width .25s cubic-bezier(.4, 0, .2, 1), width .25s cubic-bezier(.4, 0, .2, 1);
-  position: relative;
-  /* background-color: #fff; */
-  border-top-left-radius: .5rem;
-  border-top-right-radius: .5rem;
-  /* box-shadow: 0 10px 15px -3px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%); */
-}
-
-.card-toolbar .card-toolbar-content {
-  padding: 4px 16px;
-  height: 64px;
-}
-
-.btn-icon {
-  color: rgba(0, 0, 0, .54);
-  min-height: 0;
-  min-width: 0;
-  padding: 0;
-  /* box-shadow: none; */
-  height: 48px;
-  width: 48px;
-}
-</style>

@@ -2,7 +2,7 @@
   <VoltCard role="article">
     <template #title>
       <NuxtLink to="/rules">
-        <h3 class="card-title">
+        <h3 class="font-faustina">
           {{ title }}
         </h3>
       </NuxtLink>

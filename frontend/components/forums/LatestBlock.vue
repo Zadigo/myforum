@@ -1,15 +1,17 @@
 <template>
   <!-- Latest posts -->
   <section id="latest-posts">
-    <div class="col-12 d-flex justify-content-between">
+    <div class="flex justify-between">
       <h3>{{ $t('Latest posts') }}</h3>
-  
-      <NuxtLink to="/whats-new" class="lh-lg">
-        {{ $t('All new posts') }}
-      </NuxtLink>
+      
+      <VoltSecondaryButton>
+        <NuxtLinkLocale to="/whats-new" class="lh-lg">
+          {{ $t('All new posts') }}
+        </NuxtLinkLocale>
+      </VoltSecondaryButton>
     </div>
   
-    <div class="col-12">
+    <div>
       <CommentsIterator :comments="comments" :show-actions="false" />
     </div>
   </section>

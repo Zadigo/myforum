@@ -1,12 +1,10 @@
 <template>
   <section id="forums">
     <div class="row mb-5">
-        <div class="col-12">
-          <ForumsCard title="Site rules / FAQ" text="See here for detailed specifics of Tennis Forum site rules, policy, FAQ" />
-        </div>
+        <ForumsCard title="Site rules / FAQ" text="See here for detailed specifics of Tennis Forum site rules, policy, FAQ" />
 
         <!-- Forums -->
-        <div class="col-12 my-3">
+        <div class="my-3">
           <Suspense>
             <AsyncIterationBlock />
 
@@ -17,7 +15,7 @@
         </div>
 
         <!-- Latest Comments -->
-        <div class="col-12">
+        <div class="my-3">
           <Suspense>
             <AsyncForumLatestBlock />
 

@@ -54,30 +54,62 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/eslint',
     '@vesp/nuxt-fontawesome',
-    '@nuxtjs/google-fonts',
     '@nuxt/test-utils/module',
-    '@nuxtjs/google-fonts',
+    // '@nuxtjs/google-fonts',
     '@unlok-co/nuxt-stripe',
     '@nuxtjs/sitemap',
     '@nuxt/image',
     '@nuxtjs/i18n',
     '@nuxt/icon',
     // '@artmizu/nuxt-prometheus',
-    // '@nuxtjs/tailwindcss',
     'nuxt-gtag',
     'nuxt-clarity-analytics',
     'nuxt-openapi-docs-module',
-    // 'vuetify-nuxt-module',
     'vue-sonner/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    'pinia-plugin-persistedstate',
+    '@nuxt/fonts'
   ],
   
-  googleFonts: {
-    families: {
-      'Noto Sans': {
-        wght: '100..700'
+  // googleFonts: {
+  //   families: {
+  //     'Petrona': {
+  //       wght: '100..700'
+  //     }
+  //   }
+  // },
+
+  // https://www.fontpair.co/all
+  fonts: {
+    provider: 'google',
+    families: [
+      {
+        name: 'Manrope',
+        weights: [100, 700],
+        display: 'swap'
+      },
+      // Titles
+      {
+        name: 'Petrona',
+        weights: [100, 700],
+        display: 'swap'
+      },
+      {
+        name: 'Faustina',
+        weights: [300, 700],
+        display: 'swap'
+      },
+      {
+        name: 'Newsreader',
+        weights: [200, 700],
+        display: 'swap'
+      },
+      {
+        name: 'Work Sans',
+        weights: [100, 700],
+        display: 'swap'
       }
-    }
+    ]
   },
   
   gtag: {
@@ -87,17 +119,7 @@ export default defineNuxtConfig({
 
   css: [
     '~/assets/css/tailwind.css'
-    // '@/assets/style.scss',
-    // '~/assets/css/style.css',
-    // '~/node_modules/bootstrap/dist/css/bootstrap.min.css',
-    // '~/node_modules/mdb-ui-kit/css/mdb.min.css',
-    // '~/node_modules/animate.css/animate.min.css'
   ],
-
-  // vuetify: {
-  //   moduleOptions: {},
-  //   vuetifyOptions: {}
-  // },
 
   fontawesome: {
     icons: {

@@ -1,34 +1,30 @@
 <template>
-  <v-dialog v-model="authStore.openLoginModal" width="400" @close="authStore.openLoginModal=false">
-    <v-card>
-      <v-card-text>
-        <v-form @submit.prevent>
-          <v-text-field v-model="username" type="username" autocomplete="username" variant="solo-filled" placeholder="Username" flat />
-          <v-text-field v-model="password" type="password" autocomplete="current-password" variant="solo-filled" placeholder="Password" flat />
-          
-          <v-btn variant="tonal" rounded @click="handleLogin">
-            Login
-          </v-btn>          
-        </v-form>
+  <VoltDialog v-model:visible="authStore.openLoginModal" modal @close="authStore.openLoginModal=false">
+    <form @submit.prevent>
+      <VoltInputText v-model="username" type="username" autocomplete="username" placeholder="Username" flat />
+      <VoltInputText v-model="password" type="password" autocomplete="current-password" placeholder="Password" flat />
+      
+      <VaultButton @click="handleLogin">
+        Login
+      </VaultButton>
+    </form>
 
-        <v-form v-show="false" @submit.prevent>
-          <v-text-field v-model="username" type="text" autocomplete="username" variant="solo-filled" placeholder="Username" flat />
-          <v-text-field v-model="password" type="password" autocomplete="new-password" variant="solo-filled" placeholder="Password 1" flat />
-          <v-text-field v-model="password" type="password" autocomplete="new-password" variant="solo-filled" placeholder="Password 2" flat />
-          
-          <div class="flex justify-end">
-            <v-btn variant="tonal" rounded @click="handleSignup">
-              Signup
-            </v-btn>          
-          </div>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+    <form v-show="false" @submit.prevent>
+      <VoltInputText v-model="username" type="text" autocomplete="username" placeholder="Username" flat />
+      <VoltInputText v-model="password" type="password" autocomplete="new-password" placeholder="Password 1" flat />
+      <VoltInputText v-model="password" type="password" autocomplete="new-password" placeholder="Password 2" flat />
+      
+      <div class="flex justify-end">
+        <VoltButton @click="handleSignup">
+          Signup
+        </VoltButton>          
+      </div>
+    </form>
+  </VoltDialog>
 </template>
 
 <script setup lang="ts">
-import type { LoginAPIResponse } from '~/types';
+import type { LoginAPIResponse } from '~/types'
 
 const { client } = useAxiosClient()
 const authStore = useAuthentication()
@@ -40,6 +36,9 @@ const password = ref<string>('')
 const cookieAccessToken = useCookie<string>('access')
 const cookieRefreshToken = useCookie<string>('refresh')
 
+/**
+ *
+ */
 async function handleLogin () {
   try {
     const response = await client.post<LoginAPIResponse>('/auth/v1/token/', {
@@ -61,6 +60,9 @@ async function handleLogin () {
   }
 }
 
+/**
+ *
+ */
 async function handleSignup () {
   // Do something
 }

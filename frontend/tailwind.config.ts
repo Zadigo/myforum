@@ -13,7 +13,9 @@ export default {
     ],
     theme: {
         extend: {
-            fontFamily: {},
+            fontFamily: {
+            
+            },
             colors: {},
             screens: {},
         },
