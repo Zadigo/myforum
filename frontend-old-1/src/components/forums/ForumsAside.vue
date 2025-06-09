@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="card">
-      <div class="card-body">
+  <aside>
+    <VoltCard>
+      <template #content>
         <h4 class="card-title mb-3">Tennis Forum</h4>
 
         <p class="card-text mb-3">
@@ -16,15 +16,15 @@
         <button class="btn btn-block btn-info btn-rounded" @click="authStore.openLoginModal=true">
           Join our community
         </button>
-      </div>
-    </div>
+      </template>
+    </VoltCard>
 
-    <div class="card mt-2">
-      <div class="card-body">
+    <VoltCard class="mt-2">
+      <template #content>
         <h4 class="card-title mb-3">Top contributors this month</h4>
-      </div>
-    </div>
-  </div>
+      </template>
+    </VoltCard>
+  </aside>
 </template>
 
 <script>

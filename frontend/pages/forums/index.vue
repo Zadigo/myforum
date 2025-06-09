@@ -8,9 +8,7 @@
         <!-- Forums -->
         <div class="col-12 my-3">
           <Suspense>
-            <template #default>
-              <AsyncIterationBlock />
-            </template>
+            <AsyncIterationBlock />
 
             <template #fallback>
               Loading...
@@ -21,9 +19,7 @@
         <!-- Latest Comments -->
         <div class="col-12">
           <Suspense>
-            <template #default>
-              <AsyncForumLatestBlock />
-            </template>
+            <AsyncForumLatestBlock />
 
             <template #fallback>
               Loading...

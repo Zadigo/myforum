@@ -3,16 +3,13 @@
     <!-- Navbar -->
     <BaseNavbar />
     
-    <div class="container">
-      <div class="row my-5">
-        <div class="col-sm-12 col-md-8 offset-md-1" role="main">
-          <slot />
-        </div>
 
-        <aside class="col-sm-12 col-md-3">
-          <ForumsAside />
-        </aside>
+    <div class="grid grid-cols-12 px-10 max-w-7xl mx-auto gap-4 my-20" role="main">
+      <div class="col-span-8">
+        <slot />
       </div>
+
+      <ForumsAside class="col-span-4" />
     </div>
 
     <!-- Footer -->

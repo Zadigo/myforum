@@ -1,7 +1,10 @@
+import tailwindcss from '@tailwindcss/vite'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  
   ssr: true,
   routeRules: {
     '/': {
@@ -15,6 +18,15 @@ export default defineNuxtConfig({
       swr: true
     }
   },
+
+  site: {},
+  
+  vite: {
+    plugins: [
+      tailwindcss()
+    ]
+  },
+
   runtimeConfig: {
     public: {
       // Django/Quart/Flask
@@ -37,6 +49,7 @@ export default defineNuxtConfig({
       // stripeLocale: 'fr'
     }
   },
+
   modules: [
     '@pinia/nuxt',
     '@nuxt/eslint',
@@ -50,36 +63,42 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/icon',
     // '@artmizu/nuxt-prometheus',
-    '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
     'nuxt-gtag',
     'nuxt-clarity-analytics',
     'nuxt-openapi-docs-module',
-    'vuetify-nuxt-module',
+    // 'vuetify-nuxt-module',
     'vue-sonner/nuxt',
     '@vueuse/nuxt'
   ],
+  
   googleFonts: {
     families: {
-      "Noto Sans": {
+      'Noto Sans': {
         wght: '100..700'
       }
     }
   },
+  
   gtag: {
     enabled: process.env.NODE_ENV === 'production',
     id: 'G-XX'
   },
+
   css: [
-    '@/assets/style.scss',
-    '~/assets/css/style.css',
-    '~/node_modules/bootstrap/dist/css/bootstrap.min.css',
-    '~/node_modules/mdb-ui-kit/css/mdb.min.css',
-    '~/node_modules/animate.css/animate.min.css'
+    '~/assets/css/tailwind.css'
+    // '@/assets/style.scss',
+    // '~/assets/css/style.css',
+    // '~/node_modules/bootstrap/dist/css/bootstrap.min.css',
+    // '~/node_modules/mdb-ui-kit/css/mdb.min.css',
+    // '~/node_modules/animate.css/animate.min.css'
   ],
-  vuetify: {
-    moduleOptions: {},
-    vuetifyOptions: {}
-  },
+
+  // vuetify: {
+  //   moduleOptions: {},
+  //   vuetifyOptions: {}
+  // },
+
   fontawesome: {
     icons: {
       solid: [
@@ -108,6 +127,7 @@ export default defineNuxtConfig({
       ]
     }
   },
+
   i18n: {
     baseUrl: './',
     langDir: './locales',
@@ -130,6 +150,7 @@ export default defineNuxtConfig({
       }
     ]
   },
+
   nitro: {
     storage: {
       redis: {

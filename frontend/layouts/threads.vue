@@ -5,17 +5,10 @@
 
     <!-- Header -->
     <HeadersThread />
-    
-    <div class="container">
-      <div class="row my-5">
-        <div class="col-sm-12 col-md-8 offset-md-1" role="main">
-          <slot />
-        </div>
 
-        <aside class="col-sm-12 col-md-3">
-          <ThreadsAside />
-        </aside>
-      </div>
+    <div class="grid grid-cols-2 px-10 max-w-7xl mx-auto" role="main">
+      <slot />
+      <ThreadsAside />
     </div>
 
     <!-- Footer -->
