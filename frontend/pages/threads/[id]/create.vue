@@ -23,7 +23,7 @@
             {{ threadTitle }}
           </p>
         </div>
-
+        
         <!-- Base editor -->
         <BaseEditor @editor-content="(data) => requestData.content = data" />
 
@@ -37,7 +37,7 @@
           for your newly created thread
         </VoltMessage>
 
-        <VoltAutoComplete v-model="requestData.tags" label="Select multiple tags" clearable chips multiple />
+        <VoltAutoComplete v-model="requestData.tags" placeholder="Select multiple tags" />
 
         <!-- Poll -->
         <div id="poll">

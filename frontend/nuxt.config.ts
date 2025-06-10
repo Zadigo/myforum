@@ -14,7 +14,24 @@ export default defineNuxtConfig({
     'forums/**': {
       swr: true
     },
+    'threads/**/create': {
+      swr: false
+    },
     'threads/**': {
+      swr: true
+    },
+    'user/**': {
+      ssr: false,
+      swr: false
+    },
+    'rules': {
+      isr: true
+    },
+    'search': {
+      ssr: false,
+      swr: false
+    },
+    'whats-new': {
       swr: true
     }
   },
