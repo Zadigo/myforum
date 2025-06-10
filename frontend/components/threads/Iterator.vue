@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12">
+  <div>
     <article v-for="(thread, i) in forumThreads" :key="thread.id" :class="{ 'mt-1': i > 0 }" role="article" @click="forumStore.setCurrentThread(thread.id)">
       <NuxtLink :to="`/threads/${thread.id}`" :aria-label="thread.title" class="text-dark">
         <VoltCard class="card shadow-sm">
@@ -27,32 +27,31 @@
 </template>
 
 <script setup lang="ts">
-import type  { ForumThreadsApiResponse } from '~/types'
+import type  { ThreadApiResponse } from '~/types'
 
 const { $dayjs } = useNuxtApp()
 const { id } = useRoute().params
 const forumStore = useForums()
 const { forumThreads } = storeToRefs(forumStore)
 
-const emit = defineEmits({
-  'load-current-forum' () {
-    return true
-  }
-})
+const emit = defineEmits<{ 'load-current-forum': [] }>()
 
-const cachedResponse = ref<ForumThreadsApiResponse>()
+const { status, data: cachedResponse } = useFetch<ThreadApiResponse>(`/api/forums/${id}/threads`)
 
-useFetch(`/api/forums/${id}/threads`, {
-  onResponse() {
+if (cachedResponse.value) {
+  forumThreads.value = cachedResponse.value.results
+}
+
+watch(status, (value) => {
+  if (value === 'success') {
     emit('load-current-forum')
-  },
-  transform(data: ForumThreadsApiResponse) {
-    cachedResponse.value = data
-    forumThreads.value = data.results
-    return data
   }
 })
 
+/**
+ * Transforms a date to its human
+ * readable version
+ */
 function formatData(value: string) {
   return $dayjs(value).fromNow()
 }

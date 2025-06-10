@@ -14,7 +14,7 @@
           <span class="fw-bold h4">{{ currentThread?.participants.length || 0 }}</span> participants
         </p> -->
 
-        <hr>
+        <VoltDivider />
 
         <!-- TODO: Create a different aside for WhatsNew -->
         <!-- <p class="card-text">
@@ -33,11 +33,13 @@
         A forum community dedicated to Tennis players and enthusiasts. Come join the discussion 
         about players, gear, matches, scores, guidelines, and more!
 
-        <hr>
+        <VoltDivider />
 
-        <NuxtLink to="/">
-          Other threads
-        </NuxtLink>
+        <VoltButton>
+          <NuxtLink to="/">
+            Other threads
+          </NuxtLink>
+        </VoltButton>
 
 
         <!-- <v-expansion-panels>

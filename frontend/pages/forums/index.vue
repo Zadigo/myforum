@@ -6,21 +6,21 @@
         <!-- Forums -->
         <div class="my-3">
           <Suspense>
-            <AsyncIterationBlock />
+            <AsyncForumsIterationBlock />
 
             <template #fallback>
-              Loading...
+              <VoltSkeleton height="4rem" />
             </template>
           </Suspense>
         </div>
 
         <!-- Latest Comments -->
-        <div class="my-3">
+        <div class="mt-30">
           <Suspense>
-            <AsyncForumLatestBlock />
+            <AsyncForumLatestCommentsBlock />
 
             <template #fallback>
-              Loading...
+              <VoltSkeleton height="4rem" />
             </template>
           </Suspense>
         </div>
@@ -33,12 +33,12 @@ useHead({
   title: 'Forums'
 })
 
-const AsyncIterationBlock = defineAsyncComponent({
+const AsyncForumsIterationBlock = defineAsyncComponent({
   loader: async () => import('~/components/forums/IterationBlock.vue'),
   timeout: 10000
 })
 
-const AsyncForumLatestBlock = defineAsyncComponent({
+const AsyncForumLatestCommentsBlock = defineAsyncComponent({
   loader: async () => import('~/components/forums/LatestBlock.vue'),
   timeout: 10000
 })

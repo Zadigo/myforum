@@ -1,52 +1,60 @@
 <template>
-  <article v-for="category in forumCategories" :key="category" :aria-label="category" class="row mb-5">
-    <div class="col-12">
-      <h3>{{ category }}</h3>
+  <article v-for="category in forumCategories" :key="category" :aria-label="category" class="mb-5">
+    <div class="mb-2">
+      <h3 class="font-bold text-2xl font-title">
+        {{ category }}
+      </h3>
     </div>
 
-    <div class="col-12">
-      <div v-for="(forum, i) in forumsByCategory[category]" :key="forum.id" :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="card shadow-sm" role="article">
-        <div class="card-body">
-          <NuxtLink :to="`/forums/${forum.id}`" class="text-dark">
-            <div class="card-body">
-              <h3 :aria-label="forum.title" class="card-title">
-                {{ forum.title }}
-              </h3>
+    <div v-if="!isLoading">
+      <VoltCard v-for="(forum, i) in forumsByCategory[category]" :key="forum.id" :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="shadow-sm" role="article">
+        <template #content>
+          <NuxtLinkLocale :to="`/forums/${forum.id}`" class="text-dark">
+            <h4 :aria-label="forum.title" class="font-bold">
+              {{ forum.title }}
+            </h4>
 
-              <p class="card-text fw-light">{{ forum.description }}</p>
+            <p class="font-light my-2">
+              {{ forum.description }}
+            </p>
 
-              <div class="card-info">
-                <span class="badge bg-info p-2">{{ forum.number_of_threads }} <font-awesome icon="users" /></span>
-                <span class="badge bg-info p-2 ms-2">200000 <font-awesome icon="eye" /></span>
-                <span class="badge bg-info p-2 ms-2">{{ $dayjs(forum.created_on).fromNow() }}</span>
-              </div>
+            <div id="infos" class="space-x-3 mt-5">
+              <VoltTag>
+                {{ forum.number_of_threads }} <font-awesome icon="users" />
+              </VoltTag>
+
+              <VoltTag>
+                200000 <font-awesome icon="eye" />
+              </VoltTag>
+
+              <VoltTag>
+                {{ $dayjs(forum.created_on).fromNow() }}
+              </VoltTag>
             </div>
-          </NuxtLink>
-        </div>
-      </div>
+          </NuxtLinkLocale>
+        </template>
+      </VoltCard>
+    </div>
+
+    <div v-else class="space-y-3">
+      <VoltSkeleton v-for="i in 5" :key="i" height="5rem" />
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
-import type { Forum } from '~/types'
 const { forumsList, forumCategories, forumsByCategory } = storeToRefs(useForums())
 
-const emit = defineEmits({
-  'load-current-forum'() {
-    return true
-  }
-})
+const emit = defineEmits<{
+  'load-current-forum': []
+}>()
 
-const { status } = useFetch('/api/forums', {
-  onResponse() {
-    // Get the actual forum information from the
-    // database once the load is complete
-    emit('load-current-forum')
-  },
-  transform(data: Forum[]) {
-    forumsList.value = data
-    return data
-  }
-})
+const { status, data } = useFetch('/api/forums')
+
+if (data.value) {
+  forumsList.value = data.value
+  emit('load-current-forum')
+}
+
+const isLoading = computed(() => status.value !== 'success')
 </script>
