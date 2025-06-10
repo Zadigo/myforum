@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import RadioButton, { type RadioButtonPassThroughOptions, type RadioButtonProps } from 'primevue/radiobutton';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import RadioButton, { type RadioButtonPassThroughOptions, type RadioButtonProps } from 'primevue/radiobutton'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ RadioButtonProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<RadioButtonPassThroughOptions>({
     root: `relative inline-flex select-none w-5 h-5
@@ -42,5 +42,5 @@ const theme = ref<RadioButtonPassThroughOptions>({
         p-disabled:bg-surface-700 dark:p-disabled:bg-surface-400
         p-small:w-2 p-small:h-2
         p-large:w-4 p-large:h-4`
-});
+})
 </script>

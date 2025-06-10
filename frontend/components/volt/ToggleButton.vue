@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import ToggleButton, { type ToggleButtonPassThroughOptions, type ToggleButtonProps } from 'primevue/togglebutton';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import ToggleButton, { type ToggleButtonPassThroughOptions, type ToggleButtonProps } from 'primevue/togglebutton'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ ToggleButtonProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<ToggleButtonPassThroughOptions>({
     root: `inline-flex items-center justify-center overflow-hidden relative cursor-pointer select-none
@@ -40,5 +40,5 @@ const theme = ref<ToggleButtonPassThroughOptions>({
         p-checked:bg-surface-0 dark:p-checked:bg-surface-800 p-checked:shadow-[0px_1px_2px_0px_rgba(0,0,0,0.02),0px_1px_2px_0px_rgba(0,0,0,0.04)]`,
     icon: ``,
     label: ``
-});
+})
 </script>

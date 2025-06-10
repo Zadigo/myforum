@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import Inplace, { type InplacePassThroughOptions, type InplaceProps } from 'primevue/inplace';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import Inplace, { type InplacePassThroughOptions, type InplaceProps } from 'primevue/inplace'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ InplaceProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<InplacePassThroughOptions>({
     root: ``,
@@ -27,5 +27,5 @@ const theme = ref<InplacePassThroughOptions>({
         focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-primary
         transition-colors duration-200`,
     content: `block`
-});
+})
 </script>

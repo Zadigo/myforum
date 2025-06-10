@@ -17,14 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import MinusIcon from '@primevue/icons/minus';
-import PlusIcon from '@primevue/icons/plus';
-import Fieldset, { type FieldsetPassThroughOptions, type FieldsetProps } from 'primevue/fieldset';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import MinusIcon from '@primevue/icons/minus'
+import PlusIcon from '@primevue/icons/plus'
+import Fieldset, { type FieldsetPassThroughOptions, type FieldsetProps } from 'primevue/fieldset'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ FieldsetProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<FieldsetPassThroughOptions>({
     root: `border border-surface-200 dark:border-surface-700 rounded-md
@@ -55,5 +55,5 @@ const theme = ref<FieldsetPassThroughOptions>({
         leaveActiveClass: 'overflow-hidden transition-[max-height] duration-[450ms] ease-[cubic-bezier(0,1,0,1)]',
         leaveToClass: 'max-h-0'
     }
-});
+})
 </script>

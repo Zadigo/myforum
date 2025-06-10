@@ -20,15 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import ChevronDownIcon from '@primevue/icons/chevrondown';
-import ChevronRightIcon from '@primevue/icons/chevronright';
-import SearchIcon from '@primevue/icons/search';
-import Tree, { type TreePassThroughOptions, type TreeProps } from 'primevue/tree';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import ChevronDownIcon from '@primevue/icons/chevrondown'
+import ChevronRightIcon from '@primevue/icons/chevronright'
+import SearchIcon from '@primevue/icons/search'
+import Tree, { type TreePassThroughOptions, type TreeProps } from 'primevue/tree'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ TreeProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<TreePassThroughOptions>({
     root: `bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 p-4
@@ -90,5 +90,5 @@ const theme = ref<TreePassThroughOptions>({
     nodeChildren: `flex flex-col list-none m-0 gap-[2px] pt-[2px] pe-0 pb-0 ps-4`,
     mask: `bg-black/50 text-surface-200 absolute z-10 flex items-center justify-center`,
     loadingIcon: `text-[2rem] h-8 w-8`
-});
+})
 </script>

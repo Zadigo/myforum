@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import Slider, { type SliderPassThroughOptions, type SliderProps } from 'primevue/slider';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import Slider, { type SliderPassThroughOptions, type SliderProps } from 'primevue/slider'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ SliderProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const handleCommon = `cursor-grab touch-none flex items-center justify-center h-[20px] w-[20px]
         bg-surface-200 dark:bg-surface-700 rounded-full
@@ -25,7 +25,7 @@ const handleCommon = `cursor-grab touch-none flex items-center justify-center h-
         before:shadow-[0px_0.5px_0px_0px_rgba(0,0,0,0.08),0px_1px_1px_0px_rgba(0,0,0,0.14)]
         before:transition-colors before:duration-200
         p-horizontal:top-1/2 p-horizontal:-mt-[10px] p-horizontal:-ms-[10px]
-        p-vertical:start-1/2 p-vertical:-mb-[10px] p-vertical:-ms-[10px]`;
+        p-vertical:start-1/2 p-vertical:-mb-[10px] p-vertical:-ms-[10px]`
 
 const theme = ref<SliderPassThroughOptions>({
     root: `relative bg-surface-200 dark:bg-surface-700 rounded-xs
@@ -37,5 +37,5 @@ const theme = ref<SliderPassThroughOptions>({
     handle: handleCommon,
     startHandler: handleCommon,
     endHandler: handleCommon
-});
+})
 </script>

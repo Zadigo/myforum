@@ -15,14 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import ChevronUpIcon from '@primevue/icons/chevrondown';
-import ChevronDownIcon from '@primevue/icons/chevronup';
-import AccordionHeader, { type AccordionHeaderPassThroughOptions, type AccordionHeaderProps } from 'primevue/accordionheader';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import ChevronUpIcon from '@primevue/icons/chevrondown'
+import ChevronDownIcon from '@primevue/icons/chevronup'
+import AccordionHeader, { type AccordionHeaderPassThroughOptions, type AccordionHeaderProps } from 'primevue/accordionheader'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ AccordionHeaderProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<AccordionHeaderPassThroughOptions>({
     root: `cursor-pointer disabled:pointer-events-none disabled:opacity-60 flex items-center justify-between p-[1.125rem] font-semibold
@@ -32,5 +32,5 @@ const theme = ref<AccordionHeaderPassThroughOptions>({
         p-active:text-surface-700 dark:p-active:text-surface-0
         transition-colors duration-200
         focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[-1px] focus-visible:outline-primary`
-});
+})
 </script>

@@ -19,14 +19,14 @@
 </template>
 
 <script setup lang="ts">
-import AngleDownIcon from '@primevue/icons/angledown';
-import AngleUpIcon from '@primevue/icons/angleup';
-import InputNumber, { type InputNumberPassThroughOptions, type InputNumberProps } from 'primevue/inputnumber';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import AngleDownIcon from '@primevue/icons/angledown'
+import AngleUpIcon from '@primevue/icons/angleup'
+import InputNumber, { type InputNumberPassThroughOptions, type InputNumberProps } from 'primevue/inputnumber'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ InputNumberProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<InputNumberPassThroughOptions>({
     root: `inline-flex relative 
@@ -79,5 +79,5 @@ const theme = ref<InputNumberPassThroughOptions>({
         p-horizontal:order-1 p-horizontal:rounded-s-md p-horizontal:border-e-0
         p-vertical:py-2 p-vertical:order-3 p-vertical:rounded-ee-md p-vertical:rounded-es-md p-vertical:w-full p-vertical:border-t-0`,
     decrementIcon: ``
-});
+})
 </script>

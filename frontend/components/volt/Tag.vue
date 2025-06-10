@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import Tag, { type TagPassThroughOptions, type TagProps } from 'primevue/tag';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import Tag, { type TagPassThroughOptions, type TagProps } from 'primevue/tag'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ TagProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<TagPassThroughOptions>({
     root: `inline-flex items-center justify-center text-sm font-bold py-1 px-2 rounded-md gap-1 p-rounded:rounded-2xl
@@ -30,5 +30,5 @@ const theme = ref<TagPassThroughOptions>({
         p-secondary:bg-surface-100 dark:p-secondary:bg-surface-800 p-secondary:text-surface-600 dark:p-secondary:text-surface-300
         p-contrast:bg-surface-950 dark:p-contrast:bg-surface-0 p-contrast:text-surface-0 dark:p-contrast:text-surface-950`,
     icon: `text-xs w-3 h-3`
-});
+})
 </script>

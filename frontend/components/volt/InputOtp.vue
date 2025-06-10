@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import InputOtp, { type InputOtpPassThroughOptions, type InputOtpProps } from 'primevue/inputotp';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import InputOtp, { type InputOtpPassThroughOptions, type InputOtpProps } from 'primevue/inputotp'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ InputOtpProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<InputOtpPassThroughOptions>({
     root: `flex items-center gap-2`,
@@ -41,5 +41,5 @@ const theme = ref<InputOtpPassThroughOptions>({
             p-large:text-xl p-large:px-[0.875rem] p-large:py-[0.625rem] p-large:w-14 p-large:h-14
             transition-colors duration-200 shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]`
     }
-});
+})
 </script>

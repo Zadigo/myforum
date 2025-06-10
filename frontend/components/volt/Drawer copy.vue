@@ -20,14 +20,14 @@
 </template>
 
 <script setup lang="ts">
-import TimesIcon from '@primevue/icons/times';
-import Drawer, { type DrawerPassThroughOptions, type DrawerProps } from 'primevue/drawer';
-import { ref } from 'vue';
-import SecondaryButton from './SecondaryButton.vue';
-import { ptViewMerge } from './utils';
+import TimesIcon from '@primevue/icons/times'
+import Drawer, { type DrawerPassThroughOptions, type DrawerProps } from 'primevue/drawer'
+import { ref } from 'vue'
+import SecondaryButton from './SecondaryButton.vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ DrawerProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<DrawerPassThroughOptions>({
     root: `flex flex-col pointer-events-auto relative
@@ -51,5 +51,5 @@ const theme = ref<DrawerPassThroughOptions>({
         leaveActiveClass: `transition-transform duration-200 ease-in p-full-screen:transition-opacity`,
         leaveToClass: `p-left:-translate-x-full p-right:translate-x-full p-top:-translate-y-full p-bottom:translate-y-full p-full-screen:opacity-0`
     }
-});
+})
 </script>

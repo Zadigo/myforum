@@ -95,15 +95,15 @@
 </template>
 
 <script setup>
-import CalendarIcon from '@primevue/icons/calendar';
-import ChevronDownIcon from '@primevue/icons/chevrondown';
-import ChevronLeftIcon from '@primevue/icons/chevronleft';
-import ChevronRightIcon from '@primevue/icons/chevronright';
-import ChevronUpIcon from '@primevue/icons/chevronup';
-import DatePicker from 'primevue/datepicker';
-import { ref } from 'vue';
-import SecondaryButton from './SecondaryButton.vue';
-import { ptViewMerge } from './utils';
+import CalendarIcon from '@primevue/icons/calendar'
+import ChevronDownIcon from '@primevue/icons/chevrondown'
+import ChevronLeftIcon from '@primevue/icons/chevronleft'
+import ChevronRightIcon from '@primevue/icons/chevronright'
+import ChevronUpIcon from '@primevue/icons/chevronup'
+import DatePicker from 'primevue/datepicker'
+import { ref } from 'vue'
+import SecondaryButton from './SecondaryButton.vue'
+import { ptViewMerge } from './utils'
 
 const theme = ref({
     root: `inline-flex max-w-full relative p-fluid:flex`,
@@ -213,5 +213,5 @@ const theme = ref({
         leaveActiveClass: 'transition-opacity duration-100 ease-linear',
         leaveToClass: 'opacity-0'
     }
-});
+})
 </script>

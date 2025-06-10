@@ -19,14 +19,14 @@
 </template>
 
 <script setup lang="ts">
-import EyeIcon from '@primevue/icons/eye';
-import EyeSlashIcon from '@primevue/icons/eyeslash';
-import Password, { type PasswordPassThroughOptions, type PasswordProps } from 'primevue/password';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import EyeIcon from '@primevue/icons/eye'
+import EyeSlashIcon from '@primevue/icons/eyeslash'
+import Password, { type PasswordPassThroughOptions, type PasswordProps } from 'primevue/password'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ PasswordProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<PasswordPassThroughOptions>({
     root: `inline-flex relative p-fluid:flex`,
@@ -66,5 +66,5 @@ const theme = ref<PasswordPassThroughOptions>({
         leaveActiveClass: 'transition-opacity duration-100 ease-linear',
         leaveToClass: 'opacity-0'
     }
-});
+})
 </script>

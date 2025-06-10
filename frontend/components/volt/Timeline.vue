@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import Timeline, { type TimelinePassThroughOptions, type TimelineProps } from 'primevue/timeline';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import Timeline, { type TimelinePassThroughOptions, type TimelineProps } from 'primevue/timeline'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ TimelineProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<TimelinePassThroughOptions>({
     root: `flex flex-col flex-grow
@@ -49,5 +49,5 @@ const theme = ref<TimelinePassThroughOptions>({
         p-vertical:py-0 p-vertical:px-4 p-vertical:leading-none
         p-vertical:p-alternate:group-odd:text-start p-vertical:p-alternate:group-even:text-end
         p-horizontal:py-4 p-horizontal:px-0`
-});
+})
 </script>

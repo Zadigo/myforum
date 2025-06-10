@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import ToggleSwitch, { type ToggleSwitchPassThroughOptions, type ToggleSwitchProps } from 'primevue/toggleswitch';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import ToggleSwitch, { type ToggleSwitchPassThroughOptions, type ToggleSwitchProps } from 'primevue/toggleswitch'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ ToggleSwitchProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<ToggleSwitchPassThroughOptions>({
     root: `inline-block w-10 h-6`,
@@ -40,5 +40,5 @@ const theme = ref<ToggleSwitchPassThroughOptions>({
         p-checked:bg-surface-0 dark:p-checked:bg-surface-900 p-checked:text-primary p-checked:start-5
         p-disabled:bg-surface-700 dark:p-disabled:bg-surface-900
 }`
-});
+})
 </script>

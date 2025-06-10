@@ -11,12 +11,12 @@
 </template>
 
 <script setup lang="ts">
-import AccordionContent, { type AccordionContentPassThroughOptions, type AccordionContentProps } from 'primevue/accordioncontent';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import AccordionContent, { type AccordionContentPassThroughOptions, type AccordionContentProps } from 'primevue/accordioncontent'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ AccordionContentProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<AccordionContentPassThroughOptions>({
     root: `flex flex-col`,
@@ -29,5 +29,5 @@ const theme = ref<AccordionContentPassThroughOptions>({
         leaveActiveClass: 'overflow-hidden transition-[max-height] duration-[450ms] ease-[cubic-bezier(0,1,0,1)]',
         leaveToClass: 'max-h-0'
     }
-});
+})
 </script>

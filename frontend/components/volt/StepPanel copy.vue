@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import StepPanel, { type StepPanelPassThroughOptions, type StepPanelProps } from 'primevue/steppanel';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import StepPanel, { type StepPanelPassThroughOptions, type StepPanelProps } from 'primevue/steppanel'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ StepPanelProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<StepPanelPassThroughOptions>({
     root: `bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 p-vertical:flex p-vertical:flex-auto`,
@@ -31,5 +31,5 @@ const theme = ref<StepPanelPassThroughOptions>({
         leaveActiveClass: 'overflow-hidden transition-[max-height] duration-[450ms] ease-[cubic-bezier(0,1,0,1)]',
         leaveToClass: 'max-h-0'
     }
-});
+})
 </script>

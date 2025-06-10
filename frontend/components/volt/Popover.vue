@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import Popover, { type PopoverPassThroughOptions, type PopoverProps } from 'primevue/popover';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import Popover, { type PopoverPassThroughOptions, type PopoverProps } from 'primevue/popover'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ PopoverProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<PopoverPassThroughOptions>({
     root: `mt-[10px] p-flipped:-mt-[10px] p-flipped:mb-[10px]
@@ -40,12 +40,12 @@ const theme = ref<PopoverPassThroughOptions>({
         leaveActiveClass: 'transition-opacity duration-100 ease-linear',
         leaveToClass: 'opacity-0'
     }
-});
+})
 
-const el = ref();
+const el = ref()
 defineExpose({
     toggle: (event, target) => el.value.toggle(event, target),
     show: (event, target) => el.value.show(event, target),
     hide: () => el.value.toggle()
-});
+})
 </script>

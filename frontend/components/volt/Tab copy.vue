@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import Tab, { type TabPassThroughOptions, type TabProps } from 'primevue/tab';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import Tab, { type TabPassThroughOptions, type TabProps } from 'primevue/tab'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ TabProps {}
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
 const theme = ref<TabPassThroughOptions>({
     root: `flex-shrink-0 cursor-pointer select-none relative whitespace-nowrap py-4 px-[1.125rem]
@@ -28,5 +28,5 @@ const theme = ref<TabPassThroughOptions>({
         p-active:border-primary p-active:text-primary
         disabled:pointer-events-none disabled:opacity-60
         focus-visible:z-10 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[-1px] focus-visible:outline-primary`
-});
+})
 </script>

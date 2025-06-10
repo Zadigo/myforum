@@ -16,13 +16,13 @@
 </template>
 
 <script setup lang="ts">
-import ChevronDownIcon from '@primevue/icons/chevrondown';
-import AutoComplete, { type AutoCompletePassThroughOptions, type AutoCompleteProps } from 'primevue/autocomplete';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import ChevronDownIcon from '@primevue/icons/chevrondown'
+import AutoComplete, { type AutoCompletePassThroughOptions, type AutoCompleteProps } from 'primevue/autocomplete'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ AutoCompleteProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<AutoCompletePassThroughOptions>({
     root: `inline-flex p-fluid:flex`,
@@ -106,5 +106,5 @@ const theme = ref<AutoCompletePassThroughOptions>({
         leaveActiveClass: 'transition-opacity duration-100 ease-linear',
         leaveToClass: 'opacity-0'
     }
-});
+})
 </script>

@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import SelectButton, { type SelectButtonPassThroughOptions, type SelectButtonProps } from 'primevue/selectbutton';
-import { ref } from 'vue';
-import { ptViewMerge } from './utils';
+import SelectButton, { type SelectButtonPassThroughOptions, type SelectButtonProps } from 'primevue/selectbutton'
+import { ref } from 'vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ SelectButtonProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<SelectButtonPassThroughOptions>({
     root: `inline-flex select-none rounded-md
@@ -45,5 +45,5 @@ const theme = ref<SelectButtonPassThroughOptions>({
         icon: ``,
         label: ``
     }
-});
+})
 </script>

@@ -22,16 +22,16 @@
 </template>
 
 <script setup lang="ts">
-import TimesIcon from '@primevue/icons/times';
-import WindowMaximizeIcon from '@primevue/icons/windowmaximize';
-import WindowMinimizeIcon from '@primevue/icons/windowminimize';
-import Dialog, { type DialogPassThroughOptions, type DialogProps } from 'primevue/dialog';
-import { ref } from 'vue';
-import SecondaryButton from './SecondaryButton.vue';
-import { ptViewMerge } from './utils';
+import TimesIcon from '@primevue/icons/times'
+import WindowMaximizeIcon from '@primevue/icons/windowmaximize'
+import WindowMinimizeIcon from '@primevue/icons/windowminimize'
+import Dialog, { type DialogPassThroughOptions, type DialogProps } from 'primevue/dialog'
+import { ref } from 'vue'
+import SecondaryButton from './SecondaryButton.vue'
+import { ptViewMerge } from './utils'
 
 interface Props extends /* @vue-ignore */ DialogProps {}
-defineProps<Props>();
+defineProps<Props>()
 
 const theme = ref<DialogPassThroughOptions>({
   root: `max-h-[90%] max-w-screen rounded-xl
@@ -51,5 +51,5 @@ const theme = ref<DialogPassThroughOptions>({
     leaveActiveClass: 'transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)]',
     leaveToClass: 'opacity-0 scale-75'
   }
-});
+})
 </script>
