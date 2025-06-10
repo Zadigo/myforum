@@ -1,1 +1,1 @@
-export * from './forums'
+export * from './constants'

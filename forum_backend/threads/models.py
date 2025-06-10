@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.apps import apps
-from forums.models import USER_MODEL, Forum
+from forums.models import Forum
 from tags.models import Tag
 from threads.choices import ThreadCategories
 from threads.validators import validate_title
@@ -171,7 +171,7 @@ class MainThread(AbstractThread):
     other sub-threads"""
 
     followers = models.ManyToManyField(
-        USER_MODEL,
+        get_user_model(),
         related_name='main_thread_followers',
         blank=True
     )
@@ -191,7 +191,7 @@ class SubThread(AbstractThread):
 
     def __str__(self):
         return f"SubThread: {self.title}"
-    
+
 
 @receiver(pre_save, sender=MainThread)
 def run_conditions_for_main_thread(instance, **kwargs):

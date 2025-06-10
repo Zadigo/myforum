@@ -10,8 +10,13 @@ urlpatterns = [
         name='forum_threads'
     ),
     re_path(
+        r'^(?P<pk>\d+)$',
+        views.ForumDetails.as_view(),
+        name='forum'
+    ),
+    re_path(
         r'^$',
-        views.Forums.as_view(),
+        views.ListForums.as_view(),
         name='forums'
     )
 ]

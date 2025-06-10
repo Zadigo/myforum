@@ -1,10 +1,12 @@
 <template>
   <div class="card flex justify-center">
-    <slot>
-      <Button :aria-controls="id" :aria-haspopup="isOpen ? 'true' : 'false'" type="button" plain @click="handleToggle" />
+    <slot name="button">
+      <VoltButton :aria-controls="id" :aria-haspopup="isOpen ? 'true' : 'false'" type="button" plain @click="handleToggle">
+        <slot />
+      </VoltButton>
     </slot>
 
-    <Menu :id="id" ref="menuEl" :model="items" :popup="true" />
+    <VoltMenu :id="id" ref="menuEl" :model="items" :popup="true" />
 </div>
 </template>
 

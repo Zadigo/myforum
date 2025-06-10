@@ -8,8 +8,6 @@ from forums.validators import validate_title
 
 # Forum -> Threads [Main -> Sub] -> Comments
 
-USER_MODEL = get_user_model()
-
 
 class Forum(models.Model):
     """A forum regroups a set of topics 
@@ -18,7 +16,7 @@ class Forum(models.Model):
     created"""
 
     user = models.ForeignKey(
-        USER_MODEL,
+        get_user_model(),
         on_delete=models.SET_NULL,
         null=True
     )

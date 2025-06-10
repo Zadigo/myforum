@@ -13,7 +13,12 @@ class BasePagination(PageNumberPagination):
     page_size = 30
 
 
-class Forums(generics.ListAPIView):
+class ForumDetails(generics.RetrieveAPIView):
+    serializer_class = serializers.ForumSerializer
+    queryset = Forum.objects.filter(active=True)
+
+
+class ListForums(generics.ListAPIView):
     serializer_class = serializers.ForumSerializer
     queryset = Forum.objects.filter(active=True)
 

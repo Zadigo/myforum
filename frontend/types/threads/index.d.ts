@@ -1,10 +1,12 @@
-import type { Forum } from './forums'
-import type { User } from './user'
+import type { Forum } from '../forums'
+import type { User } from '../user'
+
+export * from './create'
 
 export interface ThreadApiResponse {
     count: number
-    next: null
-    previous: null
+    next: string | null
+    previous: string | null
     results: ForumThreadResults[]
 }
 
@@ -16,7 +18,7 @@ export interface ForumThreadResults {
     latest_comment: LatestComment
     title: string
     category: string
-    description: null
+    description: string | null
     owned_by_user: boolean
     participants: Participant[]
     active: boolean
