@@ -1,48 +1,49 @@
 <template>
   <div id="editor-wrapper" class="my-3">
-    <QuillEditor ref="editor" v-model:content="content" :options="options" @text-change="editorContent" @ready="initializeEditor" />
+    <ClientOnly>
+      <QuillEditor ref="editorEl" v-model:content="content" :options="options" @text-change="editorContent" @ready="initializeEditor" />
+    </ClientOnly>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { EditorData } from '~/types';
+<script setup lang="ts">
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import type { EditorData } from '~/types'
 
-export default defineComponent({
-  name: 'BaseEditor',
-  emits: {
-    'editor-content' (_data: EditorData) {
-      return true
-    }
-  },
-  async setup() {
-    if (!process.server) {
-      const { QuillEditor } = await import('@vueup/vue-quill');
-      const { vueApp } = useNuxtApp();
-      vueApp.component('QuillEditor', QuillEditor);
-    }
-  },
-  data () {
-    return {
-      content: null,
-      options: {
-        theme: 'snow',
-        modules: {},
-        placeholder: 'Write your text',
-      }
-    }
-  },
-  methods: {
-    initializeEditor () { },
-    editorContent () {
-      this.$emit('editor-content', {
-        delta: this.$refs.editor.getContents(),
-        html: this.$refs.editor.getHTML(),
-        text: this.$refs.editor.getText()
-      })
-    }
-  }
-})
+const emit = defineEmits<{
+  'editor-content': (_data: EditorData) => void  
+}>()
+
+const editorEl = useTemplateRef('editorEl')
+
+const content = ref<string>('')
+
+if (import.meta.browser) {
+  const { QuillEditor } = await import('@vueup/vue-quill')
+  const { vueApp } = useNuxtApp()
+  vueApp.component('QuillEditor', QuillEditor)
+}
+
+const options = {
+  theme: 'snow',
+  modules: {},
+  placeholder: 'Write your text'
+}
+
+/**
+ *
+ */
+function initializeEditor () {}
+
+/**
+ *
+ */
+function editorContent () {
+  emit('editor-content', {
+    delta: editorEl.value.getContents(),
+    html: editorEl.value.getHTML(),
+    text: editorEl.value.getText()
+  })
+}
 </script>
