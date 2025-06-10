@@ -12,33 +12,16 @@
     <div v-else class="row">
       <!-- Poll -->
       <Suspense>
-        <template #default>
-          <AsyncPollSection class="mb-3" />
-        </template>
+        <AsyncPollSection class="mb-3" />
 
         <template #fallback>
-          Loading...
+          <VoltSkeleton height="5rem" />
         </template>
       </Suspense>
 
       <!-- Comments -->
-      <div class="col-12">
-        <div class="row">
-          <!-- Pagination -->
-          <!-- <div class="d-flex justify-content-between mb-3">
-            <span>Left</span>
-            <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
-          </div> -->
-
-          <!-- Comments -->
-          <CommentsWrapper :comments="threadComments" @reply="handleReply" />
-
-          <!-- Pagination -->
-          <!-- <div class="d-flex justify-content-between mb-3">
-            <span>Left</span>
-            <BasePagination v-model="currentOffset" :previous-url="cachedResponse?.previous" :next-url="cachedResponse?.next" @paginate="handlePagination" />
-          </div> -->
-        </div>
+      <div>
+        <CommentsWrapper :comments="threadComments" @reply="handleReply" />
       </div>
     </div>
 
@@ -71,25 +54,34 @@ const { id } = useRoute().params
 const store = useForums()
 const { threadComments, currentThread } = storeToRefs(store)
 
-const cachedResponse = ref<ThreadCommentsApiResponse>()
+// const cachedResponse = ref<ThreadCommentsApiResponse>()
 const currentOffset = ref<number>(1)
 const replyingToComment = ref<Comment>()
 
 provide('replyingToComment', replyingToComment)
 
-
-const { refresh } = useFetch(`/api/threads/${id}/comments`, {
+/**
+ *
+ */
+const { refresh, data: cachedResponse } = useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
   query: {
     limit: 30,
     offset: currentOffset.value 
   },
-  transform(data: ThreadCommentsApiResponse) {
-    cachedResponse.value = data
-    threadComments.value = data.results
-    return data
-  }
+  // transform(data: ThreadCommentsApiResponse) {
+  //   cachedResponse.value = data
+  //   threadComments.value = data.results
+  //   return data
+  // }
 })
 
+if (cachedResponse.value) {
+  threadComments.value = cachedResponse.value.results
+}
+
+/**
+ *
+ */
 const { execute } = useFetch(`/api/threads/${id}`, {
   immediate: false,
   transform(data: ForumThread) {
@@ -98,20 +90,33 @@ const { execute } = useFetch(`/api/threads/${id}`, {
   }
 })
 
+/**
+ *
+ * @param data 
+ */
 function handleEditorContent(data: { text: string, delta: string, html: string }) {
   // Do something
   console.log(data)
 }
 
+/**
+ *
+ */
 async function handlePagination() {
   refresh()
 }
 
+/**
+ *
+ */
 async function handleCommentCreated () {
   // await getComments()
   store.showCreateCommentForm = false
 }
 
+/**
+ *
+ */
 // TODO: Does not return the last comment that
 // was created in the database
 function handleReply(comment: Comment) {

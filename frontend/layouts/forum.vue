@@ -6,17 +6,21 @@
     <!-- Header -->
     <HeadersForum />
     
-    <div class="grid grid-cols-2" role="main">
-      <slot />
+    <div class="grid grid-cols-12 px-10 max-w-7xl mx-auto gap-4 my-20" role="main">
+      <div class="col-span-8">
+        <slot />
+      </div>
 
-      <ForumsAside />
+      <div class="col-span-4">
+        <ForumsAside />
+      </div>
     </div>
 
     <!-- Footer -->
     <BaseFooter />
     
+    <!-- Modals -->
     <ClientOnly>
-      <!-- Modals -->
       <ModalsLogin />
       <ModalsSearch />
     </ClientOnly>

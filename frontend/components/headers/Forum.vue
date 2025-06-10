@@ -4,31 +4,26 @@
       <span v-if="currentForum">
         {{ currentForum.title }}
       </span>
-      <span v-else>
-        Loading...
-      </span>
+
+      <VoltSkeleton v-else height="2rem" />
     </template>
 
     <template #breadcrumbs>
-      <li v-if="currentForum" class="breadcrumb-item active" aria-current="page">
-        {{ currentForum.title }}
-      </li>
-      
-      <li v-else class="breadcrumb-item active" aria-current="page">
-        Loading...
-      </li>
+      <VoltBreadcrumb :home="{ icon: 'pi pi-home' }" :items="breadcrumbs" />
     </template>
 
     <template #actions>
-      <div class="btn-group shadow-none">
-        <button type="button" class="btn btn-lg btn-info btn-sm" @click="handleFollowForum">
-          <Icon name="fa-solid:plus-circle" class="me-1" />
+      <div class="space-x-2">
+        <VoltButton @click="handleFollowForum">
+          <Icon name="fa-solid:plus-circle" />
           Follow forum
-        </button>
+        </VoltButton>
 
-        <NuxtLink to="/threads/1/create" class="btn btn-lg btn-primary btn-sm" @click="handleNewThread">
-          New thread
-        </NuxtLink>
+        <VoltButton>
+          <NuxtLink to="/threads/1/create" @click="handleNewThread">
+            New thread
+          </NuxtLink>
+        </VoltButton>
       </div>
     </template>
   </BasePageHeader>
@@ -46,8 +41,21 @@ const emit = defineEmits({
 const forumStore = useForums()
 const { currentForum } = storeToRefs(forumStore)
 
+const breadcrumbs = ref([
+  {
+    label: currentForum.value?.title
+  }
+])
+
+/**
+ *
+ */
 async function handleFollowForum() {
   emit('follow', currentForum)
 }
+
+/**
+ *
+ */
 async function handleNewThread() {}
 </script>

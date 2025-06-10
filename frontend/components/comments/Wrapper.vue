@@ -5,11 +5,11 @@
     <div id="replies" class="w-full flex justify-end mt-6">
       <div class="w-5/6">
         <!-- <p class="my-1 text-right">Replies</p> -->
-        <div v-for="x in 3" :key="x" class="card shadow-sm mt-1">
-          <div class="card-body">
+        <VoltCard v-for="x in 3" :key="x" class="shadow-sm mt-1">
+          <template #content>
             Reply {{ x }}
-          </div>
-        </div>
+          </template>
+        </VoltCard>
       </div>
     </div>
   </article>
@@ -63,6 +63,10 @@ defineProps({
 //   }
 // }
 
+/**
+ *
+ * @param comment The comment for which the reply is to
+ */
 function handleReply(comment: Comment) {
   emit('reply', comment)
 }

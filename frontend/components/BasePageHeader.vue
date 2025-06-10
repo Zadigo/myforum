@@ -1,32 +1,19 @@
 <template>
-  <header ref="pageHeaderEl" class="page-header mb-5">
-    <div class="container">
-      <div class="row p-4 align-items-center">
-        <div class="col-11 p-3 offset-1">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <NuxtLink to="/">
-                  Forums
-                </NuxtLink>
-              </li>
-              <slot name="breadcrumbs" />
-            </ol>
-          </nav>
-  
-          <h1 class="display-6 fw-normal lh-1 my-4">
-            <slot name="title" />
-          </h1>
+  <header ref="pageHeaderEl" class="mb-5">
+    <div class="p-20">
+      <slot name="breadcrumbs" />
 
-          <div class="mt-4">
-            <slot name="actions" />
-          </div>
-        </div>
+      <h1 class="font-title font-bold text-5xl mt-2 mb-5">
+        <slot name="title" />
+      </h1>
+
+      <div class="mt-5">
+        <slot name="actions" />
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-const pageHeaderEl = ref<HTMLElement>()
+const pageHeaderEl = useTemplateRef<HTMLElement>('pageHeaderEl')
 </script>

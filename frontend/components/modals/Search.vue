@@ -29,7 +29,7 @@
 
         <!-- Forums -->
         <div class="py-3">
-          <VoltAutocomplete v-model="requestData.search_in_forums" :suggestions="['1', '2']" placeholder="Search in forums..." @complete="() => {}" />
+          <VoltAutoComplete v-model="requestData.search_in_forums" :suggestions="['1', '2']" placeholder="Search in forums..." @complete="() => {}" />
           <VoltToggleSwitch v-model="requestData.include_subforums" label="Include sub-forums in search" inset />
         </div>
       </div>

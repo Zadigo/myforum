@@ -1,15 +1,13 @@
 <template>
-  <v-app>
-    <NuxtLayout>
-      <NuxtLoadingIndicator />
-      <NuxtPage />
-    </NuxtLayout>
-  </v-app>
+  <NuxtLayout>
+    <NuxtLoadingIndicator />
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import { useSessionStorage } from '@vueuse/core';
-import type { User } from './types';
+import { useSessionStorage } from '@vueuse/core'
+import type { User } from './types'
 
 const authStore = useAuthentication()
 

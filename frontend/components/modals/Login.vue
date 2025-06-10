@@ -4,9 +4,9 @@
       <VoltInputText v-model="username" type="username" autocomplete="username" placeholder="Username" flat />
       <VoltInputText v-model="password" type="password" autocomplete="current-password" placeholder="Password" flat />
       
-      <VaultButton @click="handleLogin">
+      <VoltButton @click="handleLogin">
         Login
-      </VaultButton>
+      </VoltButton>
     </form>
 
     <form v-show="false" @submit.prevent>

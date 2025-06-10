@@ -1,12 +1,14 @@
 <template>
-  <div class="card shadow-sm">
-    <div class="card-body">
+  <VoltCard class="shadow-sm">
+    <template #content>
       <div id="infos" class="flex justify-between align-center">
         <div class="flex items-center gap-2">
           <span class="fw-semibold text-muted">#{{ comment.id }}</span>
           <Icon name="fa-solid:star-of-life" />
           <span class="font-bold">{{ comment.user.username }}</span>
         </div>
+
+        <VoltDropButton id="something" :items="[{ label: 'Google' }]" />
 
         <v-btn v-if="authStore.isAuthenticated" color="dark" variant="text" rounded>
           <font-awesome icon="ellipsis-vertical" />
@@ -40,19 +42,14 @@
 
       <!-- Actions -->
       <BaseCommentCardActions :comment="comment" @reply="handleReply" />
-    </div>
-  </div>
+    </template>
+  </VoltCard>
 </template>
 
 <script setup lang="ts">
 import type { Comment } from '~/types'
 
-const props = defineProps({
-  comment: {
-    type: Object as PropType<Comment>,
-    required: true
-  }
-})
+const props = defineProps<{ comment: Comment }>()
 
 const emit = defineEmits({
   reply(_comment: Comment) {
@@ -62,18 +59,30 @@ const emit = defineEmits({
 
 const authStore = useAuthentication()
 
+/**
+ *
+ */
 function handleEdit() {
 
 }
 
+/**
+ *
+ */
 function handleReply() {
   emit('reply', props.comment)
 }
 
+/**
+ *
+ */
 async function handleReport() {
 
 }
 
+/**
+ *
+ */
 async function handleDeletion() {
 
 }

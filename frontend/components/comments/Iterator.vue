@@ -7,7 +7,7 @@
             {{ comment.title }}
           </span>
 
-          <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
+          <!-- <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
             <font-awesome icon="ellipsis-vertical" />
 
             <v-menu activator="parent">
@@ -31,7 +31,7 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-          </v-btn>
+          </v-btn> -->
         </div>
       </template>
 
@@ -143,10 +143,17 @@ function isAuthor(comment: Comment) {
   }
 }
 
+/**
+ *
+ */
 async function handleQuoteFrom () {
   // pass
 }
 
+/**
+ *
+ * @param comment 
+ */
 async function handleBookmark (comment: Comment) {
   try {
     await $client.post(`comments/${comment.id}/bookmark`)
@@ -155,10 +162,16 @@ async function handleBookmark (comment: Comment) {
   }
 }
 
+/**
+ *
+ */
 async function handleShare () {
   // pass
 }
 
+/**
+ *
+ */
 async function handleDeletion (comment: Comment) {
   try {
     await $client.delete(`comments/${comment.id}`)
@@ -169,6 +182,9 @@ async function handleDeletion (comment: Comment) {
   }
 }
 
+/**
+ *
+ */
 async function handleReport () {
   // pass 
 }
