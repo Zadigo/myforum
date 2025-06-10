@@ -1,97 +1,87 @@
 <template>
-  <div v-if="comments.length > 0" id="comments">
-    <VoltCard v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="mb-2">
-      <template v-if="showActions" #header>
-        <div class="flex justify-between items-center">
-          <span :aria-label="comment.title || ''">
-            {{ comment.title }}
-          </span>
+  <VoltCard v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="mb-2 shadow-sm">
+    <template v-if="showActions" #header>
+      <div class="flex justify-between items-center">
+        <span :aria-label="comment.title || ''">
+          {{ comment.title }}
+        </span>
 
-          <!-- <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
-            <font-awesome icon="ellipsis-vertical" />
+        <!-- <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
+          <font-awesome icon="ellipsis-vertical" />
 
-            <v-menu activator="parent">
-              <v-list>
-                <v-list-item>
-                  <v-list-item-title @click="emit('edit', comment)">
-                    Edit
-                  </v-list-item-title>
-                </v-list-item>
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item>
+                <v-list-item-title @click="emit('edit', comment)">
+                  Edit
+                </v-list-item-title>
+              </v-list-item>
 
-                <v-list-item @click="handleReport">
-                  <v-list-item-title>
-                    Report
-                  </v-list-item-title>
-                </v-list-item>
+              <v-list-item @click="handleReport">
+                <v-list-item-title>
+                  Report
+                </v-list-item-title>
+              </v-list-item>
 
-                <v-list-item @click="handleDeletion(comment)">
-                  <v-list-item-title>
-                    Delete
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-btn> -->
-        </div>
-      </template>
-
-      <template #content>
-        <div class="mb-4">
-          <span class="fw-bold text-muted">#{{ comment.id }}</span> 
-          <span class="mx-2">-</span> by <span class="fw-bold">{{ comment.user?.username }}</span> 
-          <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
-        </div>
-        <div v-html="comment.content_html" />
-      </template>
-
-      <template v-if="showActions" #footer>
-        <div v-if="authStore.isAuthenticated" class="d-flex gap-2">
-          <VoltButton variant="tonal" @click="emit('reply', comment)">
-            <font-awesome icon="reply" class="me-2" />Reply
-          </VoltButton>
-
-          <VoltButton variant="tonal" @click="handleQuoteFrom">
-            <font-awesome icon="quote-left" class="me-2" />Quote from
-          </VoltButton>
-          
-          <VoltButton variant="tonal" @click="handleBookmark(comment)">
-            <font-awesome v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
-            <font-awesome v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
-          </VoltButton>
-          
-          <VoltButton variant="tonal" @click="handleShare">
-            <font-awesome icon="share" class="me-2" />Share
-          </VoltButton>
-        </div>
-
-        <div v-else class="d-flex gap-2">
-          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-            <font-awesome icon="reply" class="me-2" />Reply
-          </VoltButton>
-
-          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-            <font-awesome icon="quote-left" class="me-2" />Quote from
-          </VoltButton>
-          
-          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-            <font-awesome icon="bookmark" class="me-2" />Bookmark
-          </VoltButton>
-          
-          <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-            <font-awesome icon="share" class="me-2" />Share
-          </VoltButton>
-        </div>
-      </template>
-    </VoltCard>
-  </div>
-
-  <div v-else>
-    <div class="card">
-      <div class="card-body">
-        No comments
+              <v-list-item @click="handleDeletion(comment)">
+                <v-list-item-title>
+                  Delete
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn> -->
       </div>
-    </div>
-  </div>
+    </template>
+
+    <template #content>
+      <div class="mb-4">
+        <span class="fw-bold text-muted">#{{ comment.id }}</span> 
+        <span class="mx-2">-</span> by <span class="fw-bold">{{ comment.user?.username }}</span> 
+        <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
+      </div>
+      <div v-html="comment.content_html" />
+    </template>
+
+    <template v-if="showActions" #footer>
+      <div v-if="authStore.isAuthenticated" class="d-flex gap-2">
+        <VoltButton variant="tonal" @click="emit('reply', comment)">
+          <font-awesome icon="reply" class="me-2" />Reply
+        </VoltButton>
+
+        <VoltButton variant="tonal" @click="handleQuoteFrom">
+          <font-awesome icon="quote-left" class="me-2" />Quote from
+        </VoltButton>
+        
+        <VoltButton variant="tonal" @click="handleBookmark(comment)">
+          <font-awesome v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
+          <font-awesome v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
+        </VoltButton>
+        
+        <VoltButton variant="tonal" @click="handleShare">
+          <font-awesome icon="share" class="me-2" />Share
+        </VoltButton>
+      </div>
+
+      <div v-else class="d-flex gap-2">
+        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+          <font-awesome icon="reply" class="me-2" />Reply
+        </VoltButton>
+
+        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+          <font-awesome icon="quote-left" class="me-2" />Quote from
+        </VoltButton>
+        
+        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+          <font-awesome icon="bookmark" class="me-2" />Bookmark
+        </VoltButton>
+        
+        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+          <font-awesome icon="share" class="me-2" />Share
+        </VoltButton>
+      </div>
+    </template>
+  </VoltCard>
 </template>
 
 <script setup lang="ts">

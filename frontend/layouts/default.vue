@@ -14,8 +14,8 @@
     <!-- Footer -->
     <BaseFooter />
     
+    <!-- Modals -->
     <ClientOnly>
-      <!-- Modals -->
       <ModalsLogin />
       <ModalsSearch />
     </ClientOnly>

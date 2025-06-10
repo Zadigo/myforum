@@ -6,8 +6,8 @@
       </h3>
     </div>
 
-    <div v-if="!isLoading">
-      <VoltCard v-for="(forum, i) in forumsByCategory[category]" :key="forum.id" :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="shadow-sm" role="article">
+    <article v-for="(forum, i) in forumsByCategory[category]" :key="forum.id">
+      <VoltCard :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="shadow-sm" role="article">
         <template #content>
           <NuxtLinkLocale :to="`/forums/${forum.id}`" class="text-dark">
             <h4 :aria-label="forum.title" class="font-bold">
@@ -34,11 +34,7 @@
           </NuxtLinkLocale>
         </template>
       </VoltCard>
-    </div>
-
-    <div v-else class="space-y-3">
-      <VoltSkeleton v-for="i in 5" :key="i" height="5rem" />
-    </div>
+    </article>
   </article>
 </template>
 
@@ -49,12 +45,12 @@ const emit = defineEmits<{
   'load-current-forum': []
 }>()
 
-const { status, data } = useFetch('/api/forums')
+const { data } = useFetch('/api/forums')
 
 if (data.value) {
   forumsList.value = data.value
   emit('load-current-forum')
 }
 
-const isLoading = computed(() => status.value !== 'success')
+console.log('forumsList', forumsList)
 </script>

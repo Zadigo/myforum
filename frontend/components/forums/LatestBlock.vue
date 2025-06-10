@@ -1,8 +1,9 @@
 <template>
-  <!-- Latest posts -->
   <section id="latest-posts">
     <div class="flex justify-between">
-      <h3>{{ $t('Latest posts') }}</h3>
+      <h3 class="font-bold text-2xl">
+        {{ $t('Latest posts') }}
+      </h3>
       
       <VoltSecondaryButton>
         <NuxtLinkLocale to="/whats-new" class="lh-lg">
@@ -12,20 +13,13 @@
     </div>
   
     <div>
-      <CommentsIterator :comments="comments" :show-actions="false" />
+      <CommentsIterator :comments="comments || []" :show-actions="false" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types';
+import type { Comment } from '~/types'
 
-const comments = ref<Comment[]>([])
-
-useFetch(`/api/comments/latest`, {
-  transform(data: Comment[]) {
-    comments.value = data
-    return data
-  }
-})
+const { data: comments } = useFetch<Comment[]>('/api/comments/latest')
 </script>

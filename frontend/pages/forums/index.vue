@@ -1,30 +1,34 @@
 <template>
   <section id="forums">
     <div class="row mb-5">
-        <ForumsCard title="Site rules / FAQ" text="See here for detailed specifics of Tennis Forum site rules, policy, FAQ" />
+      <ForumsCard title="Site rules / FAQ" text="See here for detailed specifics of Tennis Forum site rules, policy, FAQ" />
 
-        <!-- Forums -->
-        <div class="my-3">
-          <Suspense>
+      <!-- Forums -->
+      <div class="my-3">
+        <Suspense>
+          <template #default>
             <AsyncForumsIterationBlock />
+          </template>
 
-            <template #fallback>
-              <VoltSkeleton height="4rem" />
-            </template>
-          </Suspense>
-        </div>
+          <template #fallback>
+            <VoltSkeleton height="4rem" />
+          </template>
+        </Suspense>
+      </div>
 
-        <!-- Latest Comments -->
+      <!-- Latest Comments -->
+      <ClientOnly>
         <div class="mt-30">
           <Suspense>
             <AsyncForumLatestCommentsBlock />
 
             <template #fallback>
-              <VoltSkeleton height="4rem" />
+              <VoltSkeleton v-for="i in 4" :key="i" height="4rem" />
             </template>
           </Suspense>
         </div>
-      </div>
+      </ClientOnly>
+    </div>
   </section>
 </template>
 
@@ -34,8 +38,7 @@ useHead({
 })
 
 const AsyncForumsIterationBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/IterationBlock.vue'),
-  timeout: 10000
+  loader: async () => import('~/components/forums/IterationBlock.vue')
 })
 
 const AsyncForumLatestCommentsBlock = defineAsyncComponent({

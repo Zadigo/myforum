@@ -6,21 +6,20 @@
           About this Discussion
         </h5>
   
-        <!-- <p class="card-text mb-1">
-          <span class="fw-bold h4">{{ numberOfComments }}</span> replies
+        <p class="mb-1">
+          <span class="font-bold text-2xl">6,677</span> replies
         </p>
         
-        <p class="card-text mb-0">
-          <span class="fw-bold h4">{{ currentThread?.participants.length || 0 }}</span> participants
-        </p> -->
+        <p>
+          <span class="fw-bold h4">currentThread?.participants.length || 0</span> participants
+        </p>
 
         <VoltDivider />
 
-        <!-- TODO: Create a different aside for WhatsNew -->
-        <!-- <p class="card-text">
-          Last post from <NuxtLink to="/" class="text-decoration">{{ currentThread.latest_comment.user__username }}</NuxtLink> 
-          {{ formatDuration(currentThread.latest_comment.created_on) }}  
-        </p> -->
+        <p>
+          Last post from <NuxtLinkLocale to="/" class="text-decoration">currentThread.latest_comment.user__username </NuxtLinkLocale> 
+          formatDuration(currentThread.latest_comment.created_on)
+        </p>
       </template>
     </VoltCard>    
 
@@ -41,25 +40,38 @@
           </NuxtLink>
         </VoltButton>
 
+        <VoltAccordion :value="0" class="mt-5">
+          <VoltAccordionPanel v-for="(item, i) in items" :key="item.title" :value="i">
+            <VoltAccordionHeader>
+              {{ i }}
+            </VoltAccordionHeader>
 
-        <!-- <v-expansion-panels>
-          <v-expansion-panel v-for="(item, i) in 4" :key="i" accordion>
-            <v-expansion-panel-header>
-              Thread {{ i }}
-            </v-expansion-panel-header>
-            
-            <v-expansion-panel-content>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels> -->
+            <VoltAccordionContent>
+              {{ i }}
+            </VoltAccordionContent>
+          </VoltAccordionPanel>
+        </VoltAccordion>
       </template>
     </VoltCard>
 
     <VoltCard class="bg-blue-300 shadow-sm">
       <template #content>
-        <!-- <base-accordion-vue :items="[{'title': 'First forum', 'content': 'Some content'}, {'title': 'Second forum', 'content': 'Some content'}]" /> -->
+        <VoltAccordion :value="0">
+          <VoltAccordionPanel v-for="(item, i) in items" :key="item.title" :value="i">
+            <VoltAccordionHeader>
+              {{ item.title }}
+            </VoltAccordionHeader>
+
+            <VoltAccordionContent>
+              {{ item.title }}
+            </VoltAccordionContent>
+          </VoltAccordionPanel>
+        </VoltAccordion>
       </template>
     </VoltCard>
   </aside>
 </template>
+
+<script setup lang="ts">
+const items = [{'title': 'First forum', 'content': 'Some content'}, {'title': 'Second forum', 'content': 'Some content'}]
+</script>>
