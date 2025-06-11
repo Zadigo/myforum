@@ -8,33 +8,13 @@
           <span class="font-bold">{{ comment.user.username }}</span>
         </div>
 
-        <VoltDropButton id="something" :items="[{ label: 'Google' }]" />
-
-        <v-btn v-if="authStore.isAuthenticated" color="dark" variant="text" rounded>
-          <font-awesome icon="ellipsis-vertical" />
-
-          <v-menu activator="parent">
-            <v-list>
-              <v-list-item>
-                <v-list-item-title @click="handleEdit">
-                  Edit
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item @click="handleReport">
-                <v-list-item-title>
-                  Report
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item @click="handleDeletion">
-                <v-list-item-title>
-                  Delete
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
+        <VoltDropButton id="something" :items="actions">
+          <template #button="{ toggle }">
+            <VoltSecondaryButton rounded @click="toggle">
+              <Icon name="fa-solid:ellipsis-vertical" />
+            </VoltSecondaryButton>
+          </template>
+        </VoltDropButton>
       </div>
 
       <!-- Content -->
@@ -56,6 +36,12 @@ const emit = defineEmits({
     return true
   }
 })
+
+const actions = [
+  { label: 'Edit' },
+  { label: 'Report' },
+  { label: 'Delete' }
+]
 
 const authStore = useAuthentication()
 

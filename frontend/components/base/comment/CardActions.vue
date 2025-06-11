@@ -1,53 +1,48 @@
 <template>
   <div v-if="authStore.isAuthenticated" class="flex justify-end gap-2 mt-8">
-    <v-btn color="primary" variant="text" @click="handleReply">
+    <VoltSecondaryButton color="primary" variant="text" @click="handleReply">
       <font-awesome icon="reply" class="me-2" />Reply
-    </v-btn>
+    </VoltSecondaryButton>
 
-    <v-btn color="primary" variant="text" @click="handleQuoteFrom">
+    <VoltSecondaryButton color="primary" variant="text" @click="handleQuoteFrom">
       <font-awesome icon="quote-left" class="me-2" />Quote from
-    </v-btn>
+    </VoltSecondaryButton>
     
-    <v-btn color="primary" variant="text" @click="handleBookmark">
+    <VoltSecondaryButton color="primary" variant="text" @click="handleBookmark">
       <font-awesome v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
       <font-awesome v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
-    </v-btn>
+    </VoltSecondaryButton>
     
-    <v-btn color="primary" variant="text" @click="handleShare">
+    <VoltSecondaryButton color="primary" variant="text" @click="handleShare">
       <font-awesome icon="share" class="me-2" />Share
-    </v-btn>
+    </VoltSecondaryButton>
   </div>
 
   <div v-else class="flex justify-end gap-2 mt-8">
-    <v-btn color="dark" variant="text" @click="authStore.openLoginModal=true">
+    <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
       <font-awesome icon="reply" class="me-2" />Reply
-    </v-btn>
+    </VoltSecondaryButton>
 
-    <v-btn color="dark" variant="text" @click="authStore.openLoginModal=true">
+    <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
       <font-awesome icon="quote-left" class="me-2" />Quote from
-    </v-btn>
+    </VoltSecondaryButton>
     
-    <v-btn color="dark" variant="text" @click="authStore.openLoginModal=true">
+    <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
       <font-awesome icon="bookmark" class="me-2" />Bookmark
-    </v-btn>
+    </VoltSecondaryButton>
     
-    <v-btn color="dark" variant="text" @click="authStore.openLoginModal=true">
+    <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
       <font-awesome icon="share" class="me-2" />Share
-    </v-btn>
+    </VoltSecondaryButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue';
+import { VoltSecondaryButton } from '#components'
 
 const authStore = useAuthentication()
 
-const props = defineProps({
-  comment: {
-    type: Object as PropType<Comment>,
-    required: true
-  }
-})
+const props = defineProps<{ comment: Comment }>()
 
 const emit = defineEmits({
   reply(_comment: Comment) {
@@ -55,10 +50,16 @@ const emit = defineEmits({
   }
 })
 
+/**
+ * 
+ */
 async function handleQuoteFrom() {
-  // pass
+
 }
 
+/**
+ * 
+ */
 async function handleBookmark() {
   // try {
   //   await $client.post(`comments/${comment.id}/bookmark`)
@@ -67,10 +68,16 @@ async function handleBookmark() {
   // }
 }
 
+/**
+ * 
+ */
 function handleShare() {
 
 }
 
+/**
+ * 
+ */
 async function handleReply() {
   emit('reply', props.comment)
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="card flex justify-center">
-    <slot name="button">
+    <slot name="button" :toggle="handleToggle">
       <VoltButton :aria-controls="id" :aria-haspopup="isOpen ? 'true' : 'false'" type="button" plain @click="handleToggle">
         <slot />
       </VoltButton>

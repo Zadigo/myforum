@@ -9,7 +9,7 @@
     <article v-for="(forum, i) in forumsByCategory[category]" :key="forum.id">
       <VoltCard :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="shadow-sm" role="article">
         <template #content>
-          <NuxtLinkLocale :to="`/forums/${forum.id}`" class="text-dark">
+          <NuxtLinkLocale :to="`/forums/${forum.id}`">
             <h4 :aria-label="forum.title" class="font-bold">
               {{ forum.title }}
             </h4>

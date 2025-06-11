@@ -6,9 +6,14 @@
     <!-- Header -->
     <HeadersThread />
 
-    <div class="grid grid-cols-2 px-10 max-w-7xl mx-auto" role="main">
-      <slot />
-      <ThreadsAside />
+    <div class="grid grid-cols-12 px-10 max-w-7xl mx-auto" role="main">
+      <div class="col-span-8">
+        <slot />
+      </div>
+      
+      <div class="col-span-4">
+        <ThreadsAside />
+      </div>
     </div>
 
     <!-- Footer -->

@@ -85,7 +85,8 @@ export default defineNuxtConfig({
     'vue-sonner/nuxt',
     '@vueuse/nuxt',
     'pinia-plugin-persistedstate',
-    '@nuxt/fonts'
+    '@nuxt/fonts',
+    // 'nuxt-schema-org'
   ],
   
   // googleFonts: {

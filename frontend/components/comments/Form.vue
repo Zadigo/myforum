@@ -5,7 +5,7 @@
     </div>
 
     <div class="card-body">
-      <v-text-field v-model="requestData.title" type="text" placeholder="Title" variant="solo-filled" flat />
+      <VoltInputText v-model="requestData.title" type="text" placeholder="Title" />
 
       <BaseEditor @editor-content="handleEditorContent" />
 
@@ -16,17 +16,17 @@
 
     <div class="card-footer d-flex">
       <div class="ms-auto d-flex gap-2">
-        <v-btn color="primary" variant="tonal" rounded @click="createNewPost">
+        <VoltButton rounded @click="createNewPost">
           Post
-        </v-btn>
+        </VoltButton>
 
-        <v-btn color="info" variant="tonal" rounded @click="saveDraft">
+        <VoltButton @click="saveDraft">
           Save draft
-        </v-btn>
+        </VoltButton>
         
-        <v-btn color="info" variant="tonal" rounded @click="emit('close')">
+        <VoltButton @click="emit('close')">
           Cancel
-        </v-btn>
+        </VoltButton>
       </div>
     </div>
   </div>
@@ -89,6 +89,10 @@ async function createNewPost () {
  */
 async function saveDraft () {}
 
+/**
+ *
+ * @param data
+ */
 function handleEditorContent (data: EditorData) {
   requestData.value.content = data.text
   requestData.value.content_html = data.html

@@ -17,70 +17,54 @@
     </template>
 
     <template #actions>
-      <div class="btn-group shadow-none">
-        <button type="button" class="btn btn-lg btn-info btn-sm" @click="emit('jump-to-latest')">
+      <div class="space-x-2">
+        <VoltButton type="button" rounded @click="emit('jump-to-latest')">
+          <Icon name="fa-solid:arrow-down" />
           Jump to latest
-        </button>
+        </VoltButton>
         
-        <button type="button" class="btn btn-lg btn-info btn-sm" @click="emit('follow')">
+        <VoltButton type="button" rounded @click="emit('follow')">
+          <Icon name="fa-solid:plus-circle" />
           Follow thread
-        </button>
+        </VoltButton>
         
-        <button type="button" class="btn btn-lg btn-danger btn-sm" @click="emit('delete')">
+        <VoltButton type="button" rounded @click="emit('delete')">
+          <Icon name="fa-solid:trash" />
           Delete
-        </button>
+        </VoltButton>
         
-        <button type="button" class="btn btn-lg btn-primary btn-sm" @click="forumStore.showCreateCommentForm=true">
+        <VoltButton type="button" rounded @click="forumStore.showCreateCommentForm=true">
+          <Icon name="fa-solid:plus" />
           New comment
-        </button>
+        </VoltButton>
       </div>
     </template>
   </BasePageHeader>
 </template>
 
 <script setup lang="ts">
-import { useSessionStorage } from '@vueuse/core';
-import type { Forum, ForumThread } from '~/types';
+import { useStorage } from '@vueuse/core'
+import type { CustomRouteIdParamsGeneric, Forum, ForumThread } from '~/types'
 
-const { id } = useRoute().params
+const { id } = useRoute().params as CustomRouteIdParamsGeneric
 const forumStore = useForums()
-const route = useRoute()
 
-const cachedForums = useSessionStorage<Forum[]>('forums', null, {
-  serializer: {
-    read (raw) {
-      return JSON.parse(raw)
-    },
-    write (value) {
-      return JSON.stringify(value)
-    }
-  }
-})
+const cachedForums = useStorage<Forum[]>('forums', [])
+const cachedThreads = useStorage<ForumThread[]>('threads', [])
 
-const cachedThreads = useSessionStorage<ForumThread[]>('threads', null, {
-  serializer: {
-    read (raw) {
-      return JSON.parse(raw)
-    },
-    write (value) {
-      return JSON.stringify(value)
-    }
-  }
-})
+const emit = defineEmits<{
+  'jump-to-latest': [],
+  'follow': [],
+  'delete': [],
+  'new-comment': [],
+}>()
 
-const emit = defineEmits({
-  'jump-to-latest' () {
-    return true
-  },
-  'follow' () {
-    return true
-  },
-  'delete' () {
-    return true
-  },
-  'new-comment' () {
-    return true
-  }
+const userCreatedThread = computed(() => {
+  return false
+  // if (!this.user) {
+  //   return false
+  // }
+  // return this.currentThread.user.id === this.user.id
 })
 
 onBeforeMount(() => {
@@ -91,13 +75,5 @@ onBeforeMount(() => {
   if (cachedThreads.value) {
     forumStore.currentThread = cachedThreads.value.find(thread => thread.id === parseInt(id))
   }
-})
-
-const userCreatedThread = computed(() => {
-  return false
-  // if (!this.user) {
-  //   return false
-  // }
-  // return this.currentThread.user.id === this.user.id
 })
 </script>

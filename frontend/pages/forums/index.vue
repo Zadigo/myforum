@@ -42,7 +42,6 @@ const AsyncForumsIterationBlock = defineAsyncComponent({
 })
 
 const AsyncForumLatestCommentsBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/LatestBlock.vue'),
-  timeout: 10000
+  loader: async () => import('~/components/forums/LatestBlock.vue')
 })
 </script>
