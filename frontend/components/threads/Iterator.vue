@@ -34,7 +34,7 @@ const { forumThreads } = storeToRefs(forumStore)
 
 const emit = defineEmits<{ 'load-current-forum': [] }>()
 
-const { data: cachedResponse } = useFetch<ThreadApiResponse>(`/api/forums/${id}/threads`, {
+const { data: cachedResponse } = await useFetch<ThreadApiResponse>(`/api/forums/${id}/threads`, {
   method: 'GET'
 })
 

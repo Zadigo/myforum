@@ -6,9 +6,7 @@
       <!-- Forums -->
       <div class="my-3">
         <Suspense>
-          <template #default>
-            <AsyncForumsIterationBlock />
-          </template>
+          <AsyncForumsIterationBlock />
 
           <template #fallback>
             <VoltSkeleton height="4rem" />
@@ -23,7 +21,14 @@
             <AsyncForumLatestCommentsBlock />
 
             <template #fallback>
-              <VoltSkeleton v-for="i in 4" :key="i" height="4rem" />
+              <div class="flex justify-between">
+                <VoltSkeleton height="2rem" />
+                <VoltSkeleton height="2rem" />
+              </div>
+              
+              <div class="space-y-3">
+                <VoltSkeleton v-for="i in 4" :key="i" height="4rem" />
+              </div>
             </template>
           </Suspense>
         </div>

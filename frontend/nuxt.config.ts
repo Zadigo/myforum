@@ -12,7 +12,11 @@ export default defineNuxtConfig({
       swr: true
     },
     'forums/**': {
-      swr: true
+      swr: true,
+      cache: {
+        swr: true,
+        maxAge: 1*60
+      }
     },
     'threads/**/create': {
       swr: false

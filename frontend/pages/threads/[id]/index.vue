@@ -63,7 +63,7 @@ provide('replyingToComment', replyingToComment)
 /**
  *
  */
-const { refresh, data: cachedResponse } = useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
+const { refresh, data: cachedResponse } = await useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
   query: {
     limit: 30,
     offset: currentOffset.value 

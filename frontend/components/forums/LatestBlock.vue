@@ -1,12 +1,12 @@
 <template>
   <section id="latest-posts">
     <div class="flex justify-between">
-      <h3 class="font-bold text-2xl">
+      <h3 class="font-bold font-title text-2xl">
         {{ $t('Latest posts') }}
       </h3>
       
       <VoltSecondaryButton>
-        <NuxtLinkLocale to="/whats-new" class="lh-lg">
+        <NuxtLinkLocale to="/whats-new">
           {{ $t('All new posts') }}
         </NuxtLinkLocale>
       </VoltSecondaryButton>
@@ -21,5 +21,7 @@
 <script setup lang="ts">
 import type { Comment } from '~/types'
 
-const { data: comments } = useFetch<Comment[]>('/api/comments/latest')
+const { data: comments } = await useFetch<Comment[]>('/api/comments/latest', {
+  method: 'GET'
+})
 </script>

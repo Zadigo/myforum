@@ -35,9 +35,11 @@
     </template>
 
     <template #content>
-      <div class="mb-4">
-        <span class="fw-bold text-muted">#{{ comment.id }}</span> 
-        <span class="mx-2">-</span> by <span class="fw-bold">{{ comment.user?.username }}</span> 
+      <div class="mb-4 space-x-1">
+        <span class="font-bold text-surface-700">#{{ comment.id }}</span> 
+        <span>-</span>
+        <span class="font-bold text-blue-700 underline underline-offset-4">@{{ comment.user?.username }}</span> 
+        <span>-</span>
         <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
       </div>
       <div v-html="comment.content_html" />
@@ -86,7 +88,6 @@
 
 <script setup lang="ts">
 import type { Comment } from '~/types'
-import type { PropType } from 'vue'
 
 const emit = defineEmits({
   reply (_comment: Comment) {
@@ -97,16 +98,10 @@ const emit = defineEmits({
   }
 })
 
-defineProps({
-  comments: {
-    type: Array as PropType<Comment[]>,
-    required: true
-  },
-  showActions: {
-    type: Boolean,
-    default: true
-  }
-})
+defineProps<{
+  comments: Comment[],
+  showActions: boolean
+}>()
 
 const { $dayjs } = useNuxtApp()
 const authStore = useAuthentication()

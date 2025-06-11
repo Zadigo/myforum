@@ -39,18 +39,13 @@
 </template>
 
 <script setup lang="ts">
+import type { Forum } from '~/types'
+
 const { forumsList, forumCategories, forumsByCategory } = storeToRefs(useForums())
 
-const emit = defineEmits<{
-  'load-current-forum': []
-}>()
-
-const { data } = useFetch('/api/forums')
+const { data } = await useFetch<Forum[]>('/api/forums', { method: 'GET' })
 
 if (data.value) {
   forumsList.value = data.value
-  emit('load-current-forum')
 }
-
-console.log('forumsList', forumsList)
 </script>

@@ -47,6 +47,6 @@ export default defineCachedEventHandler(async event => {
   // ]
 }, {
   base: 'fs',
-  maxAge: 1 * 60,
+  maxAge: 15 * 60,
   name: 'forums'
 })
