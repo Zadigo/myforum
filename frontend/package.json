@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "test:vi": "vitest"
+    "test:vi": "vitest",
+    "cleanup": "nuxt cleanup && rm -rf .nuxt .output dist node_modules/.cache"
   },
   "dependencies": {
     "@artmizu/nuxt-prometheus": "2.4.0",

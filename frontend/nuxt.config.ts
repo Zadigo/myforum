@@ -104,31 +104,31 @@ export default defineNuxtConfig({
   // https://www.fontpair.co/all
   fonts: {
     provider: 'google',
+    defaults: {
+      fallbacks: {
+        "sans-serif": ['Arial', 'Helvetica', 'sans-serif']
+      }
+    },
     families: [
       {
         name: 'Manrope',
-        weights: [100, 700],
         display: 'swap'
       },
       // Titles
       {
         name: 'Petrona',
-        weights: [100, 700],
         display: 'swap'
       },
       {
         name: 'Faustina',
-        weights: [300, 700],
         display: 'swap'
       },
       {
         name: 'Newsreader',
-        weights: [200, 700],
         display: 'swap'
       },
       {
         name: 'Work Sans',
-        weights: [100, 700],
         display: 'swap'
       }
     ]

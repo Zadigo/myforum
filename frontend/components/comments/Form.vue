@@ -1,10 +1,10 @@
 <template>
-  <div class="card shadow-sm">
-    <div v-if="replyingToComment" class="card-header">
+  <VoltCard class="shadow-sm">
+    <template v-if="replyingToComment" #header>
       Replying to <span class="fw-bold">@{{ replyingToComment.user.username }}</span>
-    </div>
+    </template>
 
-    <div class="card-body">
+    <template #content>
       <VoltInputText v-model="requestData.title" type="text" placeholder="Title" />
 
       <BaseEditor @editor-content="handleEditorContent" />
@@ -12,15 +12,17 @@
       <div v-for="quote in requestData.quotes" :key="quote" class="alert alert-info">
         {{ quote }}
       </div>
-    </div>
+    </template>
 
-    <div class="card-footer d-flex">
-      <div class="ms-auto d-flex gap-2">
-        <VoltButton rounded @click="createNewPost">
+    <template #footer>
+      <div class="space-x-2">
+        <VoltButton @click="createNewPost">
+          <Icon name="fa-solid:check" />
           Post
         </VoltButton>
 
         <VoltButton @click="saveDraft">
+          <Icon name="fa-solid:drafting-compass" />
           Save draft
         </VoltButton>
         
@@ -28,13 +30,12 @@
           Cancel
         </VoltButton>
       </div>
-    </div>
-  </div>
+    </template>
+  </VoltCard>
 </template>
 
 <script setup lang="ts">
-import type { Comment, EditorData } from '~/types';
-import BaseEditor from '../BaseEditor.vue';
+import type { Comment, CustomRouteIdParamsGeneric, EditorData } from '~/types'
 
 interface RequestData {
   thread: string | number
@@ -54,7 +55,7 @@ const emit = defineEmits({
   }
 })
 
-const { id } = useRoute().params
+const { id } = useRoute().params as CustomRouteIdParamsGeneric
 
 const requestData = ref<RequestData>({
   thread: id,

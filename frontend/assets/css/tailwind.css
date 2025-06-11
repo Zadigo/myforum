@@ -28,11 +28,12 @@
     --p-surface-950: #09090b;
     --p-content-border-radius: 6px;
 
-    /* --font-sans: Manrope, Roboto, sans-serif; */
-    --font-title: 'Petrona';
-    --font-faustina: 'Faustina';
-    --font-newsreader: 'Newsreader';
-    --font-work-sans: 'Work Sans';
+    --font-sans: 'Manrope', sans-serif;
+    --font-serif: 'Faustina', serif;
+    --font-title: 'Petrona', serif;
+    --font-faustina: 'Faustina', serif;
+    --font-newsreader: 'Newsreader', serif;
+    --font-work-sans: 'Work Sans', sans-serif;
 }
 
 /* Light */
