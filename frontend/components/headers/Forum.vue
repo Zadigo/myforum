@@ -1,11 +1,13 @@
 <template>
   <BasePageHeader class="bg-blue-50">
     <template #title>
-      <span v-if="currentForum">
-        {{ currentForum.title }}
-      </span>
+      <ClientOnly>
+        <span v-if="currentForum">
+          {{ currentForum.title }}
+        </span>
 
-      <VoltSkeleton v-else height="2rem" />
+        <VoltSkeleton v-else height="2rem" />
+      </ClientOnly>
     </template>
 
     <template #breadcrumbs>
@@ -30,13 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Forum } from '~/types';
+import type { Forum } from '~/types'
 
-const emit = defineEmits({
-  follow (_data: Forum | undefined) {
-    return true
-  }
-})
+const emit = defineEmits<{ 'follow': [forum: Forum] }>()
 
 const forumStore = useForums()
 const { currentForum } = storeToRefs(forumStore)
@@ -48,10 +46,12 @@ const breadcrumbs = ref([
 ])
 
 /**
- *
+ * Function to handle the follow forum action
  */
 async function handleFollowForum() {
-  emit('follow', currentForum)
+  if (currentForum.value !== undefined) {
+    emit('follow', currentForum.value)
+  }
 }
 
 /**

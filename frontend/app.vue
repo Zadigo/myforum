@@ -28,4 +28,7 @@ const cachedUserProfile = useSessionStorage<User>('user', null, {
 authStore.accessToken = cookieAccessToken.value
 authStore.refreshToken = cookieRefreshToken.value
 authStore.userProfile = cachedUserProfile.value
+
+onMounted(() => { document.body.classList.add('bg-slate-100/50') })
+onUnmounted(() => { document.body.classList.remove('bg-slate-100/50') })
 </script>

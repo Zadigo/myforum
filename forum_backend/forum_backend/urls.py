@@ -49,10 +49,15 @@ urlpatterns = [
         name='redoc'
     ),
     path(
-        'api/v1/polls/',
-        include('polls.api.urls')),
+        'v1/tags/',
+        include('tags.api.urls')
+    ),
     path(
-        'api/v1/accounts/',
+        'v1/polls/',
+        include('polls.api.urls')
+    ),
+    path(
+        'v1/accounts/',
         include('accounts.api.urls')
     ),
     path(
@@ -68,7 +73,7 @@ urlpatterns = [
         include('threads.api.urls')
     ),
     re_path(
-        r'^api/v1/search$',
+        r'^v1/search$',
         views.Search.as_view(),
         name='search'
     ),

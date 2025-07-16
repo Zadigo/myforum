@@ -2,11 +2,9 @@
   <section id="comments">
     <!-- Editor -->
     <div v-if="store.showCreateCommentForm" class="row">
-      <div class="col-12">
-        <KeepAlive>
-          <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
-        </KeepAlive>
-      </div>
+      <KeepAlive>
+        <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+      </KeepAlive>
     </div>
 
     <div v-else class="row">
@@ -15,7 +13,7 @@
         <AsyncPollSection class="mb-3" />
 
         <template #fallback>
-          <VoltSkeleton height="5rem" />
+          <VoltSkeleton class="h-[100px]" />
         </template>
       </Suspense>
 
@@ -26,13 +24,11 @@
     </div>
 
     <div class="row">
-      <div class="col-12">
-        <h1 class="fw-bold display-6 my-5">Recommended reading</h1>
+      <h1 class="font-bold display-6 my-5">Recommended reading</h1>
 
-        <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
-          <div class="card-body">
-            {{ i }}
-          </div>
+      <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
+        <div class="card-body">
+          {{ i }}
         </div>
       </div>
     </div>
@@ -50,29 +46,25 @@ const AsyncPollSection = defineAsyncComponent({
   loader: async () => import('~/components/threads/Poll.vue')
 })
 
-const { id } = useRoute().params
-const store = useForums()
-const { threadComments, currentThread } = storeToRefs(store)
-
 // const cachedResponse = ref<ThreadCommentsApiResponse>()
-const currentOffset = ref<number>(1)
 const replyingToComment = ref<Comment>()
 
 provide('replyingToComment', replyingToComment)
 
 /**
- *
+ * Comments for the current thread
  */
+
+const { id } = useRoute().params
+const store = useForums()
+const { threadComments, currentThread } = storeToRefs(store)
+const currentOffset = ref<number>(1)
+
 const { refresh, data: cachedResponse } = await useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
   query: {
     limit: 30,
     offset: currentOffset.value 
-  },
-  // transform(data: ThreadCommentsApiResponse) {
-  //   cachedResponse.value = data
-  //   threadComments.value = data.results
-  //   return data
-  // }
+  }
 })
 
 if (cachedResponse.value) {
@@ -80,9 +72,10 @@ if (cachedResponse.value) {
 }
 
 /**
- *
+ * Information for the current thread
  */
-const { execute } = useFetch(`/api/threads/${id}`, {
+
+const { execute } = await useFetch<ForumThread>(`/api/threads/${id}`, {
   immediate: false,
   transform(data: ForumThread) {
     currentThread.value = data
@@ -90,12 +83,13 @@ const { execute } = useFetch(`/api/threads/${id}`, {
   }
 })
 
+execute()
+
 /**
  *
  * @param data 
  */
 function handleEditorContent(data: { text: string, delta: string, html: string }) {
-  // Do something
   console.log(data)
 }
 
@@ -127,6 +121,4 @@ function handleReply(comment: Comment) {
 useHead({
   title: currentThread.value?.title || '...'
 })
-
-execute()
 </script>

@@ -25,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import type  { ThreadApiResponse } from '~/types'
+import type { SortMethodNames } from '~/data'
+import type { ThreadApiResponse } from '~/types'
 
 const { $dayjs } = useNuxtApp()
 const { id } = useRoute().params
@@ -34,8 +35,14 @@ const { forumThreads } = storeToRefs(forumStore)
 
 const emit = defineEmits<{ 'load-current-forum': [] }>()
 
+const sortingMethods = inject<Ref<SortMethodNames>>('sortingMethods', ref('Most recent'))
+
 const { data: cachedResponse } = await useFetch<ThreadApiResponse>(`/api/forums/${id}/threads`, {
-  method: 'GET'
+  method: 'GET',
+  watch: [sortingMethods],
+  query: {
+    sort: sortingMethods.value
+  }
 })
 
 if (cachedResponse.value) {

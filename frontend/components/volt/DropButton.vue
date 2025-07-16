@@ -11,17 +11,14 @@
 </template>
 
 <script setup lang="ts">
-interface Item {
-  label: string
-  icon?: string
-}
+import { ref } from 'vue'
 
-defineProps<{
-  id: string
-  items: Item[]
-}>()
+import type { VoltMenu } from '#components';
 
-const menuEl = useTemplateRef('menuEl')
+defineEmits<{ items: { label: [] }}>()
+defineProps<{ id?: string, items: { label: string }[] }>()
+
+const menuEl = useTemplateRef<typeof VoltMenu>('menuEl')
 
 const isOpen = ref<boolean>(false)
 

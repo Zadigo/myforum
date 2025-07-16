@@ -3,15 +3,13 @@ import type { Forum, Comment, ForumThreadResults, ForumThread } from '~/types'
 
 export default defineStore('forums', () => {
   const forumsList = ref<Forum[]>([])
-  const forumThreads = ref<ForumThreadResults[]>([])
   const threadComments = ref<Comment[]>([])
-
+  
   const openSearchModal = ref<boolean>(false)
 
   const currentForum = ref<Forum | undefined>()
-  const currentThread = ref<ForumThread | undefined>()
   const showCreateCommentForm = ref<boolean>(false)
-
+  
   const forumsByCategory = computed((): Record<string, Forum[]> => {
     const groupedForums: Record<string, Forum[]> = {}
 
@@ -34,12 +32,16 @@ export default defineStore('forums', () => {
     }
   })
 
-  const hasForums = computed(() => {
-    return forumsList.value.length > 0
-  })
+  /**
+   * Current thread
+   */
+
+  const forumThreads = ref<ForumThreadResults[]>([])
+  const currentThread = ref<ForumThread | undefined>()
+  const hasForums = computed(() => forumsList.value.length > 0)
 
   /**
-   *
+   * Sets the current forum being viewed
    * @param id The current thread id
    */
   function setCurrentThread(id: string | number) {
@@ -56,13 +58,25 @@ export default defineStore('forums', () => {
     setCurrentThread,
     openSearchModal,
     showCreateCommentForm,
+    /**
+     * The current forum being viewed
+     */
     currentForum,
+    /**
+     * The current thread being viewed
+     */
     currentThread,
     forumCategories,
     forumsByCategory,
     hasForums,
     forumsList,
+    /**
+     * Returns the threads for the current forum
+     */
     forumThreads,
+    /**
+     * Returns the comments for the current thread
+     */
     threadComments
   }
 })

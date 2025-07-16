@@ -1,3 +1,4 @@
+import type { Delta } from '@vueup/vue-quill'
 import type { RouteParamsGeneric } from 'vue-router'
 
 export * from './forums'
@@ -16,7 +17,7 @@ export interface LoginAPIResponse {
 export type RefreshAPIResponse = Exclude<LoginAPIResponse, 'access'>
 
 export interface EditorData {
-  delta: object | null
+  delta: string | Delta | undefined
   html: string
   text: string
 }

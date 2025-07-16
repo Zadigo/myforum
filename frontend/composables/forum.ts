@@ -1,101 +1,60 @@
+import { useSessionStorage } from '@vueuse/core'
 import { z } from 'zod'
-import type { Forum, ForumThread } from "~/types"
-import { useSessionStorage } from "@vueuse/core"
+
+import type { Forum } from '~/types'
+// import type { SortMethodNames } from '~/data'
 
 const ForumSchema = z.object({
-    id: z.number().int().positive(),
-    title: z.string(),
-    category: z.string(),
-    description: z.string(),
-    admin: z.boolean(),
-    number_of_threads: z.number().positive(),
-    active: z.boolean(),
-    created_on: z.string().datetime()
+  id: z.number().int().positive(),
+  title: z.string(),
+  category: z.string(),
+  description: z.string(),
+  admin: z.boolean(),
+  number_of_threads: z.number().positive(),
+  active: z.boolean(),
+  created_on: z.string().datetime()
 })
 
 type ValidatedForum = z.infer<typeof ForumSchema>
 
-export function useForumsComposable () {
-    const { $client } = useNuxtApp()
-    const { handleError } = useErrorHandler()
-    const { forumsList } = storeToRefs(useForums())
+export function useForumsComposable() {
+  const { $client } = useNuxtApp()
+  const { handleError } = useErrorHandler()
+  const { forumsList } = storeToRefs(useForums())
 
-    const cachedForums = useSessionStorage('forums', [], {
-        serializer: {
-            read(raw) {
-                return JSON.parse(raw)
-            },
-            write(value) {
-                return JSON.stringify(value)
-            },
-        }
-    })
+  const cachedForums = useSessionStorage('forums', [], {
+    serializer: {
+      read(raw) {
+        return JSON.parse(raw)
+      },
+      write(value) {
+        return JSON.stringify(value)
+      },
+    }
+  })
 
-    async function getForums() {
+  async function getForums() {
+    try {
+      const response = await $client.get<Forum[]>('/forums/')
+      const validatedData = response.data.reduce<ValidatedForum[]>((validForums, forum: Forum) => {
         try {
-            const response = await $client.get<Forum[]>('/forums/')
-            const validatedData = response.data.reduce<ValidatedForum[]>((validForums, forum: Forum) => {
-                try {
-                    const validItem = ForumSchema.parse(forum)
-                    validForums.push(validItem)
-                } catch (error) {
-                    console.warn(`Failed to validate forum item: ${error}`)
-                }
-                return validForums
-            }, [])
-
-            forumsList.value = validatedData
-            cachedForums.value = validatedData
+          const validItem = ForumSchema.parse(forum)
+          validForums.push(validItem)
         } catch (error) {
-            handleError(error)
+          console.warn(`Failed to validate forum item: ${error}`)
         }
+        return validForums
+      }, [])
+
+      forumsList.value = validatedData
+      cachedForums.value = validatedData
+    } catch (error) {
+      handleError(error)
     }
+  }
 
-    return {
-        getForums,
-        cachedForums
-    }
-}
-
-export function useThreadsComposable () {
-    const { forumThreads } = storeToRefs(useForums())
-
-    const categories = computed(() => {
-        const result = forumThreads.value.map(thread => {
-            return thread.category
-        })
-        return Array.from(new Set(result))
-    })
-
-
-    // const cachedThreads = useSessionStorage('threads', null, {
-    //     serializer: {
-    //         read(raw) {
-    //             return JSON.parse(raw)
-    //         },
-    //         write(value) {
-    //             return JSON.stringify(value)
-    //         }
-    //     }
-    // })
-
-    // async function getThreads(id: string, sort = 0) {
-    //     try {
-    //         const response = await $client.get<Thread[]>(`/forums/${id}`, { params: { sort } })
-    //         forumThreads.value = response.data
-    //         cachedThreads.value = response.data
-    //     } catch (e) {
-    //         handleError(e)
-    //     }
-    // }
-
-    async function sortThreads (index: number) {
-        // await getThreads(route.params.id, index)
-    }
-
-    return {
-        // getThreads,
-        sortThreads,
-        categories
-    }
+  return {
+    getForums,
+    cachedForums
+  }
 }

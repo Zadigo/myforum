@@ -36,3 +36,8 @@ export interface Participant {
     user__id: number
     user__username: string
 }
+
+export interface TagApiResponse {
+    id: number
+    name: string
+}

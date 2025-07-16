@@ -1,3 +1,5 @@
+import type { Delta } from "@vueup/vue-quill"
+
 export type NewThreadCatategories = 'General discussion' | 'Result' | 'WWW' | 'Bombshell' | 'Draw' | 'Poll' 
 
 export type NewPollChoiceSelection = 'Single' | 'Limited'
@@ -29,7 +31,7 @@ export interface NewThreadData {
     score: string | null
   }
   content: {
-    delta: string | null
+    delta: string | Delta | null | undefined
     html: string | null
     text: string | null
   }

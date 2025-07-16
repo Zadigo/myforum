@@ -1,0 +1,10 @@
+[
+    {
+        "model": "tags.Tag",
+        "pk": 1,
+        "fields": {
+            "name": "Eugénie Bouchard",
+            "created_on": "2022-06-04"
+        }
+    }
+]

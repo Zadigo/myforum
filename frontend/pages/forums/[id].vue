@@ -1,40 +1,19 @@
 <template>
   <section class="threads">
-    <div class="col-12 d-flex justify-content-between align-items-center my-3">
+    <div class="flex justify-between items-center my-3">
       <div class="flex justify-start align-center gap-2">
-        <!-- Sorting -->
-        <!-- <VoltButton id="sort" color="primary" variant="tonal">
-          <font-awesome icon="sort" />
-        </VoltButton>
-
-        <v-menu activator="#sort">
-          <v-list>
-            <v-list-item v-for="(method, index) in sortMethods" :key="method.label" :value="index" @click="sortThreads(index)">
-              <v-list-item-title>
-                {{ method.label }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
-
         <ClientOnly>
-          <VoltDropButton  id="sort-threads" :items="sortMethods" />
-        </ClientOnly>
-        
-        <!-- Filtering -->
-        <VoltButton id="filter">
-          <font-awesome icon="filter" />
-        </VoltButton>
+          <VoltDropButton  id="sort-threads" v-model="sortingMethod" :items="sortMethods">
+            <Icon name="i-fa-solid:sort" />
+          </VoltDropButton>
 
-        <!-- <v-menu activator="#filter">
-          <v-list>
-            <v-list-item v-for="(category, index) in categories" :key="category" :value="index">
-              <v-list-item-title>
-                {{ category }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
+          {{ sortingMethod }}
+
+          <!-- Filtering -->
+          <VoltButton id="filter">
+            <Icon name="i-fa-solid:filter" />
+          </VoltButton>
+        </ClientOnly>
       </div>
     </div>
 
@@ -50,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { sortMethods } from '~/data'
+import { sortMethods, type SortMethodNames } from '~/data'
 import type { CustomRouteIdParamsGeneric, Forum } from '~/types'
 
 definePageMeta({
@@ -65,24 +44,33 @@ const forumStore = useForums()
 const { currentForum } = storeToRefs(forumStore)
 
 const { id } = useRoute().params as CustomRouteIdParamsGeneric
-const { sortThreads, categories } = useThreadsComposable()
 
-
+/**
+ * Fetches the forum information based on the ID from the route
+ */
 const { data, execute } = useFetch<Forum>(`/api/forums/${id}`, {
   immediate: false,
   method: 'GET'
 })
 
-
 /**
- *
+ * Load information of the current forum once the threads are loaded
  */
 const handleLoadForumInfo = useDebounceFn(async () => {
   await execute()
   
   console.log('Forum', data.value)
+
   if (data.value) {
     currentForum.value = data.value
   }
-}, 3000)
+}, 1000)
+
+/**
+ * Sorting methods for threads
+ */
+
+const sortingMethod = ref<SortMethodNames>('Most recent')
+
+provide('sortingMethod', sortingMethod)
 </script>
