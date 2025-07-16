@@ -3,16 +3,16 @@
 
 /* Primary and Surface Palettes */
 :root {
-    --p-primary-50: #ecfdf5;
-    --p-primary-100: #d1fae5;
-    --p-primary-200: #a7f3d0;
-    --p-primary-300: #6ee7b7;
-    --p-primary-400: #34d399;
-    --p-primary-500: #10b981;
-    --p-primary-600: #059669;
-    --p-primary-700: #047857;
-    --p-primary-800: #065f46;
-    --p-primary-900: #064e3b;
+    --p-primary-50: #eef4f9;
+    --p-primary-100: #cbdded;
+    --p-primary-200: #a8c6e2;
+    --p-primary-300: #86afd6;
+    --p-primary-400: #6399ca;
+    --p-primary-500: #4082bf;
+    --p-primary-600: #356a9c;
+    --p-primary-700: #295379;
+    --p-primary-800: #1d3b57;
+    --p-primary-900: #122334;
     --p-primary-950: #022c22;
     --p-surface-0: #ffffff;
     --p-surface-50: #fafafa;
@@ -30,7 +30,7 @@
 
     --font-sans: 'Manrope', sans-serif;
     --font-serif: 'Faustina', serif;
-    --font-title: 'Petrona', serif;
+    --font-title: 'Petrona', sans-serif;
     --font-faustina: 'Faustina', serif;
     --font-newsreader: 'Newsreader', serif;
     --font-work-sans: 'Work Sans', sans-serif;
@@ -81,4 +81,8 @@
         --p-text-muted-color: var(--p-surface-400);
         --p-text-hover-muted-color: var(--p-surface-300);
     }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title);
 }

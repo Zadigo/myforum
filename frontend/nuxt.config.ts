@@ -92,14 +92,6 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     // 'nuxt-schema-org'
   ],
-  
-  // googleFonts: {
-  //   families: {
-  //     'Petrona': {
-  //       wght: '100..700'
-  //     }
-  //   }
-  // },
 
   // https://www.fontpair.co/all
   fonts: {
@@ -112,23 +104,28 @@ export default defineNuxtConfig({
     families: [
       {
         name: 'Manrope',
+        weight: '200..800',
         display: 'swap'
       },
       // Titles
       {
         name: 'Petrona',
+        weight: '100..900',
         display: 'swap'
       },
       {
         name: 'Faustina',
+        weight: '300..800',
         display: 'swap'
       },
       {
         name: 'Newsreader',
+        weight: '200..800',
         display: 'swap'
       },
       {
         name: 'Work Sans',
+        weight: '100..900',
         display: 'swap'
       }
     ]
