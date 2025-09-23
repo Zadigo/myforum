@@ -158,7 +158,7 @@ class ThreadPoll(generics.RetrieveAPIView):
         try:
             obj = queryset.get()
         except:
-            return None   
+            return None
         else:         
             self.check_object_permissions(self.request, obj)
             return obj
@@ -166,3 +166,14 @@ class ThreadPoll(generics.RetrieveAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(thread__id=self.kwargs['pk'])
+
+    def retrieve(self, request, *args, **kwargs):
+        template = {'has_poll': False, 'poll': None}
+        instance = self.get_object()
+
+        serializer = self.get_serializer(instance)
+        if instance is not None:
+            template['has_poll'] = True
+            template['poll'] = serializer.data
+
+        return Response(template)

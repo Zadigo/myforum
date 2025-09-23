@@ -1,8 +1,8 @@
 <template>
-  <VoltCard role="article">
+  <VoltCard role="article" class="shadow-sm">
     <template #title>
       <NuxtLink to="/rules">
-        <h3 class="font-title font-bold">
+        <h3 class="font-bold">
           {{ title }}
         </h3>
       </NuxtLink>

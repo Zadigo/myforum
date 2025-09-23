@@ -1,36 +1,38 @@
 <template>
   <section id="comments">
-    <!-- Editor -->
-    <div v-if="store.showCreateCommentForm" class="row">
-      <KeepAlive>
-        <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
-      </KeepAlive>
-    </div>
-
-    <div v-else class="row">
-      <!-- Poll -->
-      <Suspense>
-        <AsyncPollSection class="mb-3" />
-
-        <template #fallback>
-          <VoltSkeleton class="h-[100px]" />
-        </template>
-      </Suspense>
-
-      <!-- Comments -->
-      <div>
-        <CommentsWrapper :comments="threadComments" @reply="handleReply" />
+    <ClientOnly>
+      <div v-if="store.showCreateCommentForm" class="row">
+        <!-- Form -->
+        <KeepAlive>
+          <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+        </KeepAlive>
       </div>
-    </div>
 
-    <div class="row">
-      <h1 class="font-bold display-6 my-5">Recommended reading</h1>
+      <div v-else class="row">
+        <!-- Poll -->
+        <Suspense>
+          <AsyncPollSection class="mb-3" />
 
-      <div v-for="i in 5" :key="i" class="card shadow-sm mb-2">
-        <div class="card-body">
-          {{ i }}
+          <template #fallback>
+            <VoltSkeleton class="h-[200px]" />
+          </template>
+        </Suspense>
+
+        <!-- Comments -->
+        <div>
+          <CommentsWrapper :comments="threadComments" @reply="handleReply" />
         </div>
       </div>
+    </ClientOnly>
+
+    <div class="row">
+      <h1 class="font-bold text-2xl my-5">Recommended reading</h1>
+
+      <VoltCard v-for="i in 5" :key="i" class="shadow-sm mb-2">
+        <template #content>
+          {{ i }}
+        </template>
+      </VoltCard>
     </div>
   </section>
 </template>

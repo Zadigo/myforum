@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
 
+@theme {
+    --color-secondary-50: #f8e9f2;
+    --color-secondary-100: #f0d3e5;
+    --color-secondary-200: #e8bdd8;
+    --color-secondary-300: #e0a7cb;
+    --color-secondary-400: #d48fc0;
+    --color-secondary-500: #955069;
+    --color-secondary-600: #7a3f5c;
+    --color-secondary-700: #5f3550;
+    --color-secondary-800: #442b43;
+    --color-secondary-900: #2a212e;
+    --color-secondary-950: #1a161b;
+}
+
 /* Primary and Surface Palettes */
 :root {
     --p-primary-50: #eef4f9;
@@ -34,6 +48,8 @@
     --font-faustina: 'Faustina', serif;
     --font-newsreader: 'Newsreader', serif;
     --font-work-sans: 'Work Sans', sans-serif;
+
+    --p-secondary-500: var(--color-secondary-500);
 }
 
 /* Light */
@@ -53,6 +69,8 @@
     --p-text-hover-color: var(--p-surface-800);
     --p-text-muted-color: var(--p-surface-500);
     --p-text-hover-muted-color: var(--p-surface-600);
+
+    --p-secondary-color: var(--p-secondary-500);
 }
 
 /*

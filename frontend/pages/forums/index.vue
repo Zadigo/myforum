@@ -14,6 +14,10 @@
         </Suspense>
       </div>
 
+      <div class="p-5 bg-secondary">
+        google
+      </div>
+
       <!-- Latest Comments -->
       <ClientOnly>
         <div class="mt-30">
@@ -22,12 +26,12 @@
 
             <template #fallback>
               <div class="flex justify-between">
-                <VoltSkeleton height="2rem" />
-                <VoltSkeleton height="2rem" />
+                <VoltSkeleton class="h-[2rem]" />
+                <VoltSkeleton class="h-[2rem]" />
               </div>
               
               <div class="space-y-3">
-                <VoltSkeleton v-for="i in 4" :key="i" height="4rem" />
+                <VoltSkeleton v-for="i in 4" :key="i" class="h-[4rem]" />
               </div>
             </template>
           </Suspense>

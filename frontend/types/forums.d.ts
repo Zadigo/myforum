@@ -47,16 +47,19 @@ export interface PollQuestion {
 }
 
 export interface PollApiResponse {
-    id: number
-    question: string
-    possibility_set: PollQuestion[]
-    poll_type: 'Single' | 'Multiple'
-    choices_limit: number
-    allow_vote_change: boolean
-    closes: boolean
-    closing_date: string | null
-    public: boolean
-    voters_alone: boolean
-    active: boolean
-    created_on: string
+    has_poll: boolean
+    poll: {
+        id: number
+        question: string
+        possibility_set: PollQuestion[]
+        poll_type: 'Single' | 'Multiple'
+        choices_limit: number
+        allow_vote_change: boolean
+        closes: boolean
+        closing_date: string | null
+        public: boolean
+        voters_alone: boolean
+        active: boolean
+        created_on: string
+    }
 }

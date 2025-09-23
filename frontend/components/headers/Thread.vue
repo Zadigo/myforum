@@ -1,5 +1,5 @@
 <template>
-  <BasePageHeader class="bg-red-100">
+  <BasePageHeader class="bg-secondary-200">
     <template #title>
       {{ forumStore.currentThread?.title }}
     </template>
@@ -18,20 +18,20 @@
 
     <template #actions>
       <div class="space-x-2">
-        <VoltButton type="button" rounded @click="emit('jump-to-latest')">
+        <VoltSecondaryButton type="button" rounded @click="emit('jump-to-latest')">
           <Icon name="fa-solid:arrow-down" />
           Jump to latest
-        </VoltButton>
+        </VoltSecondaryButton>
         
         <VoltButton type="button" rounded @click="emit('follow')">
           <Icon name="fa-solid:plus-circle" />
           Follow thread
         </VoltButton>
         
-        <VoltButton type="button" rounded @click="emit('delete')">
+        <VoltDangerButton type="button" rounded @click="emit('delete')">
           <Icon name="fa-solid:trash" />
           Delete
-        </VoltButton>
+        </VoltDangerButton>
         
         <VoltButton type="button" rounded @click="forumStore.showCreateCommentForm=true">
           <Icon name="fa-solid:plus" />

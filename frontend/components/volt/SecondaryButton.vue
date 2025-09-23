@@ -1,15 +1,9 @@
 <template>
-    <Button
-        unstyled
-        :pt="theme"
-        :pt-options="{
-            mergeProps: ptViewMerge
-        }"
-    >
-        <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
-            <slot :name="slotName" v-bind="slotProps ?? {}" />
-        </template>
-    </Button>
+  <Button unstyled :pt="theme" :pt-options="{ mergeProps: ptViewMerge }">
+    <template v-for="(_, slotName) in $slots" #[slotName]="slotProps">
+      <slot :name="slotName" v-bind="slotProps ?? {}" />
+    </template>
+  </Button>
 </template>
 
 <script setup lang="ts">

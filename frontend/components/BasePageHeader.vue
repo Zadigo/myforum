@@ -1,5 +1,5 @@
 <template>
-  <header ref="pageHeaderEl" class="mb-5">
+  <header ref="pageHeaderEl" class="mb-5 max-w-7xl px-10 rounded-md mx-auto">
     <div class="p-20">
       <slot name="breadcrumbs" />
 

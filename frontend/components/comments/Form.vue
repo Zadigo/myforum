@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import type { Comment, CustomRouteIdParamsGeneric, EditorData } from '~/types'
 
-interface RequestData {
+interface NewComment {
   thread: string | number
   title: string
   content: string
@@ -45,19 +45,11 @@ interface RequestData {
   content_html: string
   quotes: number[]
 }
-
-const emit = defineEmits({
-  close () {
-    return true
-  },
-  created() {
-    return true
-  }
-})
+const emit = defineEmits<{ close: [], created: [] }>()
 
 const { id } = useRoute().params as CustomRouteIdParamsGeneric
 
-const requestData = ref<RequestData>({
+const requestData = ref<NewComment>({
   thread: id,
   title: '',
   content: '',

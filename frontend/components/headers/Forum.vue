@@ -1,10 +1,10 @@
 <template>
-  <BasePageHeader class="bg-blue-50">
+  <BasePageHeader class="bg-primary-200">
     <template #title>
       <ClientOnly>
-        <span v-if="currentForum">
+        <h1 v-if="currentForum">
           {{ currentForum.title }}
-        </span>
+        </h1>
 
         <VoltSkeleton v-else height="2rem" />
       </ClientOnly>
@@ -21,11 +21,12 @@
           Follow forum
         </VoltButton>
 
-        <VoltButton>
+        <VoltSecondaryButton>
+          <Icon name="i-fa-solid:plus" />
           <NuxtLink to="/threads/1/create" @click="handleNewThread">
             New thread
           </NuxtLink>
-        </VoltButton>
+        </VoltSecondaryButton>
       </div>
     </template>
   </BasePageHeader>
