@@ -1,11 +1,12 @@
 import tailwindcss from '@tailwindcss/vite'
+import { defineOrganization } from 'nuxt-schema-org/schema'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  
   ssr: true,
+
   routeRules: {
     '/': {
       redirect: '/forums',
@@ -15,7 +16,7 @@ export default defineNuxtConfig({
       swr: true,
       cache: {
         swr: true,
-        maxAge: 1*60
+        maxAge: 1 * 60
       }
     },
     'threads/**/create': {
@@ -40,166 +41,226 @@ export default defineNuxtConfig({
     }
   },
 
-  site: {},
-  
-  vite: {
-    plugins: [
-      tailwindcss()
-    ]
-  },
-
   runtimeConfig: {
     public: {
-      // Django/Quart/Flask
-      prodDomain: process.env.NUXT_DJANGO_PROD_URL || 'http://127.0.0.1:8000',
-
-      // Firebase
-      firebaseApiKey: process.env.NUXT_FIREBASE_API_KEY,
-      firebaseAuthDomain: process.env.NUXT_FIREBASE_AUTH_DOMAIN,
-      firebaseDbUrl: process.env.NUXT_FIREBASE_DB_URL,
-      firebaseStorageBucket: process.env.NUXT_FIREBASE_STORAGE_BUCKET,
-      firebaseAppId: process.env.NUXT_FIREBASE_APP_ID,
-      firebaseMeasurementId: process.env.NUXT_FIREBASE_MEASUREMENT_ID,
-      firebaseMessageSenderId: process.env.NUXT_FIREBASE_MESSAGE_SENDER_ID,
-      firebaseProjectId: process.env.NUXT_FIREBASE_PROJECT_ID,
-
-      // Stripe
-      // stripeTestSecretKey: process.env.NUXT_STRIPE_TEST_SECRET_KEY,
-      // stripeTestPublishableKey: process.env.NUXT_STRIPE_TEST_PUBLISHABLE_KEY,
-      // stripeApiVersion: '2024-06-20',
-      // stripeLocale: 'fr'
+      nuxtAuthentication: {
+        enabled: false
+      }
     }
+  },
+
+  site: {
+    url: process.env.NUXT_PUBLIC_DJANGO_PROD_URL || 'http://localhost:3000'
   },
 
   modules: [
-    '@pinia/nuxt',
     '@nuxt/eslint',
-    '@vesp/nuxt-fontawesome',
-    '@nuxt/test-utils/module',
-    // '@nuxtjs/google-fonts',
-    '@unlok-co/nuxt-stripe',
-    '@nuxtjs/sitemap',
+    '@nuxt/fonts',
+    '@nuxt/icon',
     '@nuxt/image',
+    '@nuxt/scripts',
+    '@nuxt/test-utils',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    '@nuxtjs/sitemap',
+    '@unlok-co/nuxt-stripe',
     '@nuxtjs/i18n',
     '@nuxt/icon',
-    // '@artmizu/nuxt-prometheus',
-    'nuxt-gtag',
-    'nuxt-clarity-analytics',
-    'nuxt-openapi-docs-module',
-    'vue-sonner/nuxt',
-    '@vueuse/nuxt',
-    'pinia-plugin-persistedstate',
     '@nuxt/fonts',
-    // 'nuxt-schema-org'
+    'nuxt-authentication',
+    'pinia-plugin-persistedstate',
+    'nuxt-schema-org',
+    'nuxt-vuefire'
   ],
 
-  // https://www.fontpair.co/all
-  fonts: {
-    provider: 'google',
-    defaults: {
-      fallbacks: {
-        "sans-serif": ['Arial', 'Helvetica', 'sans-serif']
-      }
-    },
-    families: [
-      {
-        name: 'Manrope',
-        weight: '200..800',
-        display: 'swap'
-      },
-      // Titles
-      {
-        name: 'Petrona',
-        weight: '100..900',
-        display: 'swap'
-      },
-      {
-        name: 'Faustina',
-        weight: '300..800',
-        display: 'swap'
-      },
-      {
-        name: 'Newsreader',
-        weight: '200..800',
-        display: 'swap'
-      },
-      {
-        name: 'Work Sans',
-        weight: '100..900',
-        display: 'swap'
-      }
-    ]
-  },
-  
-  gtag: {
-    enabled: process.env.NODE_ENV === 'production',
-    id: 'G-XX'
-  },
-
-  css: [
-    '~/assets/css/tailwind.css'
-  ],
-
-  fontawesome: {
-    icons: {
-      solid: [
-        'ellipsis-vertical',
-        'reply',
-        'quote-left',
-        'bookmark',
-        'share',
-        'sort',
-        'filter',
-        'bars',
-        'arrow-down',
-        'users',
-        'eye'
-      ],
-      regular: [
-        'bookmark'
-      ],
-      brands: [
-        'whatsapp',
-        'cc-mastercard',
-        'google',
-        'instagram',
-        'facebook-f',
-        'twitter'
-      ]
+  vuefire: {
+    config: {
+      apiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      dbUrl: process.env.NUXT_PUBLIC_FIREBASE_DB_URL,
+      storageBucket: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      appId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+      measurementId: process.env.NUXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+      messageSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+      projectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID
     }
   },
 
-  i18n: {
-    baseUrl: './',
-    langDir: './locales',
-    defaultLocale: 'fr',
-    vueI18n: './i18n.config.ts',
-    locales: [
-      {
-        code: 'en',
-        language: 'en-US',
-        file: 'en-US.json',
-        dir: 'ltr',
-        name: 'English'
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ]
+  },
+
+    schemaOrg: {
+    identity: defineOrganization({
+      '@type': 'onlineStore',
+      name: 'E-Woman',
+      alternateName: 'The E-Woman',
+      description: 'A description for the e-woman e-commerce website',
+      foundingDate: '2015-01-01',
+      numberOfEmployees: {
+        '@type': 'QuantitativeValue',
+        value: 100
       },
+      legalName: 'E-Woman Inc.',
+      taxID: '47-1234567',
+      vatID: 'EU123456789',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '100 Commerce Way, Suite 300',
+        addressLocality: 'Portland',
+        addressRegion: 'OR',
+        postalCode: '97201',
+        addressCountry: 'US'
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        name: 'Standard Return Policy',
+        inStoreReturnsOffered: false,
+        merchantReturnDays: '30',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        returnMethod: ['ReturnByMail'],
+        returnFees: 'https://schema.org/FreeReturn',
+        returnPolicyCountry: {
+          '@type': 'Country',
+          name: ['US', 'CA', 'GB', 'AU', 'NZ']
+        }
+      },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'EUR'
+        },
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: ['FR', 'GP']
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 1,
+            maxValue: 2,
+            unitCode: 'DAY'
+          },
+          'transitTime': {
+            '@type': 'QuantitativeValue',
+            minValue: 3,
+            maxValue: 7,
+            unitCode: 'DAY'
+          }
+        }
+      },
+      paymentAccepted: [
+        'Credit Card',
+        'PayPal',
+        'Apple Pay',
+        'Google Pay',
+      ],
+      currenciesAccepted: ['EUR'],
+      sameAs: [
+        'https://facebook.com/modernhome',
+        'https://instagram.com/modernhome',
+        'https://pinterest.com/modernhome',
+        'https://twitter.com/modernhome'
+      ],
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '09:00:00',
+          closes: '18:00:00'
+        }
+      ],
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer service',
+          telephone: '+1-888-555-0123',
+          email: 'support@modernhome.com',
+          availableLanguage: ['English', 'French'],
+          hoursAvailable: {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            opens: '09:00:00',
+            closes: '18:00:00'
+          }
+        },
+        {
+          '@type': 'ContactPoint',
+          contactType: 'sales',
+          telephone: '+1-888-555-0124',
+          email: 'sales@modernhome.com'
+        }
+      ]
+    })
+  },
+
+  css: [
+    '~/assets/css/main.css'
+  ],
+
+    fonts: {
+    families: [
+      // Body
       {
-        code: 'fr',
-        language: 'fr-FR',
-        file: 'fr-FR.json',
-        dir: 'ltr',
-        name: 'Français'
+        name: 'Sora',
+        weight: [100, 800],
+        styles: ['normal', 'italic'],
+        preload: true
+      },
+      // Title
+      {
+        name: 'Manrope',
+        weight: [200, 800],
+        styles: ['normal', 'italic'],
+        preload: true
       }
     ]
   },
 
+  stripe: {
+    server: {
+      key: process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    },
+    client: {
+      key: process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    }
+  },
+
+    image: {
+    // TODO: Activate when the project images backend
+    // is set correctly to cloudefare/aws
+    // https://image.nuxt.com/providers/cloudflare
+    provider: 'none'
+  },
+
   nitro: {
+    prerender: {
+      routes: [
+        '/mentions-legales',
+        '/confidentialite'
+      ]
+    },
     storage: {
+      redis: {
+        driver: 'redis',
+        host: process.env.NUXT_PUBLIC_REDIS_HOST,
+        port: 6379,
+        username: process.env.NUXT_PUBLIC_REDIS_USER,
+        password: process.env.NUXT_PUBLIC_REDIS_PASSWORD
+      }
+    },
+    devStorage: {
       redis: {
         driver: 'redis',
         host: '127.0.0.1',
         port: 6379,
         username: '',
-        password: 'django-local-testing'
+        password: ''
       }
     }
   }
