@@ -42,6 +42,7 @@ django-celery-beat = "*"
 flower = "*"
 pyjwt = "*"
 nltk = "*"
+channels = {extras = ["daphne"], version = "*"}
 
 [dev-packages]
 autopep8 = "*"
