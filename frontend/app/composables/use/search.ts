@@ -6,9 +6,12 @@ import type { CustomRouteParamsGeneric, SearchApiResponse } from '~/types'
 export async function useSearch<T>() {
   const search = ref<string>('')
   const results = reactive<T[]>([])
+
+  const query = useUrlSearchParams<{ q: string }>('history')
   const { q } = useRoute().params as CustomRouteParamsGeneric
   
-  const { data, error } = await useFetch('/v1/search',{
+  const { data, error } = await useFetch<SearchApiResponse>('/v1/search', {
+    method: 'get',
     watch: [search],
     query: {
       q

@@ -1,7 +1,7 @@
 // import { useAxiosClient } from "~/composables/django_client"
 
 import { FetchError } from 'ofetch'
-import { refreshAccessToken } from '~/utils'
+import { refreshAccessToken } from 'nuxt-authentication'
 
 import type { Forum } from '~/types'
 

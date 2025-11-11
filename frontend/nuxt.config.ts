@@ -41,11 +41,18 @@ export default defineNuxtConfig({
     }
   },
 
+  nuxtAuthentication: {
+    enabled: false,
+    domain: import.meta.env.NUXT_PUBLIC_DJANGO_PROD_URL,
+    accessEndpoint: '/v1/auth/login/',
+    refreshEndpoint: '/v1/auth/refresh/',
+    login: '/login/',
+    bearerTokenType: 'Token',
+    strategy: 'renew'
+  },
+
   runtimeConfig: {
     public: {
-      nuxtAuthentication: {
-        enabled: false
-      }
     }
   },
 

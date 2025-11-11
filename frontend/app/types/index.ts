@@ -29,3 +29,7 @@ export interface CustomRouteParamsGeneric extends RouteParamsGeneric {
 export interface CustomRouteIdParamsGeneric extends RouteParamsGeneric {
   id: string
 }
+
+export interface BaseApiResponse<R> {
+  results: R[]
+}

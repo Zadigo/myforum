@@ -17,10 +17,10 @@ if ENV_PATH.exists():
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rfpn+3c*ftsqmn9c+=6*6pu5an97j5&4mvz^72wk^3csx(1@!)'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -31,7 +31,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    # 'daphne',
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,22 +43,19 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
-    'django_extensions',
-    'django_celery_beat',
     'corsheaders',
     'drf_spectacular',
     'debug_toolbar',
+    'django_extensions',
+    'django_celery_beat',
     'import_export',
     'django_ckeditor_5',
 
-    'allauth',
-    'allauth.usersessions',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'storages',
 
-    'api',
+
     'accounts',
+    'api',
     'forums',
     'threads',
     'notifications',
@@ -76,8 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'forum_backend.urls'
@@ -100,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'forum_backend.wsgi.application'
+ASGI_APPLICATION = 'forum_backend.asgi.application'
 
 
 # Database
@@ -196,14 +193,13 @@ CSRF_TRUSTED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication'
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER': timedelta(days=1),
@@ -238,47 +234,6 @@ EMAIL_USE_LOCALTIME = True
 # Sites
 
 SITE_ID = 1
-
-
-# Django All Auth for more information
-# on the settings for django-allauth
-# https://docs.allauth.org/en/latest/socialaccount/provider_configuration.html
-
-# For two factor authentication, see:
-# https://stackoverflow.com/questions/54908541/django-two-factor-authentication
-# https://github.com/pyauth/pyotp?tab=readme-ov-file
-# https://github.com/soldair/node-qrcode
-
-USERSESSIONS_TRACK_ACTIVITY = False
-
-SOCIALACCOUNT_FORMS = {
-    'signup': 'accounts.forms.SocialSignupForm',
-    'disconnect': 'accounts.forms.SocialLogoutForm',
-}
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APPS': [
-            {
-                'client_id': '123',
-                'secret': '456',
-                'key': ''
-            }
-        ],
-        # These are provider-specific settings that can only be
-        # listed here:
-        'SCOPE': [
-            "profile",
-            "email",
-        ],
-        'AUTH_PARAMS': {
-            "access_type": "online",
-        }
-    }
-}
 
 
 # CKEditor for more information on customizing
@@ -345,10 +300,6 @@ CACHES = {
             'PASSWORD': REDIS_PASSWORD,
             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
         }
-    },
-    'file': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': BASE_DIR / 'cache'
     }
 }
 
