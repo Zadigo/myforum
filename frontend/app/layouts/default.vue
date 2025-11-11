@@ -15,10 +15,10 @@
     <BaseFooter />
     
     <!-- Modals -->
-    <ClientOnly>
+    <client-only>
       <ModalsLogin />
       <ModalsSearch />
-    </ClientOnly>
+    </client-only>
   </section>
 </template>
 

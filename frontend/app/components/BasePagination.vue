@@ -1,16 +1,16 @@
 <template>
   <div id="pagination" class="d-flex gap-1">
     <v-btn variant="tonal" :disabled="!canPaginate" @click="paginateTo(0, callbackFunction)">
-      <Icon name="fa-solid:angle-double-left" />
+      <Icon name="i-lucide:angle-double-left" />
     </v-btn>
     <v-btn variant="tonal" :disabled="!canPaginatePrevious" @click="paginatPrevious(callbackFunction)">
-      <Icon name="fa-solid:angle-left" />
+      <Icon name="i-lucide:angle-left" />
     </v-btn>
     <v-btn variant="tonal" :disabled="!canPaginateNext" @click="paginateNext(callbackFunction)">
-      <Icon name="fa-solid:angle-right" />
+      <Icon name="i-lucide:angle-right" />
     </v-btn>
     <v-btn variant="tonal" :disabled="!canPaginate" @click="paginateTo(itemsCount, callbackFunction)">
-      <Icon name="fa-solid:angle-double-right" />
+      <Icon name="i-lucide:angle-double-right" />
     </v-btn>
   </div>
 </template>

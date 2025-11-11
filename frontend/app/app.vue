@@ -1,8 +1,8 @@
 <template>
-  <NuxtLayout>
-    <NuxtLoadingIndicator />
-    <NuxtPage />
-  </NuxtLayout>
+  <nuxt-layout>
+    <nuxt-loading-indicator />
+    <nuxt-page />
+  </nuxt-layout>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +29,8 @@ authStore.accessToken = cookieAccessToken.value
 authStore.refreshToken = cookieRefreshToken.value
 authStore.userProfile = cachedUserProfile.value
 
-onMounted(() => { document.body.classList.add('bg-slate-100/50') })
-onUnmounted(() => { document.body.classList.remove('bg-slate-100/50') })
+const tokens = ['bg-primary-100', 'dark:bg-primary-900']
+
+onMounted(() => { document.body.classList.add(...tokens) })
+onUnmounted(() => { document.body.classList.remove(...tokens) })
 </script>

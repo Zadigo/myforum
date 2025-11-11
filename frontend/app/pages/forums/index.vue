@@ -42,15 +42,25 @@
 </template>
 
 <script setup lang="ts">
-useHead({
-  title: 'Forums'
-})
-
 const AsyncForumsIterationBlock = defineAsyncComponent({
   loader: async () => import('~/components/forums/IterationBlock.vue')
 })
 
 const AsyncForumLatestCommentsBlock = defineAsyncComponent({
   loader: async () => import('~/components/forums/LatestBlock.vue')
+})
+
+/**
+ * SEO
+ */
+
+useHead({
+  title: 'Forums',
+  meta: [
+    {
+      name: 'description',
+      content: 'Join the Tennis Forum community to discuss tennis news, matches, players, and more with fellow tennis enthusiasts.'
+    }
+  ]
 })
 </script>

@@ -7,7 +7,7 @@
         </span>
 
         <!-- <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
-          <font-awesome icon="ellipsis-vertical" />
+          <icon icon="ellipsis-vertical" />
 
           <v-menu activator="parent">
             <v-list>
@@ -48,38 +48,38 @@
     <template v-if="showActions" #footer>
       <div v-if="authStore.isAuthenticated" class="d-flex gap-2">
         <VoltButton variant="tonal" @click="emit('reply', comment)">
-          <font-awesome icon="reply" class="me-2" />Reply
+          <icon icon="reply" class="me-2" />Reply
         </VoltButton>
 
         <VoltButton variant="tonal" @click="handleQuoteFrom">
-          <font-awesome icon="quote-left" class="me-2" />Quote from
+          <icon icon="quote-left" class="me-2" />Quote from
         </VoltButton>
         
         <VoltButton variant="tonal" @click="handleBookmark(comment)">
-          <font-awesome v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
-          <font-awesome v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
+          <icon v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
+          <icon v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
         </VoltButton>
         
         <VoltButton variant="tonal" @click="handleShare">
-          <font-awesome icon="share" class="me-2" />Share
+          <icon icon="share" class="me-2" />Share
         </VoltButton>
       </div>
 
       <div v-else class="d-flex gap-2">
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <font-awesome icon="reply" class="me-2" />Reply
+          <icon icon="reply" class="me-2" />Reply
         </VoltButton>
 
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <font-awesome icon="quote-left" class="me-2" />Quote from
+          <icon icon="quote-left" class="me-2" />Quote from
         </VoltButton>
         
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <font-awesome icon="bookmark" class="me-2" />Bookmark
+          <icon icon="bookmark" class="me-2" />Bookmark
         </VoltButton>
         
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <font-awesome icon="share" class="me-2" />Share
+          <icon icon="share" class="me-2" />Share
         </VoltButton>
       </div>
     </template>

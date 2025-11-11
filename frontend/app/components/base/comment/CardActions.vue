@@ -1,38 +1,38 @@
 <template>
   <div v-if="authStore.isAuthenticated" class="flex justify-end gap-2 mt-8">
     <VoltSecondaryButton color="primary" variant="text" @click="handleReply">
-      <font-awesome icon="reply" class="me-2" />Reply
+      <icon icon="reply" class="me-2" />Reply
     </VoltSecondaryButton>
 
     <VoltSecondaryButton color="primary" variant="text" @click="handleQuoteFrom">
-      <font-awesome icon="quote-left" class="me-2" />Quote from
+      <icon icon="quote-left" class="me-2" />Quote from
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="primary" variant="text" @click="handleBookmark">
-      <font-awesome v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
-      <font-awesome v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
+      <icon v-if="comment.bookmarked_by_user" :name="['fas', 'bookmark']" class="me-2" />
+      <icon v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="primary" variant="text" @click="handleShare">
-      <font-awesome icon="share" class="me-2" />Share
+      <icon icon="share" class="me-2" />Share
     </VoltSecondaryButton>
   </div>
 
   <div v-else class="flex justify-end gap-2 mt-8">
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <font-awesome icon="reply" class="me-2" />Reply
+      <icon icon="reply" class="me-2" />Reply
     </VoltSecondaryButton>
 
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <font-awesome icon="quote-left" class="me-2" />Quote from
+      <icon icon="quote-left" class="me-2" />Quote from
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <font-awesome icon="bookmark" class="me-2" />Bookmark
+      <icon icon="bookmark" class="me-2" />Bookmark
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <font-awesome icon="share" class="me-2" />Share
+      <icon icon="share" class="me-2" />Share
     </VoltSecondaryButton>
   </div>
 </template>

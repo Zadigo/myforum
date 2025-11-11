@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import type { LoginAPIResponse } from '~/types'
 
-const { client } = useAxiosClient()
+const { client } = useLogin()
 const authStore = useAuthentication()
 const { $toast } = useNuxtApp()
 

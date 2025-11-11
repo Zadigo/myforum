@@ -238,6 +238,61 @@ export default defineNuxtConfig({
     provider: 'none'
   },
 
+  i18n: {
+    baseUrl: './',
+    langDir: './locales',
+    defaultLocale: 'fr',
+    lazy: true,
+    vueI18n: './i18n.config.ts',
+    // bundle: {
+    //   // TODELETE:  bundle.optimizeTranslationDirective is enabled by default, we recommend 
+    //   // disabling this feature as it causes issues and will be deprecated in v10.
+    //   optimizeTranslationDirective: false
+    // },
+    // customRoutes: 'config',
+    locales: [
+      {
+        code: 'en',
+        language: 'en-US',
+        file: 'en-US.ts',
+        dir: 'ltr',
+        name: 'English'
+      },
+      {
+        code: 'es',
+        language: 'es-ES',
+        file: 'es-ES.ts',
+        dir: 'ltr',
+        name: 'Spanish'
+      },
+      {
+        code: 'fr',
+        language: 'fr-FR',
+        file: 'fr-FR.ts',
+        dir: 'ltr',
+        name: 'Français'
+      }
+    ],
+    // pages: {
+    //   'guide': { fr: '/guide-achat', en: '/guide-achat', es: '/guide-achat' },
+    //   'wishlist': { fr: '/liste-souhait', en: '/wishlist', es: '/wishlist' },
+    //   'mentions-legales': { fr: '/mentions-legales', en: '/mentions-legales', es: '/mentions-legales' },
+    //   'confidentialite': { fr: '/confidentialite', en: '/confidentialite', es: '/confidentialite' },
+    //   'conditions-generales': { fr: '/conditions-generales', en: '/conditions-generales', es: '/conditions-generales' },
+
+    //   'shop-id': { fr: '/boutique/[id]', en: '/shop/[id]', es: '/tienda/[id]' },
+    //   'shop-collection-id': { fr: '/boutique/collection/[id]', en: '/shop/collection/[id]', es: '/tienda/collecion/[id]' },
+
+    //   'cart': { fr: '/cart', en: '/cart', es: '/cart' },
+    //   'cart-shipment': { fr: '/panier/livraison', en: '/cart/shipment', es: '/cart/shipment' },
+    //   'cart-payment': { fr: '/panier/paiement', en: '/cart/payment', es: '/cart/payment' },
+    //   'cart-success': { fr: '/panier/recapitulatif', en: '/cart/success', es: '/cart/success' },
+
+    //   'account': { fr: '/compte', en: '/account', es: '/account' },
+    //   'orders': { fr: '/compte/commandes', en: '/account/orders', es: '/account/orders' },
+    // }
+  },
+
   nitro: {
     prerender: {
       routes: [

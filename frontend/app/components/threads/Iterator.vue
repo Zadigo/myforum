@@ -6,7 +6,7 @@
           <div class="flex justify-start items-center gap-2 mb-4">
             <VoltAvatar image="/avatar1.png" shape="circle" />
             <h3 class="font-title font-bold">{{ thread.title }}</h3>
-            <font-awesome v-if="thread.owned_by_user" icon="bolt-lightning" class="text-warning" />
+            <icon v-if="thread.owned_by_user" icon="bolt-lightning" class="text-warning" />
           </div>
 
           <div v-if="thread.description" class="font-light my-2">
