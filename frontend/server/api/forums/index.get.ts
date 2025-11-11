@@ -1,5 +1,5 @@
 import { FetchError } from 'ofetch'
-import { refreshAccessToken } from 'nuxt-authentication'
+// import { refreshAccessToken } from '#imports'
 
 import type { Forum } from '~/types'
 

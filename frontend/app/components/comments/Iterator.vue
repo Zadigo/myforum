@@ -48,38 +48,38 @@
     <template v-if="showActions" #footer>
       <div v-if="authStore.isAuthenticated" class="d-flex gap-2">
         <VoltButton variant="tonal" @click="emit('reply', comment)">
-          <icon icon="reply" class="me-2" />Reply
+          <icon name="i-lucide:reply" class="me-2" />Reply
         </VoltButton>
 
         <VoltButton variant="tonal" @click="handleQuoteFrom">
-          <icon icon="quote-left" class="me-2" />Quote from
+          <icon name="i-lucide:quote-left" class="me-2" />Quote from
         </VoltButton>
         
         <VoltButton variant="tonal" @click="handleBookmark(comment)">
-          <icon v-if="comment.bookmarked_by_user" :icon="['fas', 'bookmark']" class="me-2" />
-          <icon v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
+          <icon v-if="comment.bookmarked_by_user" name="i-fa6:bookmark" class="me-2" />
+          <icon v-else name="i-fa6:bookmark" class="me-2" />Bookmark
         </VoltButton>
         
         <VoltButton variant="tonal" @click="handleShare">
-          <icon icon="share" class="me-2" />Share
+          <icon name="i-lucide:share" class="me-2" />Share
         </VoltButton>
       </div>
 
       <div v-else class="d-flex gap-2">
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <icon icon="reply" class="me-2" />Reply
+          <icon name="i-lucide:reply" class="me-2" />Reply
         </VoltButton>
 
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <icon icon="quote-left" class="me-2" />Quote from
+          <icon name="i-lucide:quote-left" class="me-2" />Quote from
         </VoltButton>
         
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <icon icon="bookmark" class="me-2" />Bookmark
+          <icon name="i-lucide:bookmark" class="me-2" />Bookmark
         </VoltButton>
         
         <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
-          <icon icon="share" class="me-2" />Share
+          <icon name="i-lucide:share" class="me-2" />Share
         </VoltButton>
       </div>
     </template>

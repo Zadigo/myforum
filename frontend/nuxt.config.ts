@@ -53,6 +53,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      prodDomain: process.env.NUXT_PUBLIC_PROD_DOMAIN
     }
   },
 

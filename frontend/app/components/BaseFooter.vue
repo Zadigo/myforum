@@ -3,7 +3,7 @@
     <div class="container pt-4">
       <section class="mb-4">
         <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#" role="button">
-          <icon name="i-fa6:facebook-f" />
+          <icon name="i-fa7-brands:facebook" />
         </a>
       </section>
     </div>

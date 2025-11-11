@@ -1,38 +1,38 @@
 <template>
   <div v-if="authStore.isAuthenticated" class="flex justify-end gap-2 mt-8">
     <VoltSecondaryButton color="primary" variant="text" @click="handleReply">
-      <icon icon="reply" class="me-2" />Reply
+      <icon name="i-lucide:reply" class="me-2" />Reply
     </VoltSecondaryButton>
 
     <VoltSecondaryButton color="primary" variant="text" @click="handleQuoteFrom">
-      <icon icon="quote-left" class="me-2" />Quote from
+      <icon name="i-lucide:quote-left" class="me-2" />Quote from
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="primary" variant="text" @click="handleBookmark">
-      <icon v-if="comment.bookmarked_by_user" :name="['fas', 'bookmark']" class="me-2" />
-      <icon v-else :icon="['far', 'bookmark']" class="me-2" />Bookmark
+      <icon v-if="comment.bookmarked_by_user" name="i-fa6:bookmark" class="me-2" />
+      <icon v-else name="[-fa6:bookmark" class="me-2" />Bookmark
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="primary" variant="text" @click="handleShare">
-      <icon icon="share" class="me-2" />Share
+      <icon name="i-lucide:share" class="me-2" />Share
     </VoltSecondaryButton>
   </div>
 
   <div v-else class="flex justify-end gap-2 mt-8">
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <icon icon="reply" class="me-2" />Reply
+      <icon name="i-lucide:reply" class="me-2" />Reply
     </VoltSecondaryButton>
 
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <icon icon="quote-left" class="me-2" />Quote from
+      <icon name="i-lucide:quote-left" class="me-2" />Quote from
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <icon icon="bookmark" class="me-2" />Bookmark
+      <icon name="i-lucide:bookmark" class="me-2" />Bookmark
     </VoltSecondaryButton>
     
     <VoltSecondaryButton color="dark" variant="text" @click="authStore.openLoginModal=true">
-      <icon icon="share" class="me-2" />Share
+      <icon name="i-lucide:share" class="me-2" />Share
     </VoltSecondaryButton>
   </div>
 </template>

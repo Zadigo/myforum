@@ -5,13 +5,13 @@
 
       <!-- Forums -->
       <div class="my-3">
-        <Suspense>
+        <suspense>
           <AsyncForumsIterationBlock />
 
           <template #fallback>
-            <VoltSkeleton height="4rem" />
+            <volt-skeleton height="4rem" />
           </template>
-        </Suspense>
+        </suspense>
       </div>
 
       <div class="p-5 bg-secondary">
@@ -19,24 +19,24 @@
       </div>
 
       <!-- Latest Comments -->
-      <ClientOnly>
+      <client-only>
         <div class="mt-30">
-          <Suspense>
+          <suspense>
             <AsyncForumLatestCommentsBlock />
 
             <template #fallback>
               <div class="flex justify-between">
-                <VoltSkeleton class="h-[2rem]" />
-                <VoltSkeleton class="h-[2rem]" />
+                <volt-skeleton class="h-8" />
+                <volt-skeleton class="h-8" />
               </div>
               
               <div class="space-y-3">
-                <VoltSkeleton v-for="i in 4" :key="i" class="h-[4rem]" />
+                <volt-skeleton v-for="i in 4" :key="i" class="h-16" />
               </div>
             </template>
-          </Suspense>
+          </suspense>
         </div>
-      </ClientOnly>
+      </client-only>
     </div>
   </section>
 </template>

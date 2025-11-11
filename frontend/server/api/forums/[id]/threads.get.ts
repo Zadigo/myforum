@@ -1,8 +1,5 @@
-// import axios from 'axios'
-// import { useAxiosClient } from '~/composables/client'
-
-import { refreshAccessToken } from 'nuxt-authentication'
 import { FetchError } from 'ofetch'
+// import { refreshAccessToken } from '#imports'
 
 import type { ThreadApiResponse } from '~/types'
 

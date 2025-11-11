@@ -7,13 +7,25 @@ export * from './threads'
 export * from './comments'
 export * from './accounts'
 
-export type StringNull = string | null | undefined
+export type Arrayable<T> = T[]
 
+export type Nullable<T> = T | null
+
+export type Undefineableable<T> = T | undefined
+
+export type TypeNull<T> = T | Nullable<T> | Undefineableable<T>
+
+/**
+ * @deprecated
+ */
 export interface LoginAPIResponse {
   access: string
   refresh: string
 }
 
+/**
+ * @deprecated
+ */
 export type RefreshAPIResponse = Exclude<LoginAPIResponse, 'access'>
 
 export interface EditorData {

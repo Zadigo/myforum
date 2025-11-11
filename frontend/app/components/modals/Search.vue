@@ -6,7 +6,7 @@
 
       <VoltButton rounded @click="showAdvancedSearch=!showAdvancedSearch">
         Advanced search
-        <icon icon="arrow-down" />
+        <icon name="i-lucide:arrow-down" />
       </VoltButton>
 
       <div v-if="showAdvancedSearch">

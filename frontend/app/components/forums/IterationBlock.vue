@@ -20,11 +20,11 @@
 
             <div id="infos" class="space-x-3 mt-5">
               <VoltTag>
-                {{ forum.number_of_threads }} <icon icon="users" />
+                {{ forum.number_of_threads }} <icon name="i-lucide:users" />
               </VoltTag>
 
               <VoltTag>
-                200000 <icon icon="eye" />
+                200000 <icon name="i-lucide:eye" />
               </VoltTag>
 
               <VoltTag>

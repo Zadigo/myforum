@@ -1,4 +1,4 @@
-import type { PollApiResponse } from "~/types"
+import type { PollApiResponse } from '~/types'
 
 export default defineCachedEventHandler(_event => {
     const data: PollApiResponse = {
