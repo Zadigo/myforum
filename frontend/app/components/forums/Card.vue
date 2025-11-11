@@ -1,5 +1,5 @@
 <template>
-  <VoltCard role="article" class="shadow-sm">
+  <volt-card role="article" class="shadow-sm">
     <template #title>
       <NuxtLink to="/rules">
         <h3 class="font-bold">
@@ -13,7 +13,7 @@
         {{ text }}
       </NuxtLink>
     </template>
-  </VoltCard>
+  </volt-card>
 </template>
 
 <script setup lang="ts">

@@ -19,11 +19,11 @@
     <!-- Footer -->
     <base-footer />
     
-    <ClientOnly>
+    <client-only>
       <!-- Modals -->
       <ModalsLogin />
       <ModalsSearch />
-    </ClientOnly>
+    </client-only>
   </section>
 </template>
 

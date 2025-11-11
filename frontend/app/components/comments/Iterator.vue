@@ -36,51 +36,54 @@
 
     <template #content>
       <div class="mb-4 space-x-1">
-        <span class="font-bold text-surface-700">#{{ comment.id }}</span> 
+        <span class="font-bold text-surface-200">#{{ comment.id }}</span> 
         <span>-</span>
-        <span class="font-bold text-blue-700 underline underline-offset-4">@{{ comment.user?.username }}</span> 
+        <span class="font-bold text-primary-700 underline underline-offset-4">@{{ comment.user?.username }}</span> 
         <span>-</span>
-        <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
+        <client-only>
+          <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
+        </client-only>
       </div>
+
       <div v-html="comment.content_html" />
     </template>
 
     <template v-if="showActions" #footer>
-      <div v-if="authStore.isAuthenticated" class="d-flex gap-2">
-        <VoltButton variant="tonal" @click="emit('reply', comment)">
+      <div v-if="authStore.isAuthenticated" class="flex gap-2">
+        <volt-button variant="tonal" @click="emit('reply', comment)">
           <icon name="i-lucide:reply" class="me-2" />Reply
-        </VoltButton>
+        </volt-button>
 
-        <VoltButton variant="tonal" @click="handleQuoteFrom">
+        <volt-button variant="tonal" @click="handleQuoteFrom">
           <icon name="i-lucide:quote-left" class="me-2" />Quote from
-        </VoltButton>
+        </volt-button>
         
-        <VoltButton variant="tonal" @click="handleBookmark(comment)">
+        <volt-button variant="tonal" @click="handleBookmark(comment)">
           <icon v-if="comment.bookmarked_by_user" name="i-fa6:bookmark" class="me-2" />
           <icon v-else name="i-fa6:bookmark" class="me-2" />Bookmark
-        </VoltButton>
+        </volt-button>
         
-        <VoltButton variant="tonal" @click="handleShare">
+        <volt-button variant="tonal" @click="handleShare">
           <icon name="i-lucide:share" class="me-2" />Share
-        </VoltButton>
+        </volt-button>
       </div>
 
-      <div v-else class="d-flex gap-2">
-        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+      <div v-else class="flex gap-2">
+        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
           <icon name="i-lucide:reply" class="me-2" />Reply
-        </VoltButton>
+        </volt-button>
 
-        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
           <icon name="i-lucide:quote-left" class="me-2" />Quote from
-        </VoltButton>
+        </volt-button>
         
-        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
           <icon name="i-lucide:bookmark" class="me-2" />Bookmark
-        </VoltButton>
+        </volt-button>
         
-        <VoltButton variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
           <icon name="i-lucide:share" class="me-2" />Share
-        </VoltButton>
+        </volt-button>
       </div>
     </template>
   </VoltCard>
@@ -89,31 +92,18 @@
 <script setup lang="ts">
 import type { UserComment } from '~/types'
 
-const emit = defineEmits({
-  reply(_comment: UserComment) {
-    return true
-  },
-  edit(_comment: UserComment) {
-    return true
-  }
-})
+defineProps<{ comments: UserComment[], showActions: boolean }>()
+const emit = defineEmits<{ reply: [comment: UserComment], edit: [comment: UserComment] }>()
 
-defineProps<{
-  comments: UserComment[],
-  showActions: boolean
-}>()
 
-const { $dayjs } = useNuxtApp()
+const { $dayjs, $nuxtAuthentication } = useNuxtApp()
 const authStore = useAuthentication()
 const { customHandleError } = useErrorHandler()
 
 const store = useForums()
-const { $client } = useNuxtApp()
 
-/**
- * Checks that the author of the comment
- * is from the current authenticated user 
- */
+// Checks that the author of the comment
+// is from the current authenticated user 
 function isAuthor(comment: UserComment) {
   if (!authStore.isAuthenticated) {
     return false
@@ -128,49 +118,34 @@ function isAuthor(comment: UserComment) {
   }
 }
 
-/**
- *
- */
+//
 async function handleQuoteFrom () {
   // pass
 }
 
-/**
- *
- * @param comment 
- */
+//
 async function handleBookmark(comment: UserComment) {
   try {
-    await $client.post(`comments/${comment.id}/bookmark`)
+    await $nuxtAuthentication(`comments/${comment.id}/bookmark`, {
+      method: 'POST'
+    })
   } catch (e) {
-    handleError(e)
+    customHandleError(e)
   }
 }
 
-/**
- *
- */
+//
 async function handleShare () {
   // pass
 }
 
-/**
- *
- */
+//
 async function handleDeletion(comment: UserComment) {
   try {
-    await $client.delete(`comments/${comment.id}`)
-    const index = store.threadComments.findIndex(oldComment => oldComment.id === comment.id)
-    store.threadComments.splice(index, 1)
+    await $nuxtAuthentication(`comments/${comment.id}`, { method: 'DELETE' })
+    store.threadComments = store.threadComments.filter(c => c.id !== comment.id)
   } catch (e) {
-    handleError(e)
+    customHandleError(e)
   }
-}
-
-/**
- *
- */
-async function handleReport () {
-  // pass 
 }
 </script>

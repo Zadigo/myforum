@@ -1,69 +1,34 @@
 <template>
-  <VoltDialog v-model:visible="authStore.openLoginModal" modal @close="authStore.openLoginModal=false">
+  <volt-dialog v-model:visible="authStore.openLoginModal" modal @close="authStore.openLoginModal=false">
     <form @submit.prevent>
-      <VoltInputText v-model="username" type="username" autocomplete="username" placeholder="Username" flat />
-      <VoltInputText v-model="password" type="password" autocomplete="current-password" placeholder="Password" flat />
+      <volt-input-text v-model="usernameField" type="username" autocomplete="username" placeholder="Username" flat />
+      <volt-input-text v-model="password" type="password" autocomplete="current-password" placeholder="Password" flat />
       
-      <VoltButton @click="handleLogin">
+      <volt-button @click="() => login()">
         Login
-      </VoltButton>
+      </volt-button>
     </form>
 
     <form v-show="false" @submit.prevent>
-      <VoltInputText v-model="username" type="text" autocomplete="username" placeholder="Username" flat />
-      <VoltInputText v-model="password" type="password" autocomplete="new-password" placeholder="Password 1" flat />
-      <VoltInputText v-model="password" type="password" autocomplete="new-password" placeholder="Password 2" flat />
+      <volt-input-text v-model="usernameField" type="text" autocomplete="username" placeholder="Username" flat />
+      <volt-input-text v-model="password" type="password" autocomplete="new-password" placeholder="Password 1" flat />
+      <volt-input-text v-model="password" type="password" autocomplete="new-password" placeholder="Password 2" flat />
       
       <div class="flex justify-end">
-        <VoltButton @click="handleSignup">
+        <volt-button @click="handleSignup">
           Signup
-        </VoltButton>          
+        </volt-button>          
       </div>
     </form>
-  </VoltDialog>
+  </volt-dialog>
 </template>
 
 <script setup lang="ts">
-import type { LoginAPIResponse } from '~/types'
+// const loginModal = useState('loginModal')
 
-const { client } = useLogin()
 const authStore = useAuthentication()
-const { $toast } = useNuxtApp()
+const { usernameField, password, login } = useLogin('username')
 
-const username = ref<string>('')
-const password = ref<string>('')
-
-const cookieAccessToken = useCookie<string>('access')
-const cookieRefreshToken = useCookie<string>('refresh')
-
-/**
- *
- */
-async function handleLogin () {
-  try {
-    const response = await client.post<LoginAPIResponse>('/auth/v1/token/', {
-      username: username.value,
-      password: password.value
-    })
-
-    authStore.accessToken = response.data.access
-    cookieAccessToken.value = response.data.access
-    cookieRefreshToken.value = response.data.refresh
-
-    authStore.openLoginModal = false
-    username.value = ''
-    password.value = ''
-    
-    $toast('Connected')
-  } catch {
-    // Handle error
-  }
-}
-
-/**
- *
- */
-async function handleSignup () {
-  // Do something
-}
+// Signup
+async function handleSignup () {}
 </script>

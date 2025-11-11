@@ -79,7 +79,6 @@ export default defineStore('forums', () => {
   }
 }, {
   persist: {
-    storage: sessionStorage,
     pick: ['currentForum', 'threadComments', 'currentThread']
   }
 })

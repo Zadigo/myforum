@@ -41,19 +41,19 @@ export default defineNuxtConfig({
     }
   },
 
-  nuxtAuthentication: {
-    enabled: false,
-    domain: import.meta.env.NUXT_PUBLIC_DJANGO_PROD_URL,
-    accessEndpoint: '/v1/auth/login/',
-    refreshEndpoint: '/v1/auth/refresh/',
-    login: '/login/',
-    bearerTokenType: 'Token',
-    strategy: 'renew'
-  },
-
   runtimeConfig: {
     public: {
-      prodDomain: process.env.NUXT_PUBLIC_PROD_DOMAIN
+      prodDomain: process.env.NUXT_PUBLIC_PROD_DOMAIN,
+
+      nuxtAuthentication: {
+        enabled: true,
+        domain: process.env.NUXT_PUBLIC_PROD_DOMAIN || '',
+        accessEndpoint: '/auth/v1/token/',
+        refreshEndpoint: '/auth/v1/token/refresh/',
+        login: '/',
+        bearerTokenType: 'Token',
+        strategy: 'renew'
+      }
     }
   },
 
@@ -63,7 +63,6 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxt/eslint',
-    '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxt/scripts',
@@ -90,7 +89,7 @@ export default defineNuxtConfig({
       appId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
       measurementId: process.env.NUXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
       messageSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
-      projectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID
+      projectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
     }
   },
 
@@ -211,7 +210,7 @@ export default defineNuxtConfig({
     '~/assets/css/main.css'
   ],
 
-    fonts: {
+  fonts: {
     families: [
       // Body
       {

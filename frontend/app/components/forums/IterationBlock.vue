@@ -1,41 +1,43 @@
 <template>
-  <article v-for="category in forumCategories" :key="category" :aria-label="category" class="mb-5">
-    <div class="mb-2">
-      <h3 class="font-bold text-2xl font-title">
-        {{ category }}
-      </h3>
-    </div>
-
-    <article v-for="(forum, i) in forumsByCategory[category]" :key="forum.id">
-      <VoltCard :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="shadow-sm" role="article">
-        <template #content>
-          <NuxtLinkLocale :to="`/forums/${forum.id}`">
-            <h4 :aria-label="forum.title" class="font-bold">
-              {{ forum.title }}
-            </h4>
-
-            <p class="font-light my-2">
-              {{ forum.description }}
-            </p>
-
-            <div id="infos" class="space-x-3 mt-5">
-              <VoltTag>
-                {{ forum.number_of_threads }} <icon name="i-lucide:users" />
-              </VoltTag>
-
-              <VoltTag>
-                200000 <icon name="i-lucide:eye" />
-              </VoltTag>
-
-              <VoltTag>
-                {{ $dayjs(forum.created_on).fromNow() }}
-              </VoltTag>
-            </div>
-          </NuxtLinkLocale>
-        </template>
-      </VoltCard>
+  <div id="latest-comments">
+    <article v-for="category in forumCategories" :key="category" class="mb-5">
+      <div class="mb-2">
+        <h3 class="font-bold text-2xl">
+          {{ category }}
+        </h3>
+      </div>
+  
+      <article v-for="(forum, i) in forumsByCategory[category]" :key="forum.id">
+        <volt-card :class="{ 'mt-1': i > 0 }" :aria-label="forum.title" class="shadow-sm" role="article">
+          <template #content>
+            <NuxtLinkLocale :to="`/forums/${forum.id}`">
+              <h4 class="font-bold">
+                {{ forum.title }}
+              </h4>
+  
+              <p class="font-light my-2">
+                {{ forum.description }}
+              </p>
+  
+              <div id="infos" class="space-x-3 mt-5">
+                <volt-tag>
+                  {{ forum.number_of_threads }} <icon name="i-lucide:users" />
+                </volt-tag>
+  
+                <volt-tag>
+                  200000 <icon name="i-lucide:eye" />
+                </volt-tag>
+  
+                <volt-tag>
+                  {{ $dayjs(forum.created_on).fromNow() }}
+                </volt-tag>
+              </div>
+            </NuxtLinkLocale>
+          </template>
+        </volt-card>
+      </article>
     </article>
-  </article>
+  </div>
 </template>
 
 <script setup lang="ts">

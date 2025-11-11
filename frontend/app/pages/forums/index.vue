@@ -1,7 +1,7 @@
 <template>
   <section id="forums">
     <div class="row mb-5">
-      <ForumsCard title="Site rules / FAQ" text="See here for detailed specifics of Tennis Forum site rules, policy, FAQ" />
+      <forums-card title="Site rules / FAQ" text="See here for detailed specifics of Tennis Forum site rules, policy, FAQ" />
 
       <!-- Forums -->
       <div class="my-3">
@@ -22,7 +22,9 @@
       <client-only>
         <div class="mt-30">
           <suspense>
-            <AsyncForumLatestCommentsBlock />
+            <div id="comments">
+              <AsyncForumLatestCommentsBlock />
+            </div>
 
             <template #fallback>
               <div class="flex justify-between">

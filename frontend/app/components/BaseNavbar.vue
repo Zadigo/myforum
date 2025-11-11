@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-primary-100 dark:bg-primary-800 z-20 text-primary-100">
+  <nav class="bg-primary-100 dark:bg-primary-900 z-20 text-primary-100">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -18,7 +18,7 @@
             <div class="flex space-x-4">
               <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
               <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" @click.prevent="() => openSearchModal = true">
-                Search
+                Search (auth: {{ isAuthenticated }})
               </a>
             </div>
           </div>
@@ -40,8 +40,13 @@
             </div>
 
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0" @click.prevent="authStore.openLoginModal=true">Login</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0" @click.prevent="authStore.openLoginModal=true">
+                Login
+              </a>
+
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">
+                Sign out
+              </a>
             </div>
           </div>
         </div>
@@ -58,12 +63,9 @@
 </template>
 
 <script setup lang="ts">
-// import { useDark, useToggle } from '@vueuse/core';
-
-// const darkMode = useDark()
-// const toggle = useToggle(darkMode)
-
 const authStore = useAuthentication()
+
+const { isAuthenticated } = useUser()
 
 const forumStore = useForums()
 const { openSearchModal } = storeToRefs(forumStore)

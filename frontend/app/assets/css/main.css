@@ -27,7 +27,7 @@
     --p-primary-700: #295379;
     --p-primary-800: #1d3b57;
     --p-primary-900: #122334;
-    --p-primary-950: #022c22;
+    --p-primary-950: #060d13;
     --p-surface-0: #ffff;
     --p-surface-50: #eef4f9;
     --p-surface-100: #cbdded;
@@ -39,15 +39,11 @@
     --p-surface-700: #295379;
     --p-surface-800: #1d3b57;
     --p-surface-900: #122334;
-    --p-surface-950: #022c22;
+    --p-surface-950: #060d13;
     --p-content-border-radius: 6px;
 
     --font-sans: 'Manrope', sans-serif;
-    --font-serif: 'Faustina', serif;
-    --font-title: 'Petrona', sans-serif;
-    --font-faustina: 'Faustina', serif;
-    --font-newsreader: 'Newsreader', serif;
-    --font-work-sans: 'Work Sans', sans-serif;
+    --font-title: 'Sora', sans-serif;
 
     --p-secondary-500: var(--color-secondary-500);
 }
@@ -103,4 +99,5 @@
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-title);
+    font-weight: var(--font-weight-bold);
 }

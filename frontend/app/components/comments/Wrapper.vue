@@ -1,15 +1,15 @@
 <template>
   <article v-for="(comment, i) in comments" :key="comment.id" :class="{ 'mt-6': i >= 1 }" :aria-label="comment.title || `Comment from ${comment.user.username}`">
-    <BaseCommentCard :comment="comment" @reply="handleReply" />
+    <base-comment-card :comment="comment" @reply="handleReply" />
     
     <div id="replies" class="w-full flex justify-end mt-6">
       <div class="w-5/6">
         <!-- <p class="my-1 text-right">Replies</p> -->
-        <VoltCard v-for="x in 3" :key="x" class="shadow-sm mt-1">
+        <volt-card v-for="x in 3" :key="x" class="shadow-sm mt-1">
           <template #content>
             Reply {{ x }}
           </template>
-        </VoltCard>
+        </volt-card>
       </div>
     </div>
   </article>
@@ -41,7 +41,7 @@ defineProps({
 
 // const { $dayjs } = useNuxtApp()
 // const authStore = useAuthentication()
-// const { handleError } = useErrorHandler()
+// const { customHandleError } = useErrorHandler()
 // const store = useForums()
 // const { $client } = useNuxtApp()
 

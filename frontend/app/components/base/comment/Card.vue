@@ -1,5 +1,5 @@
 <template>
-  <VoltCard class="shadow-sm">
+  <volt-card class="shadow-sm">
     <template #content>
       <div id="infos" class="flex justify-between align-center">
         <div class="flex items-center gap-2">
@@ -23,19 +23,14 @@
       <!-- Actions -->
       <BaseCommentCardActions :comment="comment" @reply="handleReply" />
     </template>
-  </VoltCard>
+  </volt-card>
 </template>
 
 <script setup lang="ts">
 import type { UserComment } from '~/types'
 
 const props = defineProps<{ comment: UserComment }>()
-
-const emit = defineEmits({
-  reply(_comment: UserComment) {
-    return true
-  }
-})
+const emit = defineEmits<{ reply: [comment: UserComment] }>()
 
 const actions = [
   { label: 'Edit' },
@@ -45,31 +40,17 @@ const actions = [
 
 const authStore = useAuthentication()
 
-/**
- *
- */
-function handleEdit() {
+//
+function handleEdit() {}
 
-}
-
-/**
- *
- */
+//
 function handleReply() {
   emit('reply', props.comment)
 }
 
-/**
- *
- */
-async function handleReport() {
+//
+async function handleReport() {}
 
-}
-
-/**
- *
- */
-async function handleDeletion() {
-
-}
+//
+async function handleDeletion() {}
 </script>

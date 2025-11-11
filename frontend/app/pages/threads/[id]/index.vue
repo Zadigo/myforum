@@ -1,26 +1,28 @@
 <template>
   <section id="comments">
     <client-only>
+      <!-- New Comment -->
       <div v-if="store.showCreateCommentForm" class="row">
         <!-- Form -->
         <keep-alive>
-          <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
+          <comments-form @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
         </keep-alive>
       </div>
 
+      <!-- Main -->
       <div v-else class="row">
         <!-- Poll -->
-        <Suspense>
-          <AsyncPollSection class="mb-3" />
+        <suspense>
+          <async-poll-section class="mb-3" />
 
           <template #fallback>
-            <VoltSkeleton class="h-[200px]" />
+            <volt-skeleton class="h-[200px]" />
           </template>
-        </Suspense>
+        </suspense>
 
         <!-- Comments -->
         <div>
-          <CommentsWrapper :comments="threadComments" @reply="handleReply" />
+          <comments-wrapper :comments="threadComments" @reply="handleReply" />
         </div>
       </div>
     </client-only>
@@ -28,11 +30,11 @@
     <div class="row">
       <h1 class="font-bold text-2xl my-5">Recommended reading</h1>
 
-      <VoltCard v-for="i in 5" :key="i" class="shadow-sm mb-2">
+      <volt-card v-for="i in 5" :key="i" class="shadow-sm mb-2">
         <template #content>
           {{ i }}
         </template>
-      </VoltCard>
+      </volt-card>
     </div>
   </section>
 </template>
@@ -63,7 +65,7 @@ const store = useForums()
 const { threadComments, currentThread } = storeToRefs(store)
 const currentOffset = ref<number>(1)
 
-const { refresh, data: cachedResponse } = await useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
+const { refresh, data } = await useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
   method: 'GET',
   query: {
     limit: 30,
@@ -71,12 +73,14 @@ const { refresh, data: cachedResponse } = await useFetch<ThreadCommentsApiRespon
   }
 })
 
-if (cachedResponse.value) {
-  threadComments.value = cachedResponse.value.results
+if (data.value) {
+  threadComments.value = data.value.results
 }
 
+console.log('Fetched comments:', threadComments)
+
 /**
- * Information for the current thread
+ * Current Thread Information
  */
 
 const { execute } = await useFetch<ForumThread>(`/api/threads/${id}`, {
@@ -87,7 +91,7 @@ const { execute } = await useFetch<ForumThread>(`/api/threads/${id}`, {
   }
 })
 
-execute()
+await execute()
 
 /**
  *
@@ -97,24 +101,17 @@ function handleEditorContent(data: { text: string, delta: string, html: string }
   console.log(data)
 }
 
-/**
- *
- */
+//
 async function handlePagination() {
   refresh()
 }
 
-/**
- *
- */
+//
 async function handleCommentCreated () {
   // await getComments()
   store.showCreateCommentForm = false
 }
 
-/**
- *
- */
 // TODO: Does not return the last comment that
 // was created in the database
 function handleReply(comment: UserComment) {

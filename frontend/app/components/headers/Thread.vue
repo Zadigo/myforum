@@ -1,49 +1,41 @@
 <template>
-  <BasePageHeader class="bg-secondary-200">
+  <base-page-header class="bg-secondary-200">
     <template #title>
       {{ forumStore.currentThread?.title }}
     </template>
 
     <template #breadcrumbs>
-      <li class="breadcrumb-item">
-        <NuxtLink to="/forums/1">
-          {{ forumStore.currentThread?.forum.title }}
-        </NuxtLink>
-      </li>
-
-      <li class="breadcrumb-item active" aria-current="page">
-        {{ forumStore.currentThread?.title }}
-      </li>
+      <volt-breadcrumb :model="breadcrumbs" />
     </template>
 
     <template #actions>
       <div class="space-x-2">
-        <VoltSecondaryButton type="button" rounded @click="emit('jump-to-latest')">
+        <volt-secondary-button rounded @click="emit('jump-to-latest')">
           <Icon name="fa-solid:arrow-down" />
           Jump to latest
-        </VoltSecondaryButton>
+        </volt-secondary-button>
         
-        <VoltButton type="button" rounded @click="emit('follow')">
+        <volt-button rounded @click="emit('follow')">
           <Icon name="fa-solid:plus-circle" />
           Follow thread
-        </VoltButton>
+        </volt-button>
         
-        <VoltDangerButton type="button" rounded @click="emit('delete')">
+        <VoltDangerButton rounded @click="emit('delete')">
           <Icon name="fa-solid:trash" />
           Delete
         </VoltDangerButton>
         
-        <VoltButton type="button" rounded @click="forumStore.showCreateCommentForm=true">
+        <volt-button rounded @click="forumStore.showCreateCommentForm=true">
           <Icon name="fa-solid:plus" />
           New comment
-        </VoltButton>
+        </volt-button>
       </div>
     </template>
-  </BasePageHeader>
+  </base-page-header>
 </template>
 
 <script setup lang="ts">
-import type { CustomRouteIdParamsGeneric, Forum, ForumThread } from '~/types'
+import type { CustomRouteIdParamsGeneric } from '~/types'
 
 const { id } = useRoute().params as CustomRouteIdParamsGeneric
 
@@ -63,16 +55,18 @@ const userCreatedThread = computed(() => {
     // return this.currentThread.user.id === this.user.id
   })
   
-const cachedForums = useStorage<Forum[]>('forums', [])
-const cachedThreads = useStorage<ForumThread[]>('threads', [])
 const forumStore = useForums()
-onBeforeMount(() => {
-  if (cachedForums.value) {
-    forumStore.currentForum = cachedForums.value.find(forum => forum.id === parseInt(id))
-  }
 
-  if (cachedThreads.value) {
-    forumStore.currentThread = cachedThreads.value.find(thread => thread.id === parseInt(id))
-  }
+const breadcrumbs = computed(() => {
+  return [
+    {
+      label: `${forumStore.currentThread?.forum.title}`,
+      route: '/forums',
+    },
+    {
+      label: `${forumStore.currentThread?.title}`,
+      route: `/forums/thread/${id}`,
+    }
+  ]
 })
 </script>
