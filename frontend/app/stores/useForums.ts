@@ -17,9 +17,7 @@ export default defineStore('forums', () => {
       groupedForums[item.category] = []
     })
 
-    forumsList.value.forEach(item => {
-      groupedForums[item.category].push(item)
-    })
+    forumsList.value.forEach(item => groupedForums[item.category].push(item))
 
     return groupedForums
   })

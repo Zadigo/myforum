@@ -2,7 +2,7 @@
   <section class="threads">
     <div class="flex justify-between items-center my-3">
       <div class="flex justify-start align-center gap-2">
-        <ClientOnly>
+        <client-only>
           <VoltDropButton  id="sort-threads" v-model="sortingMethod" :items="sortMethods">
             <Icon name="i-fa-solid:sort" />
           </VoltDropButton>
@@ -13,7 +13,7 @@
           <VoltButton id="filter">
             <Icon name="i-fa-solid:filter" />
           </VoltButton>
-        </ClientOnly>
+        </client-only>
       </div>
     </div>
 
@@ -33,6 +33,7 @@ import { sortMethods, type SortMethodNames } from '~/data'
 import type { CustomRouteIdParamsGeneric, Forum } from '~/types'
 
 definePageMeta({
+  name: 'Forum Threads',
   layout: 'forum'
 })
 
@@ -40,22 +41,22 @@ const AsyncThreadsIterator = defineAsyncComponent({
   loader: async () => import('~/components/threads/Iterator.vue')
 })
 
+/**
+ * Forums
+ */
+
 const forumStore = useForums()
 const { currentForum } = storeToRefs(forumStore)
 
 const { id } = useRoute().params as CustomRouteIdParamsGeneric
 
-/**
- * Fetches the forum information based on the ID from the route
- */
+// Fetches the forum information based on the ID from the route
 const { data, execute } = useFetch<Forum>(`/api/forums/${id}`, {
   immediate: false,
   method: 'GET'
 })
 
-/**
- * Load information of the current forum once the threads are loaded
- */
+// Load information of the current forum once the threads are loaded
 const handleLoadForumInfo = useDebounceFn(async () => {
   await execute()
   

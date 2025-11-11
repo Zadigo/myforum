@@ -1,7 +1,7 @@
 <template>
   <section id="forum">
     <!-- Navbar -->
-    <BaseNavbar />
+    <base-navbar />
 
     <!-- Header -->
     <HeadersForum />

@@ -1,35 +1,35 @@
 <template>
-  <BasePageHeader class="bg-primary-200">
+  <base-page-header class="bg-primary-100 mt-5">
     <template #title>
-      <ClientOnly>
+      <client-only>
         <h1 v-if="currentForum">
           {{ currentForum.title }}
         </h1>
 
-        <VoltSkeleton v-else height="2rem" />
-      </ClientOnly>
+        <volt-skeleton v-else height="2rem" />
+      </client-only>
     </template>
 
     <template #breadcrumbs>
-      <VoltBreadcrumb :home="{ icon: 'pi pi-home' }" :items="breadcrumbs" />
+      <volt-breadcrumb :home="{ icon: 'i-lucide:home', route: '/forums' }" :model="breadcrumbs" />
     </template>
 
     <template #actions>
       <div class="space-x-2">
-        <VoltButton @click="handleFollowForum">
-          <Icon name="fa-solid:plus-circle" />
+        <volt-button @click="handleFollowForum">
+          <icon name="i-lucide:circle-plus" />
           Follow forum
-        </VoltButton>
+        </volt-button>
 
-        <VoltSecondaryButton>
-          <Icon name="i-fa-solid:plus" />
+        <volt-contrast-button>
+          <icon name="i-lucide:stars" />
           <NuxtLink to="/threads/1/create" @click="handleNewThread">
             New thread
           </NuxtLink>
-        </VoltSecondaryButton>
+        </volt-contrast-button>
       </div>
     </template>
-  </BasePageHeader>
+  </base-page-header>
 </template>
 
 <script setup lang="ts">
