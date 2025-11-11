@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types'
+import type { UserComment } from '~/types'
 
-const { data: comments } = await useFetch<Comment[]>('/api/comments/latest', {
+const { data: comments } = await useFetch<UserComment[]>('/api/comments/latest', {
   method: 'GET'
 })
 </script>

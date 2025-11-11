@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import type { Forum, Comment, ForumThreadResults, ForumThread } from '~/types'
+import type { Forum, UserComment, ForumThreadResults, ForumThread } from '~/types'
 
 export default defineStore('forums', () => {
   const forumsList = ref<Forum[]>([])
-  const threadComments = ref<Comment[]>([])
+  const threadComments = ref<UserComment[]>([])
   
   const openSearchModal = ref<boolean>(false)
 
@@ -76,5 +76,10 @@ export default defineStore('forums', () => {
      * Returns the comments for the current thread
      */
     threadComments
+  }
+}, {
+  persist: {
+    storage: sessionStorage,
+    pick: ['currentForum', 'threadComments', 'currentThread']
   }
 })

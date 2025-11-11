@@ -1,4 +1,4 @@
-import type { Comment } from './comments'
+import type { UserComment } from './comments'
 import type { User } from './user'
 
 export interface Forum {
@@ -38,7 +38,7 @@ export interface ForumThread {
 
 export interface SearchApiResponse {
     threads: Thread[],
-    comments: Comment[]
+    comments: UserComment[]
 }
 
 export interface PollQuestion {

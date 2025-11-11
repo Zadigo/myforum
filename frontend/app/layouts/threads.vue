@@ -1,10 +1,10 @@
 <template>
   <section id="forum">
     <!-- Navbar -->
-    <BaseNavbar />
+    <base-navbar />
 
     <!-- Header -->
-    <HeadersThread />
+    <headers-thread />
 
     <div class="grid grid-cols-12 px-10 max-w-7xl mx-auto" role="main">
       <div class="col-span-8">
@@ -12,12 +12,12 @@
       </div>
       
       <div class="col-span-4">
-        <ThreadsAside />
+        <threads-aside />
       </div>
     </div>
 
     <!-- Footer -->
-    <BaseFooter />
+    <base-footer />
     
     <ClientOnly>
       <!-- Modals -->

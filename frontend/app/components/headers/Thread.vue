@@ -43,14 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { useStorage } from '@vueuse/core'
 import type { CustomRouteIdParamsGeneric, Forum, ForumThread } from '~/types'
 
 const { id } = useRoute().params as CustomRouteIdParamsGeneric
-const forumStore = useForums()
 
-const cachedForums = useStorage<Forum[]>('forums', [])
-const cachedThreads = useStorage<ForumThread[]>('threads', [])
 
 const emit = defineEmits<{
   'jump-to-latest': [],
@@ -62,11 +58,14 @@ const emit = defineEmits<{
 const userCreatedThread = computed(() => {
   return false
   // if (!this.user) {
-  //   return false
-  // }
-  // return this.currentThread.user.id === this.user.id
-})
-
+    //   return false
+    // }
+    // return this.currentThread.user.id === this.user.id
+  })
+  
+const cachedForums = useStorage<Forum[]>('forums', [])
+const cachedThreads = useStorage<ForumThread[]>('threads', [])
+const forumStore = useForums()
 onBeforeMount(() => {
   if (cachedForums.value) {
     forumStore.currentForum = cachedForums.value.find(forum => forum.id === parseInt(id))

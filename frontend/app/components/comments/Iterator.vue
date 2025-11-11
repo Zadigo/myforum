@@ -87,25 +87,25 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types'
+import type { UserComment } from '~/types'
 
 const emit = defineEmits({
-  reply (_comment: Comment) {
+  reply(_comment: UserComment) {
     return true
   },
-  edit (_comment: Comment) {
+  edit(_comment: UserComment) {
     return true
   }
 })
 
 defineProps<{
-  comments: Comment[],
+  comments: UserComment[],
   showActions: boolean
 }>()
 
 const { $dayjs } = useNuxtApp()
 const authStore = useAuthentication()
-const { handleError } = useErrorHandler()
+const { customHandleError } = useErrorHandler()
 
 const store = useForums()
 const { $client } = useNuxtApp()
@@ -114,7 +114,7 @@ const { $client } = useNuxtApp()
  * Checks that the author of the comment
  * is from the current authenticated user 
  */
-function isAuthor(comment: Comment) {
+function isAuthor(comment: UserComment) {
   if (!authStore.isAuthenticated) {
     return false
   } else {
@@ -139,7 +139,7 @@ async function handleQuoteFrom () {
  *
  * @param comment 
  */
-async function handleBookmark (comment: Comment) {
+async function handleBookmark(comment: UserComment) {
   try {
     await $client.post(`comments/${comment.id}/bookmark`)
   } catch (e) {
@@ -157,7 +157,7 @@ async function handleShare () {
 /**
  *
  */
-async function handleDeletion (comment: Comment) {
+async function handleDeletion(comment: UserComment) {
   try {
     await $client.delete(`comments/${comment.id}`)
     const index = store.threadComments.findIndex(oldComment => oldComment.id === comment.id)

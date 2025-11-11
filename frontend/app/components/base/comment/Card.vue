@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types'
+import type { UserComment } from '~/types'
 
-const props = defineProps<{ comment: Comment }>()
+const props = defineProps<{ comment: UserComment }>()
 
 const emit = defineEmits({
-  reply(_comment: Comment) {
+  reply(_comment: UserComment) {
     return true
   }
 })

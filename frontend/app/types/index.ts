@@ -43,5 +43,8 @@ export interface CustomRouteIdParamsGeneric extends RouteParamsGeneric {
 }
 
 export interface BaseApiResponse<R> {
+  count: number
+  next: null
+  previous: null
   results: R[]
 }

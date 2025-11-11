@@ -16,21 +16,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '~/types'
+import type { UserComment } from '~/types'
 import type { PropType } from 'vue'
 
 const emit = defineEmits({
-  reply (_comment: Comment) {
+  reply(_comment: UserComment) {
     return true
   },
-  edit (_comment: Comment) {
+  edit(_comment: UserComment) {
     return true
   }
 })
 
 defineProps({
   comments: {
-    type: Array as PropType<Comment[]>,
+    type: Array as PropType<UserComment[]>,
     required: true
   },
   showActions: {
@@ -49,7 +49,7 @@ defineProps({
 //  * Checks that the author of the comment
 //  * is from the current authenticated user 
 //  */
-// function isAuthor(comment: Comment) {
+// function isAuthor(comment: UserComment) {
 //   if (!authStore.isAuthenticated) {
 //     return false
 //   } else {
@@ -67,7 +67,7 @@ defineProps({
  *
  * @param comment The comment for which the reply is to
  */
-function handleReply(comment: Comment) {
+function handleReply(comment: UserComment) {
   emit('reply', comment)
 }
 </script>

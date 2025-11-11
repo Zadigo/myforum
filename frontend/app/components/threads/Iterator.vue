@@ -28,15 +28,15 @@
 import type { SortMethodNames } from '~/data'
 import type { ThreadApiResponse } from '~/types'
 
-const { $dayjs } = useNuxtApp()
 const { id } = useRoute().params
+
 const forumStore = useForums()
 const { forumThreads } = storeToRefs(forumStore)
 
 const emit = defineEmits<{ 'load-current-forum': [] }>()
 
 const sortingMethods = inject<Ref<SortMethodNames>>('sortingMethods', ref('Most recent'))
-
+  
 const { data: cachedResponse } = await useFetch<ThreadApiResponse>(`/api/forums/${id}/threads`, {
   method: 'GET',
   watch: [sortingMethods],
@@ -50,10 +50,10 @@ if (cachedResponse.value) {
   forumThreads.value = cachedResponse.value.results
 }
 
-/**
- * Transforms a date to its human
- * readable version
- */
+  
+const { $dayjs } = useNuxtApp()
+
+// Transforms a date to its  readable version
 function formatData(value: string) {
   return $dayjs(value).fromNow()
 }

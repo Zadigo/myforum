@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment, CustomRouteIdParamsGeneric, EditorData } from '~/types'
+import type { UserComment, CustomRouteIdParamsGeneric, EditorData } from '~/types'
 
 interface NewComment {
   thread: string | number
@@ -58,7 +58,7 @@ const requestData = ref<NewComment>({
   quotes: []
 })
 
-const replyingToComment = inject<Comment>('replyingToComment')
+const replyingToComment = inject<UserComment>('replyingToComment')
 const { handleError } = useErrorHandler()
 
 const access = useCookie('access')

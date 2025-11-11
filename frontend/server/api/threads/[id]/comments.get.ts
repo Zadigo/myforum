@@ -5,6 +5,7 @@ export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')
 
   const data = await $fetch<ThreadApiResponse[]>(`/v1/threads/${id}/comments`, {
+    baseURL: useRuntimeConfig().public.prodDomain,
     params: {
       sort
     }

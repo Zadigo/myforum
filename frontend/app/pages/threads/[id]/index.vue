@@ -1,11 +1,11 @@
 <template>
   <section id="comments">
-    <ClientOnly>
+    <client-only>
       <div v-if="store.showCreateCommentForm" class="row">
         <!-- Form -->
-        <KeepAlive>
+        <keep-alive>
           <CommentsForm @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
-        </KeepAlive>
+        </keep-alive>
       </div>
 
       <div v-else class="row">
@@ -23,7 +23,7 @@
           <CommentsWrapper :comments="threadComments" @reply="handleReply" />
         </div>
       </div>
-    </ClientOnly>
+    </client-only>
 
     <div class="row">
       <h1 class="font-bold text-2xl my-5">Recommended reading</h1>
@@ -38,9 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment, ForumThread, ThreadCommentsApiResponse } from '~/types'
+import type { UserComment, ForumThread, ThreadCommentsApiResponse } from '~/types'
 
 definePageMeta({
+  name: 'Thread Comments',
   layout: 'threads'
 })
 
@@ -49,7 +50,7 @@ const AsyncPollSection = defineAsyncComponent({
 })
 
 // const cachedResponse = ref<ThreadCommentsApiResponse>()
-const replyingToComment = ref<Comment>()
+const replyingToComment = ref<UserComment>()
 
 provide('replyingToComment', replyingToComment)
 
@@ -63,6 +64,7 @@ const { threadComments, currentThread } = storeToRefs(store)
 const currentOffset = ref<number>(1)
 
 const { refresh, data: cachedResponse } = await useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
+  method: 'GET',
   query: {
     limit: 30,
     offset: currentOffset.value 
@@ -115,10 +117,14 @@ async function handleCommentCreated () {
  */
 // TODO: Does not return the last comment that
 // was created in the database
-function handleReply(comment: Comment) {
+function handleReply(comment: UserComment) {
   replyingToComment.value = comment
   store.showCreateCommentForm = true
 }
+
+/**
+ * SEO
+ */
 
 useHead({
   title: currentThread.value?.title || '...'
