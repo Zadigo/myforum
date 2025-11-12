@@ -41,6 +41,10 @@ export default defineNuxtConfig({
     }
   },
 
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+  },
+
   runtimeConfig: {
     public: {
       prodDomain: process.env.NUXT_PUBLIC_PROD_DOMAIN,

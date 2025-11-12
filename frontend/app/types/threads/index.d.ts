@@ -1,7 +1,7 @@
 import type { Forum } from '../forums'
 import type { User } from '../user'
 
-export * from './create'
+export type * from './create'
 
 export interface ThreadApiResponse {
     count: number

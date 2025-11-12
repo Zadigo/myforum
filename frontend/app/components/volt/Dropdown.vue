@@ -2,7 +2,7 @@
   <div class="card flex justify-center">
     <slot :attrs="{ toggle }" />
 
-    <volt-menu ref="menuEl" :id="id" :model="items" :popup="true" />
+    <volt-menu :id="id" ref="menuEl" :model="items" :popup="true" />
   </div>
 </template>
 

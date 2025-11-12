@@ -1,109 +1,93 @@
 <template>
-  <VoltDialog v-model:visible="forumStore.openSearchModal" @close="forumStore.openSearchModal=false">
-    <div>
-      <VoltInputText v-model="search" type="search" placeholder="Search" @keypress.enter="handleGoToSearch" />
-      <VoltToggleSwitch v-model="requestData.search_titles_only" label="Search titles only" inset />
+  <volt-dialog v-model:visible="searchModal" class="md:w-[400px]" modal>
+    <div v-if="newSearch" class="space-y-3">
+      <volt-input-text v-model="newSearch.q" type="search" class="w-full" placeholder="Search" @keypress.enter="handleGoToSearch" />
 
-      <VoltButton rounded @click="showAdvancedSearch=!showAdvancedSearch">
+      <volt-label label-for="titles-only" label="Search titles only">
+        <volt-toggle-switch v-model="newSearch.title_only" />
+      </volt-label>
+
+      <volt-button rounded @click="showAdvancedSearch=!showAdvancedSearch">
         Advanced search
-        <icon name="i-lucide:arrow-down" />
-      </VoltButton>
+        <icon :name="showAdvancedSearch ? 'i-lucide:arrow-up' : 'i-lucide:arrow-down'" />
+      </volt-button>
 
       <div v-if="showAdvancedSearch">
+        <volt-divider />
+
         <!-- Poster -->
         <div class="py-3">
-          <VoltInputText v-model="requestData.posted_by" type="search" placeholder="Posted by" @keypress.enter="handleGoToSearch" />
+          <volt-input-text v-model="newSearch.posted_by" class="w-full" type="search" placeholder="Posted by" @keypress.enter="handleGoToSearch" />
 
           <div class="mt-2">
-            <VoltButton class="me-2" @click="() => showFromDatePicker = true">
+            <volt-button size="small" class="me-2" @click="() => showFromDatePicker = true">
               <span>From</span>
-              <span v-if="requestData.from_date">: {{ requestData.from_date }}</span>
-            </VoltButton>
-            
-            <VoltButton @click="() => showToDatePicker = true">
+              <span v-if="newSearch.from_date">: {{ newSearch.from_date }}</span>
+            </volt-button>
+
+            <volt-button size="small" @click="() => showToDatePicker = true">
               <span>To</span>
-              <span v-if="requestData.to_date">: {{ requestData.from_date }}</span>
-            </VoltButton>
+              <span v-if="newSearch.to_date">: {{ newSearch.to_date }}</span>
+            </volt-button>
           </div>
         </div>
 
         <!-- Forums -->
         <div class="py-3">
-          <VoltAutoComplete v-model="requestData.search_in_forums" :suggestions="['1', '2']" placeholder="Search in forums..." @complete="() => {}" />
-          <VoltToggleSwitch v-model="requestData.include_subforums" label="Include sub-forums in search" inset />
+          <volt-autocomplete v-model="newSearch.search_in_forums" :suggestions="['1', '2']" placeholder="Search in forums..." @complete="() => {}" />
+
+          <volt-label label-for="include-subforums" label="Include sub-forums in search">
+            <volt-toggle-switch v-model="newSearch.sub_forums" />
+          </volt-label>
         </div>
       </div>
     </div>
 
-    <div>
-      <VoltButton @click="forumStore.openSearchModal=false">
-        Close
-      </VoltButton>
+    <template #footer>
+      <div class="space-x-3">
+        <volt-secondary-button @click="searchModal = false">
+          Close
+        </volt-secondary-button>
 
-      <VoltButton @click="handleGoToSearch">
-        Search
-      </VoltButton>
-    </div>
+        <volt-button @click="handleGoToSearch">
+          <icon name="i-lucide:search" />
+          Search
+        </volt-button>
+      </div>
+    </template>
 
-    <VoltDialog v-model:visible="showFromDatePicker">
-      <VoltDatePicker v-model="requestData.to_date" />
-    </VoltDialog>
+    <!-- From Date -->
+    <volt-dialog v-model:visible="showFromDatePicker">
+      <volt-date-picker v-if="newSearch" v-model="newSearch.from_date" show-button-bar />
+    </volt-dialog>
 
-    <VoltDialog v-model:visible="showToDatePicker">
-      <VoltDatePicker v-model="requestData.to_date" />
-    </VoltDialog>
-  </VoltDialog>
+    <!-- To Date -->
+    <volt-dialog v-model:visible="showToDatePicker">
+      <volt-date-picker v-if="newSearch" v-model="newSearch.to_date" />
+    </volt-dialog>
+  </volt-dialog>
 </template>
 
 <script setup lang="ts">
-import { useRefHistory, useStorage, useUrlSearchParams } from '@vueuse/core'
+const { newSearch } = useSearchComposable()
+/**
+ * Modals
+ */
 
-interface RequestData {
-  search: string,
-  search_titles_only: boolean,
-  posted_by: string,
-  from_date: string,
-  to_date: string,
-  search_in_forums: string[],
-  include_subforums: boolean,
-}
-
-// const rules = {
-//   searchRule: (value: string) => !!value || 'Field is required'
-// }
+const searchModal = useState<boolean>('searchModal')
 
 const route = useRoute()
 const router = useRouter()
 
-const forumStore = useForums()
 const { $dayjs } = useNuxtApp()
 
-const searchHistory = useStorage<string[]>('searchHistory', [])
-
-const searchParams = useUrlSearchParams('history')
+// const searchHistory = useStorage<string[]>('searchHistory', [])
 
 const showAdvancedSearch = ref<boolean>(false)
 const showToDatePicker = ref<boolean>(false)
 const showFromDatePicker = ref<boolean>(false)
 
-const search = ref<string>('')
-const { last } = useRefHistory<string>(search)
-
-const requestData = ref<RequestData>({
-  search: search.value,
-  search_titles_only: false,
-  posted_by: '',
-  from_date: '',
-  to_date: '',
-  search_in_forums: [],
-  include_subforums: false
-})
-
 const currentDate = $dayjs().format('YYYY-MM-DD')
-
-watch(search, (value) => {
-  searchParams.q = value
-})
 
 /**
  *
@@ -116,8 +100,8 @@ function saveSearch () {
  *
  */
 function handleGoToSearch () {
-  forumStore.openSearchModal = false
-  searchHistory.value.push(last.value.snapshot)
+  searchModal.value = false
+  // searchHistory.value.push(last.value.snapshot)
 
   if (route.path === '/search') {
     // Do something
@@ -125,11 +109,7 @@ function handleGoToSearch () {
 
   router.push({
     path: '/search',
-    query: {
-      q: search.value
-    }
+    query: newSearch?.value
   })
-
-  search.value = ''
 }
 </script>

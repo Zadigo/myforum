@@ -1,10 +1,11 @@
 import { doc, addDoc, collection } from 'firebase/firestore'
-import type { Arrayable, Nullable } from '~/types'
+import type { Arrayable, Nullable, UserSearch } from '~/types'
 
 export interface UserSession {
   accessToken: string
   lastVisited: Nullable<number>
   visited: Arrayable<number>
+  search: UserSearch
 }
 
 export async function useSession<S extends UserSession>() {
@@ -24,6 +25,15 @@ export async function useSession<S extends UserSession>() {
       accessToken: '',
       lastVisited: null,
       visited: [],
+      search: {
+        q: '',
+        title_only: 'false',
+        posted_by: '',
+        from_date: '',
+        to_date: '',
+        search_in_forums: '',
+        sub_forums: 'false'
+      }
 
     }
     const newDoc = await addDoc(collectionRef, data)

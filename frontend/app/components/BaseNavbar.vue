@@ -11,44 +11,41 @@
 
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex shrink-0 items-center">
-            <NuxtLink to="/" class="font-bold uppercase text-primary-900 dark:text-primary-100">Forum</NuxtLink>
+            <nuxt-link to="/" class="uppercase text-primary-900 dark:text-primary-100 font-extrabold">
+              Forum
+            </nuxt-link>
           </div>
 
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" @click.prevent="() => openSearchModal = true">
-                Search (auth: {{ isAuthenticated }})
+              <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" @click.prevent="() => searchModal = true">
+                Search
               </a>
             </div>
           </div>
         </div>
 
-        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-          <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-            <span class="sr-only">View notifications</span>
+        <div class="absolute inset-y-0 right-0 flex items-center space-x-2 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <client-only>
+            <volt-toggle-switch v-model="darkMode">
+              <template #handle="{ checked }">
+                <icon :name="checked ? 'i-lucide:moon' : 'i-lucide:sun'" />
+              </template>
+            </volt-toggle-switch>
+          </client-only>
+
+          <volt-secondary-button>
             <icon name="i-lucide:bell" />
-          </button>
+          </volt-secondary-button>
 
-          <!-- Profile dropdown -->
-          <div class="relative ml-3">
-            <div>
-              <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                <span class="sr-only">Open user menu</span>
-                <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-              </button>
-            </div>
-
-            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0" @click.prevent="authStore.openLoginModal=true">
-                Login
-              </a>
-
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">
-                Sign out
-              </a>
-            </div>
-          </div>
+          <client-only>
+            <volt-dropdown id="profile" :items="profileItems">
+              <template #default="{ attrs }">
+                <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" @click="attrs.toggle">
+              </template>
+            </volt-dropdown>
+          </client-only>
         </div>
       </div>
     </div>
@@ -63,10 +60,54 @@
 </template>
 
 <script setup lang="ts">
-const authStore = useAuthentication()
+const loginModal = useState<boolean>('loginModal')
+const searchModal = useState<boolean>('searchModal')
 
+const authStore = useAuthentication()
 const { isAuthenticated } = useUser()
 
-const forumStore = useForums()
-const { openSearchModal } = storeToRefs(forumStore)
+/**
+ * Dark Mode
+ */
+
+const [darkMode, _] = useToggle()
+const colorMode = useColorMode({
+  initialValue: 'system',
+  onChanged (mode, defaultHandler) {
+    if (mode == 'dark') {
+      document.documentElement.classList.add('p-dark')
+      defaultHandler(mode)
+    } else {
+      document.documentElement.classList.remove('p-dark')
+      defaultHandler(mode)
+    }
+  }
+})
+
+watch(darkMode, (newValue) => {
+  colorMode.value = newValue ? 'dark' : 'light'
+})
+
+onMounted(() => {
+  darkMode.value = colorMode.value === 'dark' || (colorMode.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+})
+
+/**
+ * Dropdown
+ */
+
+const profileItems = [
+  {
+    label: 'Login',
+    command: () => {
+      loginModal.value = true
+    }
+  },
+  {
+    label: 'Sign out',
+    command: () => {
+      authStore.logout()
+    }
+  }
+]
 </script>

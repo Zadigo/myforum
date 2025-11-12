@@ -1,11 +1,11 @@
 import type { Delta } from '@vueup/vue-quill'
 import type { RouteParamsGeneric } from 'vue-router'
 
-export * from './forums'
-export * from './user'
-export * from './threads'
-export * from './comments'
-export * from './accounts'
+export type * from './forums'
+export type * from './user'
+export type * from './threads'
+export type * from './comments'
+export type * from './accounts'
 
 export type Arrayable<T> = T[]
 
@@ -34,11 +34,19 @@ export interface EditorData {
   text: string
 }
 
-export interface CustomRouteParamsGeneric extends RouteParamsGeneric {
-  q: string
+export interface UserSearch {
+  q?: string
+  title_only?: string
+  posted_by?: string
+  from_date?: string
+  to_date?: string
+  search_in_forums?: string
+  sub_forums?: string
 }
 
-export interface CustomRouteIdParamsGeneric extends RouteParamsGeneric {
+export type RouteSearchParamsGeneric = RouteParamsGeneric & UserSearch
+
+export interface RouteIdParamsGeneric extends RouteParamsGeneric {
   id: string
 }
 

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
 
+@custom-variant dark (&:where(.p-dark, .p-dark *));
+
 @theme {
     --color-secondary-50: #f8e9f2;
     --color-secondary-100: #f0d3e5;

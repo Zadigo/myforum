@@ -1,5 +1,5 @@
 <template>
-  <volt-dialog v-model:visible="authStore.openLoginModal" modal @close="authStore.openLoginModal=false">
+  <volt-dialog v-model:visible="loginModal" modal @close="loginModal = false">
     <form @submit.prevent>
       <volt-input-text v-model="usernameField" type="username" autocomplete="username" placeholder="Username" flat />
       <volt-input-text v-model="password" type="password" autocomplete="current-password" placeholder="Password" flat />
@@ -24,9 +24,8 @@
 </template>
 
 <script setup lang="ts">
-// const loginModal = useState('loginModal')
+const loginModal = useState<boolean>('loginModal')
 
-const authStore = useAuthentication()
 const { usernameField, password, login } = useLogin('username')
 
 // Signup

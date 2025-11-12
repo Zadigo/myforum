@@ -1,5 +1,5 @@
 <template>
-  <AutoComplete unstyled :pt="theme" :ptOptions="{ mergeProps: ptViewMerge }">
+  <AutoComplete unstyled :pt="theme" :pt-options="{ mergeProps: ptViewMerge }">
     <template #dropdownicon>
       <ChevronDownIcon />
     </template>
