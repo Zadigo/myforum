@@ -4,7 +4,7 @@
     <base-navbar />
 
     <!-- Header -->
-    <HeadersForum />
+    <headers-forum />
     
     <div class="grid grid-cols-12 px-10 max-w-7xl mx-auto gap-4 my-20" role="main">
       <div class="col-span-8">
@@ -12,12 +12,12 @@
       </div>
 
       <div class="col-span-4">
-        <ForumsAside />
+        <forums-aside />
       </div>
     </div>
 
     <!-- Footer -->
-    <BaseFooter />
+    <base-footer />
     
     <!-- Modals -->
     <ClientOnly>
@@ -28,4 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import type { CustomRouteMeta } from '~/types'
+
+const routeMeta = useRoute().meta as CustomRouteMeta
 </script>

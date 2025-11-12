@@ -1,18 +1,18 @@
 <template>
-  <volt-dialog v-model:visible="loginModal" modal @close="loginModal = false">
-    <form @submit.prevent>
-      <volt-input-text v-model="usernameField" type="username" autocomplete="username" placeholder="Username" flat />
-      <volt-input-text v-model="password" type="password" autocomplete="current-password" placeholder="Password" flat />
+  <volt-dialog v-model:visible="loginModal" :dismissable-mask="false" modal>
+    <form class="space-y-3" @submit.prevent>
+      <volt-input-text v-model="usernameField" type="username" class="w-full" autocomplete="username" placeholder="Username" />
+      <volt-input-text v-model="password" type="password" class="w-full" autocomplete="current-password" placeholder="Password" />
       
-      <volt-button @click="() => login()">
+      <volt-button class="ms-auto" @click="() => login()">
         Login
       </volt-button>
     </form>
 
     <form v-show="false" @submit.prevent>
-      <volt-input-text v-model="usernameField" type="text" autocomplete="username" placeholder="Username" flat />
-      <volt-input-text v-model="password" type="password" autocomplete="new-password" placeholder="Password 1" flat />
-      <volt-input-text v-model="password" type="password" autocomplete="new-password" placeholder="Password 2" flat />
+      <volt-input-text v-model="usernameField" type="text" autocomplete="username" placeholder="Username" />
+      <volt-input-text v-model="password" type="password" autocomplete="new-password" placeholder="Password 1" />
+      <volt-input-text v-model="password" type="password" autocomplete="new-password" placeholder="Password 2" />
       
       <div class="flex justify-end">
         <volt-button @click="handleSignup">

@@ -1,6 +1,6 @@
 <template>
   <section id="create-thread" class="my-5">
-    <VoltCard class="shadow-sm">
+    <volt-card class="shadow-sm">
       <template #content>
         <form id="creation" @submit.prevent>
           <!-- Thread Type -->
@@ -8,74 +8,80 @@
 
           <!-- Title -->
           <div v-if="newThread.category === 'General discussion' || newThread.category === 'Poll'" class="my-3">
-            <VoltInputText v-model="newThread.title" placeholder="Title" class="w-full" />
+            <volt-input-text v-model="newThread.title" placeholder="Title" class="w-full" />
           </div>
           <ThreadsCreateResultEditor v-else-if="newThread.category === 'Result'" v-model="newThread" :preview-thread-title="previewThreadTitle" />
           
           <!-- Base editor -->
-          <BaseEditor @editor-content="(data) => newThread.content = data" />
+          <base-editor @editor-content="(data) => newThread.content = data" />
 
           <!-- Notifications -->
-          <VoltLabel class="my-4">
+          <volt-label label-for="notifications" class="my-4">
             <VoltToggleSwitch v-model="newThread.watch" />
             <label>Watch this discussion</label>
-          </VoltLabel >
+          </volt-label >
 
-          <VoltMessage v-if="newThread.watch" severity="warn" class="my-3">
+          <volt-message v-if="newThread.watch" severity="warn" class="my-3">
             You will be receiving notifications on each new post and interraction
             for your newly created thread
-          </VoltMessage>
+          </volt-message>
 
           <!-- Tags -->
-          <VoltAutoComplete v-model="search" :suggestions="tags" input-id="multiple-tags" placeholder="Select multiple tags" class="my-4 w-full" multiple fluid @complete="searchComplete" />
+          <volt-auto-complete v-model="search" :suggestions="tags" input-id="multiple-tags" placeholder="Select multiple tags" class="my-4 w-full" multiple fluid @complete="searchComplete" />
 
           <!-- Poll -->
           <div id="poll">
-            <VoltToggleButton v-model="newThread.add_poll" on-label="Remove poll" off-label="Add poll" />
-            <ThreadsCreatePoll v-if="newThread.add_poll" v-model="newPoll" />
+            <volt-toggle-button v-model="newThread.add_poll" on-label="Remove poll" off-label="Add poll" />
+            <threads-create-poll v-if="newThread.add_poll" v-model="newPoll" />
           </div>
         </form>
       </template>
 
       <template #footer>
         <div class="space-x-2 py-5">
-          <VoltButton color="primary" @click="() => create">
+          <volt-button @click="() => create">
             Create
-          </VoltButton>
-          <VoltButton color="secondary" @click="showSchedulingModal=true">
+          </volt-button>
+          <volt-button @click="showSchedulingModal=true">
             Schedule
-          </VoltButton>
-          <VoltButton color="secondary" @click="() => create">
+          </volt-button>
+          <volt-button @click="() => create">
             Save draft
-          </VoltButton>
-          <VoltButton color="secondary">
+          </volt-button>
+          <volt-button>
             Preview
-          </VoltButton>
-          <VoltButton :to="`/forums/${$route.params.id}`" color="warning">
+          </volt-button>
+          <volt-button :to="`/forums/${$route.params.id}`">
             Cancel
-          </VoltButton>
+          </volt-button>
         </div>
       </template>
-    </VoltCard>
+    </volt-card>
 
     <!-- Modal -->
-    <VoltDialog v-model:visible="showSchedulingModal" width="500">
-      <VoltDatePicker />
-      <VoltDatePicker />
+    <volt-dialog v-model:visible="showSchedulingModal" modal>
+      <VoltDatePicker class="w-full" />
 
-      <VoltButton color="primary" block @click="showSchedulingModal=false">
-        Cancel
-      </VoltButton>
-      <VoltButton color="primary" block @click="() => create">
-        Create
-      </VoltButton>
-    </VoltDialog>
+      <template #footer>
+        <volt-secondary-button color="primary" block @click="showSchedulingModal=false">
+          Cancel
+        </volt-secondary-button>
+  
+        <volt-button color="primary" block @click="() => create">
+          Schedule
+        </volt-button>
+      </template>
+    </volt-dialog>
   </section>
 </template>
 
 <script setup lang="ts">
 import { useThread, useCreatePoll, useSearchTags } from '~/composables/use/thread'
 import { threadTypes } from '~/data/constants/threads'
+
+definePageMeta({
+  name: 'Create Thread'
+})
 
 const { newThread, showSchedulingModal, previewThreadTitle, create } = await useThread()
 const { newPoll } = useCreatePoll(newThread)

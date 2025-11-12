@@ -28,11 +28,13 @@
 
         <div class="absolute inset-y-0 right-0 flex items-center space-x-2 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <client-only>
-            <volt-toggle-switch v-model="darkMode">
-              <template #handle="{ checked }">
-                <icon :name="checked ? 'i-lucide:moon' : 'i-lucide:sun'" />
-              </template>
-            </volt-toggle-switch>
+            <template #default>
+              <volt-toggle-switch v-model="darkMode">
+                <template #handle="{ checked }">
+                  <icon :name="checked ? 'i-lucide:moon' : 'i-lucide:sun'" />
+                </template>
+              </volt-toggle-switch>
+            </template>
           </client-only>
 
           <volt-secondary-button>
@@ -40,11 +42,17 @@
           </volt-secondary-button>
 
           <client-only>
-            <volt-dropdown id="profile" :items="profileItems">
-              <template #default="{ attrs }">
-                <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" @click="attrs.toggle">
-              </template>
-            </volt-dropdown>
+            <template #default>
+              <volt-dropdown id="profile" :items="profileItems">
+                <template #default="{ attrs }">
+                  <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" @click="attrs.toggle">
+                </template>
+              </volt-dropdown>
+            </template>
+
+            <template #fallback>
+              Loading...
+            </template>
           </client-only>
         </div>
       </div>
@@ -71,26 +79,29 @@ const { isAuthenticated } = useUser()
  */
 
 const [darkMode, _] = useToggle()
-const colorMode = useColorMode({
-  initialValue: 'system',
-  onChanged (mode, defaultHandler) {
-    if (mode == 'dark') {
-      document.documentElement.classList.add('p-dark')
-      defaultHandler(mode)
-    } else {
-      document.documentElement.classList.remove('p-dark')
-      defaultHandler(mode)
+
+if (import.meta.client) {
+  const colorMode = useColorMode({
+    initialValue: 'system',
+    onChanged (mode, defaultHandler) {
+      if (mode == 'dark') {
+        document.documentElement.classList.add('p-dark')
+        defaultHandler(mode)
+      } else {
+        document.documentElement.classList.remove('p-dark')
+        defaultHandler(mode)
+      }
     }
-  }
-})
-
-watch(darkMode, (newValue) => {
-  colorMode.value = newValue ? 'dark' : 'light'
-})
-
-onMounted(() => {
-  darkMode.value = colorMode.value === 'dark' || (colorMode.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-})
+  })
+  
+  watch(darkMode, (newValue) => {
+    colorMode.value = newValue ? 'dark' : 'light'
+  })
+  
+  onMounted(() => {
+    darkMode.value = colorMode.value === 'dark' || (colorMode.value === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  })
+}
 
 /**
  * Dropdown

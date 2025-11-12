@@ -1,9 +1,15 @@
 <template>
   <div id="editor-wrapper" class="my-3">
-    <ClientOnly>
-      <QuillEditor ref="editorEl" v-model:content="content" :options="options" @text-change="editorContent" @ready="initializeEditor" />
-      {{ content }}
-    </ClientOnly>
+    <client-only>
+      <template #default>
+        <quill-editor ref="editorEl" v-model:content="content" :options="options" @text-change="editorContent" @ready="initializeEditor" />
+        {{ content }}
+      </template>
+
+      <template #fallback>
+        <volt-skeleton height="200px" width="100%" />
+      </template>
+    </client-only>
   </div>
 </template>
 
@@ -30,14 +36,10 @@ const options = {
   placeholder: 'Write your text'
 }
 
-/**
- * Initializes the editor with default settings
- */
+// Initializes the editor with default settings
 function initializeEditor () {}
 
-/**
- *
- */
+// Emit content on change
 function editorContent () {
   emit('editor-content', {
     delta: editorEl.value?.getContents(),
@@ -45,4 +47,14 @@ function editorContent () {
     text: editorEl.value?.getText()
   })
 }
+
+/**
+ * Height
+ */
+
+onMounted(() => {
+  if (isDefined(editorEl)) {
+    editorEl.value.querySelector('.ql-editor.ql-blank')!.setAttribute('style', 'height: 200px;')
+  }
+})
 </script>

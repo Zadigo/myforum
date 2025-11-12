@@ -1,5 +1,6 @@
 import type { Delta } from '@vueup/vue-quill'
 import type { RouteParamsGeneric } from 'vue-router'
+import type { RouteMeta } from 'vue-router/dist/router-BbqN7H95.mjs'
 
 export type * from './forums'
 export type * from './user'
@@ -55,4 +56,10 @@ export interface BaseApiResponse<R> {
   next: null
   previous: null
   results: R[]
+}
+
+type RouteMetaNames = 'Create Thread' | 'Edit Thread' | 'Thread Details'
+
+export interface CustomRouteMeta extends RouteMeta {
+  name?: RouteMetaNames
 }

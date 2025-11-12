@@ -1,6 +1,6 @@
 <template>
   <aside>
-    <VoltCard class="bg-blue-300 shadow-sm">
+    <volt-card class="bg-blue-300 shadow-sm">
       <template #content>
         <h5 class="font-bold text-primary-600 mb-3">
           About this Discussion
@@ -21,9 +21,9 @@
           formatDuration(currentThread.latest_comment.created_on)
         </p>
       </template>
-    </VoltCard>    
+    </volt-card>    
 
-    <VoltCard class="bg-primary-300 shadow-sm my-2">
+    <volt-card class="bg-primary-300 shadow-sm my-2">
       <template #title>
         Tennis Forum
       </template>
@@ -34,7 +34,7 @@
           about players, gear, matches, scores, guidelines, and more!
         </p>
 
-        <VoltDivider />
+        <volt-divider />
 
         <div class="flex justify-end">
           <VoltSecondaryButton size="small" rounded>
@@ -45,35 +45,35 @@
           </VoltSecondaryButton>
         </div>
 
-        <VoltAccordion :value="0" class="mt-5">
-          <VoltAccordionPanel v-for="(item, i) in items" :key="item.title" :value="i">
-            <VoltAccordionHeader>
+        <volt-accordion :value="0" class="mt-5">
+          <volt-accordion-panel v-for="(item, i) in items" :key="item.title" :value="i">
+            <volt-accordion-header>
               {{ i }}
-            </VoltAccordionHeader>
+            </volt-accordion-header>
 
-            <VoltAccordionContent>
+            <volt-accordion-content>
               {{ i }}
-            </VoltAccordionContent>
-          </VoltAccordionPanel>
-        </VoltAccordion>
+            </volt-accordion-content>
+          </volt-accordion-panel>
+        </volt-accordion>
       </template>
-    </VoltCard>
+    </volt-card>
 
-    <VoltCard class="bg-primary-100 shadow-sm">
+    <volt-card class="bg-primary-100 shadow-sm">
       <template #content>
-        <VoltAccordion :value="0">
-          <VoltAccordionPanel v-for="(item, i) in items" :key="item.title" :value="i">
-            <VoltAccordionHeader>
+        <volt-accordion :value="0">
+          <volt-accordion-panel v-for="(item, i) in items" :key="item.title" :value="i">
+            <volt-accordion-header>
               {{ item.title }}
-            </VoltAccordionHeader>
+            </volt-accordion-header>
 
-            <VoltAccordionContent>
+            <volt-accordion-content>
               {{ item.title }}
-            </VoltAccordionContent>
-          </VoltAccordionPanel>
-        </VoltAccordion>
+            </volt-accordion-content>
+          </volt-accordion-panel>
+        </volt-accordion>
       </template>
-    </VoltCard>
+    </volt-card>
   </aside>
 </template>
 

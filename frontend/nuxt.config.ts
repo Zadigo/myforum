@@ -9,8 +9,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': {
-      redirect: '/forums',
-      swr: true
+      redirect: '/forums'
     },
     'forums/**': {
       swr: true,
@@ -20,7 +19,8 @@ export default defineNuxtConfig({
       }
     },
     'threads/**/create': {
-      swr: false
+      swr: false,
+      ssr: false
     },
     'threads/**': {
       swr: true

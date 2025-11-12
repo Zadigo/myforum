@@ -28,4 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import type { CustomRouteMeta } from '~/types'
+
+const routeMeta = useRoute().meta as CustomRouteMeta
 </script>
