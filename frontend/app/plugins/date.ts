@@ -13,9 +13,14 @@ export default defineNuxtPlugin(nuxtApp => {
   dayjs.extend(timezone)
   dayjs.extend(relativeTime)
 
+  function humanizeDate(value: string) {
+    return dayjs(value).fromNow()
+  }
+
   return {
     provide: {
       dayjs,
+      humanizeDate,
       estimatedTimezone: dayjs.tz.guess()
     }
   }

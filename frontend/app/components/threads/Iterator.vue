@@ -46,7 +46,6 @@ const { data: cachedResponse } = await useFetch<ThreadApiResponse>(`/api/forums/
 })
 
 if (cachedResponse.value) {
-  console.log('cachedResponse', cachedResponse.value)
   forumThreads.value = cachedResponse.value.results
 }
 

@@ -22,18 +22,18 @@
       <client-only>
         <div class="mt-30">
           <suspense>
-            <div id="comments">
-              <AsyncForumLatestCommentsBlock />
-            </div>
+            <async-forum-latest-comments-block />
 
             <template #fallback>
-              <div class="flex justify-between">
-                <volt-skeleton class="h-8" />
-                <volt-skeleton class="h-8" />
-              </div>
-              
-              <div class="space-y-3">
-                <volt-skeleton v-for="i in 4" :key="i" class="h-16" />
+              <div>
+                <div class="flex justify-between">
+                  <volt-skeleton class="h-8" />
+                  <volt-skeleton class="h-8" />
+                </div>
+                
+                <div class="space-y-3">
+                  <volt-skeleton v-for="i in 4" :key="i" class="h-16" />
+                </div>
               </div>
             </template>
           </suspense>

@@ -4,17 +4,17 @@
 @custom-variant dark (&:where(.p-dark, .p-dark *));
 
 @theme {
-    --color-secondary-50: #f8e9f2;
-    --color-secondary-100: #f0d3e5;
-    --color-secondary-200: #e8bdd8;
-    --color-secondary-300: #e0a7cb;
-    --color-secondary-400: #d48fc0;
-    --color-secondary-500: #955069;
-    --color-secondary-600: #7a3f5c;
-    --color-secondary-700: #5f3550;
-    --color-secondary-800: #442b43;
-    --color-secondary-900: #2a212e;
-    --color-secondary-950: #1a161b;
+    --color-secondary-50: #f2eaee;
+    --color-secondary-100: #d9c1cb;
+    --color-secondary-200: #c098a8;
+    --color-secondary-300: #b38396;
+    --color-secondary-400: #9a5973;
+    --color-secondary-500: #813050;
+    --color-secondary-600: #672640;
+    --color-secondary-700: #4d1d30;
+    --color-secondary-800: #341320;
+    --color-secondary-900: #1a0a10;
+    --color-secondary-950: #0d0508;
 }
 
 /* Primary and Surface Palettes */

@@ -22,7 +22,7 @@
       <AsyncThreadsIterator @load-current-forum="handleLoadForumInfo" />
 
       <template #fallback>
-        <VoltSkeleton height="5rem" />
+        <volt-skeleton height="5rem" />
       </template>
     </Suspense>
   </section>

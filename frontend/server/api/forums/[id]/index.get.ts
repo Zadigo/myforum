@@ -1,6 +1,6 @@
 import { FetchError } from 'ofetch'
 
-// import { refreshAccessToken } from '#imports'
+// import { useRefreshAccessToken } from '#imports'
 
 import type { Forum } from '~/types'
 
@@ -42,7 +42,7 @@ export default defineCachedEventHandler(async event => {
   const access = getCookie(event, 'access')
   const refresh = getCookie(event, 'refresh')
 
-  console.log('getRouterParam', id)
+  // console.log('getRouterParam', id)
 
   try {
     const data = await $fetch<Forum>(`/v1/forums/${id}`, {
@@ -55,15 +55,15 @@ export default defineCachedEventHandler(async event => {
     return data
   } catch (e) {
     if (e instanceof FetchError) {
-      if (e.status === 401 && refresh) {
-        const { access } = await refreshAccessToken(refresh)
-        setCookie(event, 'access', access)
-      } else {
-        throw createError({
-          statusCode: e.status || 500,
-          message: e.message
-        })
-      }
+      // if (e.status === 401 && refresh) {
+      //   const { access } = await useRefreshAccessToken(refresh)
+      //   setCookie(event, 'access', access)
+      // } else {
+      //   throw createError({
+      //     statusCode: e.status || 500,
+      //     message: e.message
+      //   })
+      // }
     }
   }
 }, {

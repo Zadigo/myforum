@@ -11,13 +11,15 @@
     <nuxt-loading-indicator />
 
     <dev-only>
-      <volt-card class="fixed left-5 top-5 z-40">
-        <template #content>
-          <p>User ID: {{ userId }}</p>
-          <p>Authenticated: {{ isAuthenticated }}</p>
-          <p>Has Token: {{ hasToken }}</p>
-        </template>
-      </volt-card>
+      <client-only>
+        <volt-card class="fixed left-5 top-5 z-40">
+          <template #content>
+            <p>User ID: {{ userId }}</p>
+            <p>Authenticated: {{ isAuthenticated }}</p>
+            <p>Has Token: {{ hasToken }}</p>
+          </template>
+        </volt-card>
+      </client-only>
     </dev-only>
 
     <nuxt-page />
@@ -27,7 +29,6 @@
 <script setup lang="ts">
 const { hasToken } = useNuxtAuthentication()
 const { userId, isAuthenticated } = useUser()
-console.info('nuxt authentication state:', { userId: userId.value, isAuthenticated: isAuthenticated.value })
 
 await useSession()
 
@@ -40,8 +41,9 @@ onUnmounted(() => { document.body.classList.remove(...tokens) })
  * Modals
  */
 
-useState('loginModal', () => false)
-useState('searchModal', () => false)
+useState<boolean>('loginModal', () => false)
+useState<boolean>('searchModal', () => false)
+useState<boolean>('createCommentModal', () => false)
 </script>
 
 <style>

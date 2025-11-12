@@ -11,22 +11,22 @@
     <template #actions>
       <div class="space-x-2">
         <volt-secondary-button rounded @click="emit('jump-to-latest')">
-          <Icon name="fa-solid:arrow-down" />
+          <icon name="i-lucide:arrow-down" />
           Jump to latest
         </volt-secondary-button>
         
         <volt-button rounded @click="emit('follow')">
-          <Icon name="fa-solid:plus-circle" />
+          <icon name="i-lucide:plus-circle" />
           Follow thread
         </volt-button>
-        
-        <VoltDangerButton rounded @click="emit('delete')">
-          <Icon name="fa-solid:trash" />
+
+        <volt-danger-button rounded @click="emit('delete')">
+          <icon name="i-lucide:trash" />
           Delete
-        </VoltDangerButton>
-        
-        <volt-button rounded @click="forumStore.showCreateCommentForm=true">
-          <Icon name="fa-solid:plus" />
+        </volt-danger-button>
+
+        <volt-button rounded @click="() => createCommentModal=true">
+          <icon name="i-lucide:plus" />
           New comment
         </volt-button>
       </div>
@@ -35,10 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CustomRouteIdParamsGeneric } from '~/types'
-
-const { id } = useRoute().params as CustomRouteIdParamsGeneric
-
+import type { RouteIdParamsGeneric } from '~/types'
 
 const emit = defineEmits<{
   'jump-to-latest': [],
@@ -47,14 +44,17 @@ const emit = defineEmits<{
   'new-comment': [],
 }>()
 
-const userCreatedThread = computed(() => {
-  return false
-  // if (!this.user) {
-    //   return false
-    // }
-    // return this.currentThread.user.id === this.user.id
-  })
-  
+/**
+ * Modal
+ */
+
+const createCommentModal = useState<boolean>('createCommentModal')
+const { id } = useRoute().params as RouteIdParamsGeneric
+
+/**
+ * Breadcrumbs
+ */
+
 const forumStore = useForums()
 
 const breadcrumbs = computed(() => {

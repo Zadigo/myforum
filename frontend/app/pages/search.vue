@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CustomRouteParamsGeneric, SearchApiResponse } from '~/types';
+import type { RouteIdParamsGeneric, SearchApiResponse } from '~/types';
 
 type Pill = 'Comments' | 'Showcase' | 'Albums' | 'Media' | 'Tags' | string
 type Pills = { name: Pill, active: boolean }
@@ -50,7 +50,7 @@ const config = useRuntimeConfig()
 const { customHandleError } = useErrorHandler()
 const searchResult = ref<SearchApiResponse>()
 
-const { q } = useRoute().params as CustomRouteParamsGeneric
+const { q } = useRoute().params as RouteIdParamsGeneric
 
 const currentPill = ref<Pill>('Comments')
 

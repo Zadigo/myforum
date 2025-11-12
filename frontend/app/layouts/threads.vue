@@ -21,8 +21,9 @@
     
     <client-only>
       <!-- Modals -->
-      <ModalsLogin />
-      <ModalsSearch />
+      <modals-login />
+      <modals-search />
+      <modals-comments-create />
     </client-only>
   </section>
 </template>

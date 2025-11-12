@@ -71,9 +71,6 @@
 const loginModal = useState<boolean>('loginModal')
 const searchModal = useState<boolean>('searchModal')
 
-const authStore = useAuthentication()
-const { isAuthenticated } = useUser()
-
 /**
  * Dark Mode
  */
@@ -116,8 +113,8 @@ const profileItems = [
   },
   {
     label: 'Sign out',
-    command: () => {
-      authStore.logout()
+    command: async () => {
+      await useLogout()
     }
   }
 ]

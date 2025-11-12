@@ -40,16 +40,15 @@
         <span>-</span>
         <span class="font-bold text-primary-700 underline underline-offset-4">@{{ comment.user?.username }}</span> 
         <span>-</span>
-        <client-only>
-          <span class="text-muted">{{ $dayjs(comment.created_on).fromNow() }}</span>
-        </client-only>
+        {{ console.log($humanizeDate) }}
+        <span v-if="$humanizeDate" class="text-muted">{{ $humanizeDate(comment.created_on) }}</span>
       </div>
 
       <div v-html="comment.content_html" />
     </template>
 
     <template v-if="showActions" #footer>
-      <div v-if="authStore.isAuthenticated" class="flex gap-2">
+      <div v-if="isAuthenticated" class="flex gap-2">
         <volt-button variant="tonal" @click="emit('reply', comment)">
           <icon name="i-lucide:reply" class="me-2" />Reply
         </volt-button>
@@ -59,8 +58,8 @@
         </volt-button>
         
         <volt-button variant="tonal" @click="handleBookmark(comment)">
-          <icon v-if="comment.bookmarked_by_user" name="i-fa6:bookmark" class="me-2" />
-          <icon v-else name="i-fa6:bookmark" class="me-2" />Bookmark
+          <icon v-if="comment.bookmarked_by_user" name="i-lucide:bookmark" class="me-2" />
+          <icon v-else name="i-lucide:bookmark" class="me-2" />Bookmark
         </volt-button>
         
         <volt-button variant="tonal" @click="handleShare">
@@ -69,19 +68,19 @@
       </div>
 
       <div v-else class="flex gap-2">
-        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:reply" class="me-2" />Reply
         </volt-button>
 
-        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:quote" class="me-2" />Quote from
         </volt-button>
         
-        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:bookmark" class="me-2" />Bookmark
         </volt-button>
         
-        <volt-button variant="tonal" @click="authStore.openLoginModal=true">
+        <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:share" class="me-2" />Share
         </volt-button>
       </div>
@@ -92,31 +91,27 @@
 <script setup lang="ts">
 import type { UserComment } from '~/types'
 
-defineProps<{ comments: UserComment[], showActions: boolean }>()
+const { showActions = true, comments } = defineProps<{ comments: UserComment[], showActions?: boolean }>()
 const emit = defineEmits<{ reply: [comment: UserComment], edit: [comment: UserComment] }>()
 
 
-const { $dayjs, $nuxtAuthentication } = useNuxtApp()
-const authStore = useAuthentication()
+const { $nuxtAuthentication, $humanizeDate } = useNuxtApp()
 const { customHandleError } = useErrorHandler()
 
 const store = useForums()
 
+/**
+ * Handlers
+ */
+
+const { userId, isAuthenticated } = useUser()
+
 // Checks that the author of the comment
 // is from the current authenticated user 
-function isAuthor(comment: UserComment) {
-  if (!authStore.isAuthenticated) {
-    return false
-  } else {
-    if (!authStore.userProfile) {
-      return false
-    } else {
-      if (comment.user.id === authStore.userProfile.id) {
-        return true
-      }
-    }
-  }
-}
+const checkIsAuthor = reactify((comment: UserComment) => {
+  if (!isAuthenticated) return false
+  return isAuthenticated && comment.user.id === parseInt(userId.value)
+})
 
 //
 async function handleQuoteFrom () {
@@ -148,4 +143,10 @@ async function handleDeletion(comment: UserComment) {
     customHandleError(e)
   }
 }
+
+/**
+ * Modals
+ */
+
+const loginModal = useState<boolean>('loginModal')
 </script>

@@ -71,7 +71,6 @@ async function createNewPost () {
     await $nuxtAuthentication('/v1/comments/create', { method: 'POST', body: newComment.value })
     emit('created')
   } catch (e) {
-    console.log(e)
     customHandleError(e)
   }
 }
@@ -82,7 +81,6 @@ async function saveDraft () {
     await $nuxtAuthentication('/v1/comments/create', { method: 'POST', body: newComment.value })
     emit('created')
   } catch (e) {
-    console.log(e)
     customHandleError(e)
   }
 }

@@ -1,12 +1,12 @@
 // import { useAxiosClient } from '~/composables/django_client'
-import type { Comment } from '~/types'
+import type { UserComment } from '~/types'
 
 export default defineCachedEventHandler(async _event => {
     // const { client } = useAxiosClient()
     // const response = await client.get<Comment[]>('/comments/latest')
     // return response.data
 
-    const data: Comment[] = [
+    const data: UserComment[] = [
         {
             id: 1,
             user: {
