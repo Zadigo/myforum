@@ -1,20 +1,33 @@
 from typing import Iterator
 
-from celery import shared_task, group
+from celery import group, shared_task
+from comments.models import Comment
 from django.contrib.auth import get_user_model
+from moderation.tasks import create_report
 from nltk.tokenize import TweetTokenizer
 from notifications import tasks as notification_tasks
 from tags.models import Tag
 
 
 @shared_task
-def moderate_comment(text: str):
-    pass
+def moderate_comment(comment_id: int):
+    comment = Comment.objects.get(id=comment_id)
+    moderate = lambda x: False
+
+    result = moderate(comment.content)
+    if result:
+        # Create a report for the comment
+        create_report.delay(
+            thread_id=comment.thread.id,
+            reason='Auto-moderation triggered',
+            reporter_id=None
+        )
+    return result
 
 
 @shared_task
-def analyze_comment_with_ai(text: str):
-    pass
+def analyze_comment_with_ai(comment_id: int):
+    comment = Comment.objects.get(id=comment_id)
 
 
 @shared_task
@@ -41,10 +54,11 @@ def analyze_comment(comment_id: int, text: str):
     user_ids = list(users.values_list('id', flat=True))
 
     notification_tasks.create_message_notifications.apply_async(
-        (
+        args=[
             comment_id,
             user_ids
-        )
+        ],
+        countdown=40
     )
 
     for hashtag in hashtags:

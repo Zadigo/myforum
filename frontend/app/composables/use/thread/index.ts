@@ -1,4 +1,4 @@
-import type { CustomRouteIdParamsGeneric, NewPollData, NewThreadData, ForumThread, TagApiResponse } from '~/types'
+import type { RouteIdParamsGeneric, NewPollData, NewThreadData, ForumThread, TagApiResponse } from '~/types'
 
 export * from './comments'
 
@@ -40,7 +40,7 @@ export function useCreatePoll(newThread: Ref<NewThreadData>) {
  * Composable to create a new thread
  */
 export async function useThread() {
-  const { id } = useRoute().params as CustomRouteIdParamsGeneric
+  const { id } = useRoute().params as RouteIdParamsGeneric
 
   const newThread = ref<NewThreadData>({
     forum_id: id,
@@ -66,38 +66,53 @@ export async function useThread() {
     poll: null
   })
 
-  const router = useRouter()
   const config = useRuntimeConfig()
-  const { newPoll } = useCreatePoll(newThread)
-
-  const { data, execute: create, status } = await useFetch<ForumThread>('/v1/threads/create', {
-    baseURL: config.public.prodDomain,
-    server: false,
-    method: 'post',
-    immediate: false,
-    body: newThread.value
-  })
-
-  whenever(() => status.value === 'success', () => {
-    if (data.value?.id) {
-      router.push({ name: 'thread-id', params: { id: data.value.id } })
-    }
-  })
-
-  const showSchedulingModal = ref<boolean>(false)
+  const router = useRouter()
   
-  function schedule() {
-    showSchedulingModal.value = true
-  }
+  // TODO: Use $nuxtAuthentication
+  // const { data, execute: create, status } = await useFetch<ForumThread>('/v1/threads/create', {
+    //   baseURL: config.public.prodDomain,
+    //   server: false,
+    //   method: 'post',
+    //   immediate: false,
+    //   body: newThread.value
+    // })
+    
+    const { $nuxtAuthentication } = useNuxtApp()
+    
+    const [created, toggleCreated] = useToggle(false)
+    
+    async function create() {
+      const data =  await $nuxtAuthentication<ForumThread>('/v1/threads/create', {
+        method: 'post',
+        body: newThread.value,
+        onResponse() {
+          toggleCreated()
+        }
+      })
+      
+      router.push('/threads/' + data.id)
+    }
+    
+    /**
+     * Draft
+     */
+   
+   const [showSchedulingModal, schedule] = useToggle(false)
+   function draft() {}
+   
+   const previewThreadTitle = computed(() => {
+     return `${newThread.value.result_thread_title.tournament} ${newThread.value.result_thread_title.round} - ${newThread.value.result_thread_title.winner} defeat ${newThread.value.result_thread_title.looser} - ${newThread.value.result_thread_title.score}`
+    })
 
-  function draft() {}
+    /**
+     * Poll
+     */
 
-  const previewThreadTitle = computed(() => {
-    return `${newThread.value.result_thread_title.tournament} ${newThread.value.result_thread_title.round} - ${newThread.value.result_thread_title.winner} defeat ${newThread.value.result_thread_title.looser} - ${newThread.value.result_thread_title.score}`
-  })
-
-
+    const { newPoll } = useCreatePoll(newThread)
+    
   return {
+    created,
     showSchedulingModal,
     previewThreadTitle,
     newPoll,

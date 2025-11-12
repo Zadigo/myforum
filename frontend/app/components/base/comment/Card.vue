@@ -11,7 +11,7 @@
         <volt-dropdown id="something" :items="actions">
           <template #button="{ toggle }">
             <volt-secondary-button rounded @click="toggle">
-              <Icon name="fa-solid:ellipsis-vertical" />
+              <icon name="fa-solid:ellipsis-vertical" />
             </volt-secondary-button>
           </template>
         </volt-dropdown>
@@ -21,7 +21,7 @@
       <div class="bg-gray-50 p-3 rounded-sm mt-6" v-html="comment.content_html" />
 
       <!-- Actions -->
-      <BaseCommentCardActions :comment="comment" @reply="handleReply" />
+      <base-comment-card-actions :comment="comment" @reply="handleReply" />
     </template>
   </volt-card>
 </template>

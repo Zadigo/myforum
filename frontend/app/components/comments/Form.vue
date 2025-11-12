@@ -77,7 +77,15 @@ async function createNewPost () {
 }
 
 //
-async function saveDraft () {}
+async function saveDraft () {
+  try {
+    await $nuxtAuthentication('/v1/comments/create', { method: 'POST', body: newComment.value })
+    emit('created')
+  } catch (e) {
+    console.log(e)
+    customHandleError(e)
+  }
+}
 
 //
 function handleEditorContent (data: EditorData) {

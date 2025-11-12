@@ -67,8 +67,8 @@ async function getSearch() {
   //   handleError(e)
   // }
   return await $fetch<SearchApiResponse>('/search', {
+    baseURL: config.public.prodDomain,
     method: 'POST',
-    baseURL: config.public.djangoProdUrl,
     body: {
       q
     }

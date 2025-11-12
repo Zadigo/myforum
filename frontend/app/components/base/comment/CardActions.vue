@@ -44,16 +44,38 @@ const loginModal = useState('loginModal')
 const { isAuthenticated } = useUser()
 
 const props = defineProps<{ comment: UserComment }>()
-const emit = defineEmits<{ reply: [comment: UserComment]}>()
+const emit = defineEmits<{
+  reply: [comment: UserComment],
+  quote: [commentId: number],
+  bookmark: [commentId: number],
+  share: [commentId: number]
+}>()
 
 //
-async function handleQuoteFrom() {}
+async function handleQuoteFrom() {
+  emit('quote', props.comment.id)
+}
 
 //
-async function handleBookmark() {}
+async function handleBookmark() {
+  emit('bookmark', props.comment.id)
+}
+
+const { share, isSupported } = useShare()
 
 //
-function handleShare() {}
+function handleShare() {
+  if (!isSupported) {
+    alert('Sharing is not supported in your browser.')
+    return
+  }
+
+  share({
+    title: props.comment.title || `Comment from ${props.comment.user.username}`,
+    text: props.comment.content,
+    url: window.location.href + `#comment-${props.comment.id}`
+  })
+}
 
 //
 async function handleReply() {

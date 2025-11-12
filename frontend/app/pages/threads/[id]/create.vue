@@ -39,20 +39,20 @@
 
       <template #footer>
         <div class="space-x-2 py-5">
-          <volt-button @click="() => create">
+          <volt-button @click="() => create()">
             Create
           </volt-button>
           <volt-button @click="showSchedulingModal=true">
             Schedule
           </volt-button>
-          <volt-button @click="() => create">
+          <volt-button @click="() => create()">
             Save draft
           </volt-button>
           <volt-button>
             Preview
           </volt-button>
           <volt-button :to="`/forums/${$route.params.id}`">
-            Cancel
+            Cancelù
           </volt-button>
         </div>
       </template>
@@ -76,18 +76,41 @@
 </template>
 
 <script setup lang="ts">
-import { useThread, useCreatePoll, useSearchTags } from '~/composables/use/thread'
 import { threadTypes } from '~/data/constants/threads'
 
 definePageMeta({
   name: 'Create Thread'
 })
 
+/**
+ * Thread
+ */
+
 const { newThread, showSchedulingModal, previewThreadTitle, create } = await useThread()
+
+/**
+ * Poll
+ */
+
 const { newPoll } = useCreatePoll(newThread)
+
+/**
+ * Tags
+ */
+
 const { searchComplete, search, tags } = await useSearchTags(newThread)
 
+/**
+ * SEO
+ */
+
 useHead({
-  title: 'Create a new thread'
+  title: 'Create a new thread',
+  meta: [
+    {
+      name: 'description',
+      content: 'Create a new thread in the forum'
+    }
+  ]
 })
 </script>

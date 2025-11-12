@@ -8,7 +8,7 @@
 import { useSessionStorage } from '@vueuse/core';
 import type { User } from '~/types';
 
-const { $client } = useNuxtApp()
+const { $nuxtAuthentication } = useNuxtApp()
 
 const authStore = useAuthentication()
 const cookieUserProfile = useSessionStorage<User>('user', null, {
@@ -24,9 +24,9 @@ const cookieUserProfile = useSessionStorage<User>('user', null, {
 
 async function handleGetProfile() {
   try {
-    const response = await $client.get<User>('/accounts/profile')
-    authStore.userProfile = response.data
-    cookieUserProfile.value = response.data
+    const data = await $nuxtAuthentication<User>('/accounts/profile', { method: 'GET' })
+    authStore.userProfile = data
+    cookieUserProfile.value = data
   } catch {
     // Do something
   }

@@ -1,5 +1,5 @@
 <template>
-  <VoltCard v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="mb-2 shadow-sm">
+  <volt-card v-for="comment in comments" :id="`post-${comment.id}`" :key="comment.id" class="mb-2 shadow-sm">
     <template v-if="showActions" #header>
       <div class="flex justify-between items-center">
         <span :aria-label="comment.title || ''">
@@ -86,7 +86,7 @@
         </volt-button>
       </div>
     </template>
-  </VoltCard>
+  </volt-card>
 </template>
 
 <script setup lang="ts">

@@ -1,12 +1,11 @@
-from rest_framework import generics
-from polls.models import Answer, Poll
-from polls.api import serializers
 from celery import group
 from comments.api.serializers import CommentSerializer
 from django.core.cache import cache
 from django.db.models import Case, Q, Value, When
 from django.shortcuts import get_object_or_404
 from moderation.models import UserModerationPreference
+from polls.api import serializers
+from polls.models import Answer, Poll
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import NotAcceptable, PermissionDenied
@@ -98,9 +97,12 @@ class ThreadComments(generics.RetrieveAPIView):
 
 
 class CreateThread(generics.CreateAPIView):
+    """API endpoint that allows the creation of sub thread
+     under a main thread"""
+
     queryset = MainThread.objects.all()
     serializer_class = ValidateMainThreadSerializer
-    permissions = [IsAuthenticated, HasMainThreadPermissions]
+    permissions = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -154,12 +156,12 @@ class ThreadPoll(generics.RetrieveAPIView):
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
-        
+
         try:
             obj = queryset.get()
         except:
             return None
-        else:         
+        else:
             self.check_object_permissions(self.request, obj)
             return obj
 

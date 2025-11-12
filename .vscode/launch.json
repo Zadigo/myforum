@@ -15,7 +15,8 @@
             "name": "Django: My forum",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}\\manage.py",
+            "program": "${workspaceFolder}/forum_backend/manage.py",
+            "envFile": "${workspaceFolder}/forum_backend/.env",
             "args": [
                 "runserver"
             ],

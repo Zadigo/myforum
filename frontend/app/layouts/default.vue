@@ -1,23 +1,25 @@
 <template>
   <section id="forum">
     <!-- Navbar -->
-    <BaseNavbar />
+    <base-navbar />
 
     <div class="grid grid-cols-12 max-w-7xl mx-auto gap-4 my-20" role="main">
       <div class="col-span-8">
         <slot />
       </div>
 
-      <ForumsAside class="col-span-4" />
+      <forums-aside class="col-span-4" />
     </div>
 
     <!-- Footer -->
-    <BaseFooter />
+    <base-footer />
     
     <!-- Modals -->
     <client-only>
-      <ModalsLogin />
-      <ModalsSearch />
+      <template #default>
+        <modals-login />
+        <modals-search />
+      </template>
     </client-only>
   </section>
 </template>

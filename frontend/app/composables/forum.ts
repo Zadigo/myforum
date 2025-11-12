@@ -18,8 +18,8 @@ const ForumSchema = z.object({
 type ValidatedForum = z.infer<typeof ForumSchema>
 
 export function useForumsComposable() {
-  const { $client } = useNuxtApp()
-  const { handleError } = useErrorHandler()
+  const { $nuxtAuthentication } = useNuxtApp()
+  const { customHandleError } = useErrorHandler()
   const { forumsList } = storeToRefs(useForums())
 
   const cachedForums = useSessionStorage('forums', [], {
@@ -35,8 +35,8 @@ export function useForumsComposable() {
 
   async function getForums() {
     try {
-      const response = await $client.get<Forum[]>('/forums/')
-      const validatedData = response.data.reduce<ValidatedForum[]>((validForums, forum: Forum) => {
+      const data = await $nuxtAuthentication<Forum[]>('/forums/', { method: 'GET' })
+      const validatedData = data.reduce<ValidatedForum[]>((validForums, forum: Forum) => {
         try {
           const validItem = ForumSchema.parse(forum)
           validForums.push(validItem)
@@ -49,7 +49,7 @@ export function useForumsComposable() {
       forumsList.value = validatedData
       cachedForums.value = validatedData
     } catch (error) {
-      handleError(error)
+      customHandleError(error)
     }
   }
 

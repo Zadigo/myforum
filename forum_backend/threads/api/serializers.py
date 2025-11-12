@@ -133,7 +133,15 @@ class ValidateMainThreadSerializer(Serializer):
         )
 
         comments_tasks.analyze_comment.apply_async(
-            (comment.id, comment.content), countdown=30)
+            args=[
+                comment.id, 
+                comment.content
+            ],
+            link=[
+                comments_tasks.moderate_comment.s(comment.id)
+            ],
+            countdown=30
+        )
 
         if validated_data['add_poll']:
             if validated_data['poll'] is None:

@@ -1,7 +1,7 @@
 <template>
   <article v-for="(thread, i) in forumThreads" :key="thread.id" :class="{ 'mt-1': i > 0 }" role="article" @click="forumStore.setCurrentThread(thread.id)">
     <NuxtLink :to="`/threads/${thread.id}`" :aria-label="thread.title" class="text-dark">
-      <VoltCard class="card shadow-sm">
+      <volt-card class="card shadow-sm">
         <template #content>
           <div class="flex justify-start items-center gap-2 mb-4">
             <VoltAvatar image="/avatar1.png" shape="circle" />
@@ -19,7 +19,7 @@
             <!-- <span class="badge bg-light text-dark p-2 ms-2">{{ formatData(thread.latest_comment.created_on) }}</span> -->
           </div>
         </template>
-      </VoltCard>
+      </volt-card>
     </NuxtLink>
   </article>
 </template>

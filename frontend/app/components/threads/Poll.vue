@@ -1,5 +1,5 @@
 <template>
-  <VoltCard v-if="poll && poll.has_poll" class="shadow-sm bg-secondary-400">
+  <volt-card v-if="poll && poll.has_poll" class="shadow-sm bg-secondary-400">
     <template #content>
       <h5 class="text-2xl font-bold">
         {{ poll.poll.question }}
@@ -9,45 +9,45 @@
         <div v-if="poll.poll.poll_type === 'Single'" id="single-choices">
           {{ newAnswer.single_answer }}
           <div v-for="possibility in poll.poll.possibility_set" :key="possibility.id">
-            <VoltLabel>
+            <volt-label label-for="possibility">
               <VoltRadioButton v-model="newAnswer.single_answer" :value="possibility.id" :name="possibility.id" />
               <label>{{ possibility.text }}</label>
-            </VoltLabel>
+            </volt-label>
           </div>
         </div>
 
         <div v-else-if="poll.poll.poll_type === 'Multiple'" id="multiple-choices" class="space-y-5">
-          <VoltLabel v-for="possibility in poll.poll.possibility_set" :key="possibility.id">
+          <volt-label v-for="possibility in poll.poll.possibility_set" :key="possibility.id" label-for="possibility-multiple">
             <VoltCheckbox v-model="newAnswer.answers" :value="possibility.id" />
             <label>{{ possibility.text }}</label>
-          </VoltLabel>
+          </volt-label>
         </div>
       </div>
       
       <div v-else class="row mt-2">
-        <VoltButton rounded>
+        <volt-button rounded>
           Show results
-        </VoltButton>
+        </volt-button>
       </div>
 
       <div class="flex justify-end">
-        <VoltButton :disabled="answered" @click="async () => await submitAnswer()">
+        <volt-button :disabled="answered" @click="async () => await submitAnswer()">
           Submit answer
-        </VoltButton>
+        </volt-button>
       </div>
     </template>
-  </VoltCard>
+  </volt-card>
 </template>
 
 <script setup lang="ts">
-import type { CustomRouteIdParamsGeneric, PollApiResponse } from '~/types'
+import type { RouteIdParamsGeneric, PollApiResponse } from '~/types'
 
 interface NewAnswer {
   single_answer: number | null
   answers: number[]
 }
 
-const { id } = useRoute().params as CustomRouteIdParamsGeneric
+const { id } = useRoute().params as RouteIdParamsGeneric
 const answered = ref<boolean>(false)
 
 const newAnswer = ref<NewAnswer>({

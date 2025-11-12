@@ -60,8 +60,8 @@ class ValidateComment(Serializer):
 
         t1 = group(
             [
-                tasks.analyze_comment_with_ai.s(new_comment.content),
-                tasks.moderate_comment.s(new_comment.content)
+                tasks.analyze_comment_with_ai.s(new_comment.id),
+                tasks.moderate_comment.s(new_comment.id)
             ]
         )
 
@@ -91,8 +91,8 @@ class ValidateComment(Serializer):
 
         t1 = group(
             [
-                tasks.analyze_comment_with_ai.s(instance.content),
-                tasks.moderate_comment.s(instance.content)
+                tasks.analyze_comment_with_ai.s(instance.id),
+                tasks.moderate_comment.s(instance.id)
             ]
         )
 

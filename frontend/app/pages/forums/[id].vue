@@ -10,9 +10,9 @@
           {{ sortingMethod }}
 
           <!-- Filtering -->
-          <VoltButton id="filter">
+          <volt-button id="filter">
             <Icon name="i-fa-solid:filter" />
-          </VoltButton>
+          </volt-button>
         </client-only>
       </div>
     </div>
