@@ -1,30 +1,37 @@
 <template>
   <section id="comments">
     <client-only>
-      <!-- New Comment -->
-      <div v-if="store.showCreateCommentForm" class="row">
-        <!-- Form -->
-        <keep-alive>
-          <comments-form @editor-content="handleEditorContent" @created="handleCommentCreated" @close="store.showCreateCommentForm=false" />
-        </keep-alive>
-      </div>
-
-      <!-- Main -->
-      <div v-else class="row">
-        <!-- Poll -->
-        <suspense>
-          <async-poll-section class="mb-3" />
-
-          <template #fallback>
-            <volt-skeleton class="h-[200px]" />
-          </template>
-        </suspense>
-
-        <!-- Comments -->
-        <div>
-          <comments-wrapper :comments="threadComments" @reply="handleReply" />
+      <template #default>
+        <!-- New Comment -->
+        <div v-if="showCreateCommentForm" class="row">
+          <!-- Form -->
+          <keep-alive>
+            <comments-form @editor-content="handleEditorContent" @created="handleCommentCreated" @close="toggleShowCreateCommentForm" />
+          </keep-alive>
         </div>
-      </div>
+  
+        <!-- Main -->
+        <div v-else class="row">
+          <!-- Poll -->
+          <suspense>
+            <async-poll-section class="mb-3" />
+  
+            <template #fallback>
+              <volt-skeleton class="h-[200px]" />
+            </template>
+          </suspense>
+  
+          <!-- Comments -->
+          <div>
+            <comments-wrapper :comments="threadComments" @reply="handleReply" />
+          </div>
+        </div>
+      </template>
+
+      <template #fallback>
+        <volt-skeleton height="200px" width="100%" />
+        <volt-skeleton height="100px" width="100%" />
+      </template>
     </client-only>
 
     <div class="row">
@@ -93,10 +100,7 @@ const { execute } = await useFetch<ForumThread>(`/api/threads/${id}`, {
 
 await execute()
 
-/**
- *
- * @param data 
- */
+//
 function handleEditorContent(data: { text: string, delta: string, html: string }) {
   console.log(data)
 }
@@ -109,14 +113,20 @@ async function handlePagination() {
 //
 async function handleCommentCreated () {
   // await getComments()
-  store.showCreateCommentForm = false
+  toggleShowCreateCommentForm()
 }
+
+/**
+ * Replies
+ */
+
+const [showCreateCommentForm, toggleShowCreateCommentForm] = useToggle(false)
 
 // TODO: Does not return the last comment that
 // was created in the database
 function handleReply(comment: UserComment) {
   replyingToComment.value = comment
-  store.showCreateCommentForm = true
+  toggleShowCreateCommentForm()
 }
 
 /**

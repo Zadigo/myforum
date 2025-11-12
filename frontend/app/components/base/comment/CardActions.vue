@@ -5,7 +5,7 @@
     </volt-secondary-button>
 
     <volt-secondary-button color="primary" variant="text" @click="handleQuoteFrom">
-      <icon name="i-lucide:quote-left" class="me-2" />Quote from
+      <icon name="i-lucide:quote" class="me-2" />Quote from
     </volt-secondary-button>
     
     <volt-secondary-button color="primary" variant="text" @click="handleBookmark">

@@ -38,10 +38,10 @@
 
         <div class="flex justify-end">
           <VoltSecondaryButton size="small" rounded>
-            <NuxtLink to="/">
-              <Icon name="fa-solid:link" />
+            <nuxt-link to="/">
+              <icon name="i-lucide:link" />
               Other threads
-            </NuxtLink>
+            </nuxt-link>
           </VoltSecondaryButton>
         </div>
 

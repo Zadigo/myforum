@@ -3,9 +3,9 @@
     <div class="flex justify-between items-center my-3">
       <div class="flex justify-start align-center gap-2">
         <client-only>
-          <VoltDropButton  id="sort-threads" v-model="sortingMethod" :items="sortMethods">
-            <Icon name="i-fa-solid:sort" />
-          </VoltDropButton>
+          <volt-dropdown  id="sort-threads" v-model="sortingMethod" :items="sortMethods">
+            <icon name="i-fa-solid:sort" />
+          </volt-dropdown>
 
           {{ sortingMethod }}
 
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { sortMethods, type SortMethodNames } from '~/data'
-import type { CustomRouteIdParamsGeneric, Forum } from '~/types'
+import type { RouteIdParamsGeneric, Forum } from '~/types'
 
 definePageMeta({
   name: 'Forum Threads',
@@ -48,7 +48,7 @@ const AsyncThreadsIterator = defineAsyncComponent({
 const forumStore = useForums()
 const { currentForum } = storeToRefs(forumStore)
 
-const { id } = useRoute().params as CustomRouteIdParamsGeneric
+const { id } = useRoute().params as RouteIdParamsGeneric
 
 // Fetches the forum information based on the ID from the route
 const { data, execute } = useFetch<Forum>(`/api/forums/${id}`, {

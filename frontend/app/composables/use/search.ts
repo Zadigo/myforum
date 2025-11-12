@@ -7,7 +7,7 @@ type _UserSearch = Omit<UserSearch, 'title_only' | 'sub_forums'> & { title_only:
  * Composable for handling search functionality in a forum application
  * @param fetchData - Boolean indicating whether to fetch search results immediately
  */
-export const useSearchComposable = createGlobalState((fetchData = false) => {
+export const useSearchComposable = createGlobalState((fetchData: boolean = false) => {
   if (import.meta.server) {
     return {
       last: ref<UserSearch | null>(null),
@@ -72,21 +72,18 @@ export const useSearchComposable = createGlobalState((fetchData = false) => {
   const results = ref<Undefineableable<SearchApiResponse>>()
 
   async function _fetchImmediately() {
-    const { data, error } = await useFetch<SearchApiResponse>('/v1/search', {
-      method: 'get',
-      query: newSearch.value
+    const data = await $fetch<SearchApiResponse>('/v1/search', {
+      baseURL: useRuntimeConfig().public.prodDomain,
+      method: 'post',
+      body: newSearch.value
     })
 
-    if (isDefined(error)) {
-      console.error('Error fetching search results:', error)
-    }
-
     if (isDefined(data)) {
-      results.value = data.value
+      results.value = data
     }
   }
 
-  const { start }  = useTimeoutFn(_fetchImmediately, 2000)
+  const { start }  = useTimeoutFn(_fetchImmediately, 2000, { immediate: false })
   
   if (fetchData) {
     start()

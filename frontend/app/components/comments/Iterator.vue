@@ -55,7 +55,7 @@
         </volt-button>
 
         <volt-button variant="tonal" @click="handleQuoteFrom">
-          <icon name="i-lucide:quote-left" class="me-2" />Quote from
+          <icon name="i-lucide:quote" class="me-2" />Quote from
         </volt-button>
         
         <volt-button variant="tonal" @click="handleBookmark(comment)">
@@ -74,7 +74,7 @@
         </volt-button>
 
         <volt-button variant="tonal" @click="authStore.openLoginModal=true">
-          <icon name="i-lucide:quote-left" class="me-2" />Quote from
+          <icon name="i-lucide:quote" class="me-2" />Quote from
         </volt-button>
         
         <volt-button variant="tonal" @click="authStore.openLoginModal=true">

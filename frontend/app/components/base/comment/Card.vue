@@ -4,17 +4,17 @@
       <div id="infos" class="flex justify-between align-center">
         <div class="flex items-center gap-2">
           <span class="fw-semibold text-muted">#{{ comment.id }}</span>
-          <Icon name="fa-solid:star-of-life" />
+          <icon name="fa-solid:star-of-life" />
           <span class="font-bold">{{ comment.user.username }}</span>
         </div>
 
-        <VoltDropButton id="something" :items="actions">
+        <volt-dropdown id="something" :items="actions">
           <template #button="{ toggle }">
-            <VoltSecondaryButton rounded @click="toggle">
+            <volt-secondary-button rounded @click="toggle">
               <Icon name="fa-solid:ellipsis-vertical" />
-            </VoltSecondaryButton>
+            </volt-secondary-button>
           </template>
-        </VoltDropButton>
+        </volt-dropdown>
       </div>
 
       <!-- Content -->

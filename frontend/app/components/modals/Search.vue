@@ -34,7 +34,7 @@
 
         <!-- Forums -->
         <div class="py-3">
-          <volt-autocomplete v-model="newSearch.search_in_forums" :suggestions="['1', '2']" placeholder="Search in forums..." @complete="() => {}" />
+          <volt-auto-complete v-model="newSearch.search_in_forums" :suggestions="['1', '2']" placeholder="Search in forums..." @complete="() => {}" />
 
           <volt-label label-for="include-subforums" label="Include sub-forums in search">
             <volt-toggle-switch v-model="newSearch.sub_forums" />
