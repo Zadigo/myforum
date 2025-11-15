@@ -15,11 +15,16 @@ django_asgi_application = get_asgi_application()
 # https://github.com/django/daphne/issues/347
 # https://channels.readthedocs.io/en/stable/deploying.html#configuring-the-asgi-application
 
+from notifications.routing import ws_urlpatterns as notification_ws_urlpatterns  # noqa
+from forum_backend.ws_middleware import JWTAuthMiddleware  # noqa
+
 application = ProtocolTypeRouter({
     'http': django_asgi_application,
     'websocket': AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter([])
+        JWTAuthMiddleware(
+            URLRouter([
+                *notification_ws_urlpatterns
+            ])
         )
     )
 })

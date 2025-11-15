@@ -1,8 +1,5 @@
 import { isRef, ref } from 'vue'
 
-type ArrayAnyValues = (string | number)[]
-type RefArrayAnyValues = ArrayAnyValues | Ref<(string | number)[]>
-
 export function useUtilities () {
     function scrollToTop () {
         window.scroll({ top: 0, behavior: 'smooth' })
@@ -153,4 +150,12 @@ export function useDjangoUtilies () {
         getBaseUrl,
         builLimitOffset
     }
+}
+
+/**
+ * Function to get WebSocket protocol based on current location protocol
+ */
+export function getWsUrl() {
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://'
+    return useRuntimeConfig().public.prodDomain.replace(/^https?:\/\//, protocol)
 }

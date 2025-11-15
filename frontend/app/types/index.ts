@@ -7,6 +7,7 @@ export type * from './user'
 export type * from './threads'
 export type * from './comments'
 export type * from './accounts'
+export type * from './user_notifications'
 
 export type Arrayable<T> = T[]
 

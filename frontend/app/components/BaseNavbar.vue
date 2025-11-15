@@ -72,6 +72,15 @@ const loginModal = useState<boolean>('loginModal')
 const searchModal = useState<boolean>('searchModal')
 
 /**
+ * Notifications
+ */
+
+// const { notifications } = useNotificationsComposable()
+// console.log('Notifications:', notifications.value)
+
+const { notifications, count } = useWsNotificationComposable()
+
+/**
  * Dark Mode
  */
 

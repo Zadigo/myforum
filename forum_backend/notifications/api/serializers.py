@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from notifications import models
-from accounts.api.serializers import UserSerializer
+from accounts.api.serializers import SimpleUserSerializer
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = SimpleUserSerializer()
 
     class Meta:
         model = models.Notification

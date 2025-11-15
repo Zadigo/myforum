@@ -321,3 +321,16 @@ FIXTURES_DIRS = [
     'fixtures/forum',
     'fixtures/threads',
 ]
+
+
+# Channels
+# https://channels.readthedocs.io/en/latest/topics/channel_layers.html
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL]
+        }
+    }
+}
