@@ -37,12 +37,12 @@
     "animate.css": "^4.1.1",
     "dayjs": "^1.11.19",
     "eslint": "^9.39.1",
-    "firebase": "^12.5.0",
+    "firebase": "^12.6.0",
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^7.0.0",
     "jwt-decode": "^4.0.0",
     "nuxt": "^4.2.1",
-    "nuxt-authentication": "^1.0.6",
+    "nuxt-authentication": "^1.0.8",
     "nuxt-gtag": "^4.1.0",
     "nuxt-openapi-docs-module": "^5.3.2",
     "nuxt-vuefire": "^1.1.0",
@@ -72,7 +72,8 @@
     "playwright-core": "^1.56.1",
     "sass-embedded": "^1.93.3",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.8",
-    "vue-tsc": "^3.1.3"
-  }
+    "vitest": "^4.0.9",
+    "vue-tsc": "^3.1.4"
+  },
+  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
 }

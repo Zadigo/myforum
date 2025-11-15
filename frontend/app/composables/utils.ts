@@ -1,161 +1,200 @@
 import { isRef, ref } from 'vue'
+import type { Undefineableable } from '~/types'
 
-export function useUtilities () {
-    function scrollToTop () {
-        window.scroll({ top: 0, behavior: 'smooth' })
+export function useUtilities() {
+  function scrollToTop() {
+    window.scroll({ top: 0, behavior: 'smooth' })
+  }
+
+  // TODO: Remove. Use as simple function
+  function isNull<T>(item: T): boolean {
+    let trueValue
+
+    if (isRef(item)) {
+      trueValue = item.value
+    } else {
+      trueValue = item
     }
 
-    // TODO: Remove. Use as simple function
-    function isNull<T>(item: T): boolean {
-        let trueValue
+    return (
+      trueValue === null ||
+      typeof trueValue === 'undefined' ||
+      trueValue === '' ||
+      trueValue === ' '
+    )
+  }
 
-        if (isRef(item)) {
-            trueValue = item.value
-        } else {
-            trueValue = item
+  function hasNull<T extends ArrayAnyValues>(items: T): boolean {
+    return items.some(v => {
+      return v === null || v === '' || typeof v === 'undefined'
+    })
+  }
+
+  function readFile(e: Event): string | undefined {
+    let preview
+    const input = e.target as HTMLInputElement
+
+    if (input.files) {
+      const file = input.files[0]
+      const reader = new FileReader
+
+      reader.onload = e => {
+        preview = e.target?.result
+      }
+
+      reader.readAsDataURL(file)
+    }
+
+    return preview
+  }
+
+  function readFiles(e: Event): (string | ArrayBuffer | null | undefined)[] {
+    const input = e.target as HTMLInputElement
+
+    if (input.files) {
+      let preview: string | ArrayBuffer | undefined | null
+      const reader = new FileReader
+
+      reader.onload = e => {
+        preview = e.target?.result
+      }
+
+      return Object.values(input.files).map(f => {
+        if (f) {
+          reader.readAsDataURL(f)
         }
-
-        return (
-            trueValue === null ||
-            typeof trueValue  === 'undefined' ||
-            trueValue === '' ||
-            trueValue === ' '
-        )
-    }
-
-    function hasNull<T extends ArrayAnyValues>(items: T): boolean {
-        return items.some(v => {
-            return v === null || v === '' || typeof v === 'undefined'
-        })
-    }
-
-    function readFile (e: Event): string | undefined {
-        let preview
-        const input = e.target as HTMLInputElement
-
-        if (input.files) {
-            const file = input.files[0]
-            const reader = new FileReader
-
-            reader.onload = e => {
-                preview = e.target?.result
-            }
-
-            reader.readAsDataURL(file)
-        }
-
         return preview
+      })
     }
 
-    function readFiles (e: Event): (string | ArrayBuffer | null | undefined)[] {
-        const input = e.target as HTMLInputElement
-        
-        if (input.files) {
-            let preview: string | ArrayBuffer | undefined | null
-            const reader = new FileReader
+    return []
+  }
 
-            reader.onload = e => {
-                preview = e.target?.result
-            }
+  // function debounce<F extends (...args[]: any[]) => void>(fn: F, delay: number): (...args: Parameters<F>) => void {
+  //     let timer: ReturnType<typeof setTimeout>
 
-            return Object.values(input.files).map(f => {
-                if (f) {
-                    reader.readAsDataURL(f)
-                }
-                return preview
-            }) 
-        }
-        
-        return []
-    }
+  //     return function (...args: Parameters<F>) {
+  //         clearTimeout(timer)
+  //         timer = setTimeout(() => fn(...args), delay)
+  //     };
+  // }
 
-    // function debounce<F extends (...args[]: any[]) => void>(fn: F, delay: number): (...args: Parameters<F>) => void {
-    //     let timer: ReturnType<typeof setTimeout>
-
-    //     return function (...args: Parameters<F>) {
-    //         clearTimeout(timer)
-    //         timer = setTimeout(() => fn(...args), delay)
-    //     };
-    // }
-
-    return {
-        isNull,
-        scrollToTop,
-        // debounce,
-        hasNull,
-        readFile,
-        readFiles
-    }
+  return {
+    isNull,
+    scrollToTop,
+    // debounce,
+    hasNull,
+    readFile,
+    readFiles
+  }
 }
 
-export function useDjangoUtilies () {
-    const secure = ref(false)
-    const port = ref(8000)
-    const paginationUrl = ref<URL>()
+export function useDjangoUtilies() {
+  const secure = ref(false)
+  const port = ref(8000)
+  const paginationUrl = ref<URL>()
 
-    function getBaseUrl() {
-        let domain = `127.0.0.1:${port.value}`
+  function getBaseUrl() {
+    let domain = `127.0.0.1:${port.value}`
 
-        if (process.env.DEV === 'production') {
-            domain = process.env.NUXT_DJANGO_PROD_URL || ''
-        }
-
-        const loc = secure.value ? 'https://' : 'http://'
-        const bits = [loc, domain]
-        const url = bits.join('')
-
-        return new URL(url).toString()
+    if (process.env.DEV === 'production') {
+      domain = process.env.NUXT_DJANGO_PROD_URL || ''
     }
 
-    function mediaPath (path: string | null | undefined, altImage?: string | undefined): string | undefined {
-        const baseUrl = getBaseUrl()
+    const loc = secure.value ? 'https://' : 'http://'
+    const bits = [loc, domain]
+    const url = bits.join('')
 
-        if (path) {
-            if (path.startsWith('http')) {
-                return path
-            }
+    return new URL(url).toString()
+  }
 
-            const fullPath = path.startsWith('/media') ? `${path}` : `/media/${path}`
-            return new URL(fullPath, baseUrl).toString()
-        } else {
-            return altImage
-        }
+  function mediaPath(path: string | null | undefined, altImage?: string | undefined): string | undefined {
+    const baseUrl = getBaseUrl()
+
+    if (path) {
+      if (path.startsWith('http')) {
+        return path
+      }
+
+      const fullPath = path.startsWith('/media') ? `${path}` : `/media/${path}`
+      return new URL(fullPath, baseUrl).toString()
+    } else {
+      return altImage
+    }
+  }
+
+  function builLimitOffset(url: string | null | undefined, limit = 100, offset = 100) {
+    let defaultLimit: string | number = 100
+    let defaultOffset: string | number = 0
+
+    if (url) {
+      paginationUrl.value = new URL(url)
+
+      const potentialLimit = paginationUrl.value.searchParams.get('limit')
+      const potentialOffset = paginationUrl.value.searchParams.get('offset')
+
+      defaultLimit = potentialLimit || limit
+      defaultOffset = potentialOffset || offset
     }
 
-    function builLimitOffset (url: string | null | undefined, limit = 100, offset = 100) {
-        let defaultLimit: string | number = 100
-        let defaultOffset: string | number = 0
-
-        if (url) {
-            paginationUrl.value = new URL(url)
-
-            const potentialLimit = paginationUrl.value.searchParams.get('limit')
-            const potentialOffset = paginationUrl.value.searchParams.get('offset')
-
-            defaultLimit = potentialLimit || limit
-            defaultOffset = potentialOffset || offset
-        }
-
-        const query = new URLSearchParams({ limit: defaultLimit.toString(), offset: defaultOffset.toString() }).toString()
-        
-        return {
-            query,
-            limit: defaultLimit,
-            offset: defaultOffset 
-        }
-    }
+    const query = new URLSearchParams({ limit: defaultLimit.toString(), offset: defaultOffset.toString() }).toString()
 
     return {
-        mediaPath,
-        getBaseUrl,
-        builLimitOffset
+      query,
+      limit: defaultLimit,
+      offset: defaultOffset
     }
+  }
+
+  return {
+    mediaPath,
+    getBaseUrl,
+    builLimitOffset
+  }
 }
 
 /**
  * Function to get WebSocket protocol based on current location protocol
  */
 export function getWsUrl() {
-    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://'
-    return useRuntimeConfig().public.prodDomain.replace(/^https?:\/\//, protocol)
+  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://'
+  return useRuntimeConfig().public.prodDomain.replace(/^https?:\/\//, protocol)
+}
+
+export function useWebsocketMessage<R, S>() {
+  function send(data: S, ws?: ReturnType<typeof useWebSocket>): Undefineableable<string> {
+    if (isDefined(ws)) ws.send(JSON.stringify(data))
+    return JSON.stringify(data)
+  }
+
+  function simpleWsSend(data: S, ws?: WebSocket): string {
+    if (isDefined(ws)) ws.send(JSON.stringify(data))
+    return JSON.stringify(data)
+  }
+
+  function _parse<R>(data: string): R {
+    return JSON.parse(data) as R
+  }
+
+  const parse = reactify(_parse<R>)
+
+  return {
+    /**
+     * Send data through WebSocket connection.
+     * @param data Data to send.
+     * @param ws WebSocket instance.
+     */
+    send,
+    /**
+     * Simple send function for native WebSocket.
+     * @param data Data to send.
+     * @param ws Native WebSocket instance.
+     */
+    simpleWsSend,
+    /**
+     * Parse incoming WebSocket message data.
+     * @param data Incoming message data as string.
+     */
+    parse
+  }
 }

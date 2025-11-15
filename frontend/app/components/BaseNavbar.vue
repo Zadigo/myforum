@@ -37,9 +37,34 @@
             </template>
           </client-only>
 
-          <volt-secondary-button>
-            <icon name="i-lucide:bell" />
-          </volt-secondary-button>
+          <client-only>
+            <template #default>
+              <volt-dropdown id="notifications" :is-popover="true">
+                <template #default="{ attrs }">
+                  <volt-secondary-button :badge="`${count}`" @click="attrs.toggle">
+                    <icon name="i-lucide:bell" />
+                  </volt-secondary-button>
+                </template>
+
+                <template #popover-content>
+                  <div v-for="notification in notifications" :key="notification.id">
+                    <div class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800">
+                      Message from {{ notification.user.username }}: {{ notification.message }}
+                    </div>
+                  </div>
+
+                  <volt-button @click="pauseNotifications">
+                    <span v-if="notificationsActive">Pause Notifications</span>
+                    <span v-else>Resume Notifications</span>
+                  </volt-button>
+                </template>
+              </volt-dropdown>
+            </template>
+
+            <template #fallback>
+              Loading...
+            </template>
+          </client-only>
 
           <client-only>
             <template #default>
@@ -75,10 +100,7 @@ const searchModal = useState<boolean>('searchModal')
  * Notifications
  */
 
-// const { notifications } = useNotificationsComposable()
-// console.log('Notifications:', notifications.value)
-
-const { notifications, count } = useWsNotificationComposable()
+const { notifications, count, pauseNotifications, notificationsActive } = useWsNotificationComposable()
 
 /**
  * Dark Mode
