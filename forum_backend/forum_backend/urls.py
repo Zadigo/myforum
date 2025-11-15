@@ -61,6 +61,10 @@ urlpatterns = [
         include('accounts.api.urls')
     ),
     path(
+        'v1/notifications/',
+        include('notifications.urls')
+    ),
+    path(
         'v1/forums/',
         include('forums.api.urls')
     ),

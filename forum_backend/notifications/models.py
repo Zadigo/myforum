@@ -1,7 +1,6 @@
+from comments.models import Comment
 from django.contrib.auth import get_user_model
 from django.db import models
-
-from comments.models import Comment
 from notifications.choices import NotificationTypes
 
 
