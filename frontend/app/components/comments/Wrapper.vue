@@ -4,7 +4,6 @@
     
     <div id="replies" class="w-full flex justify-end mt-6">
       <div class="w-5/6">
-        <!-- <p class="my-1 text-right">Replies</p> -->
         <volt-card v-for="x in 3" :key="x" class="shadow-sm mt-1">
           <template #content>
             Reply {{ x }}

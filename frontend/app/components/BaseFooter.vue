@@ -1,15 +1,23 @@
 <template>
   <footer class="text-center bg-primary-600 dark:bg-primary-900 dark:text-primary-300">
-    <div class="container pt-4">
-      <section class="mb-4">
-        <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#" role="button">
+    <div class="flex justify-center pt-4">
+      <section class="mb-4 flex justify-center space-x-4">
+        <volt-link>
           <icon name="i-fa7-brands:facebook" />
-        </a>
+        </volt-link>
+
+        <volt-link>
+          <icon name="i-fa7-brands:instagram" />
+        </volt-link>
+        
+        <volt-link>
+          <icon name="i-fa7-brands:twitter" />
+        </volt-link>
       </section>
     </div>
 
     <!-- Copyright -->
-    <div class="text-center text-light p-3 dark:bg-primary-800">
+    <div class="text-center text-light p-3 bg-primary-700 dark:bg-primary-800">
       © {{ currentYear }} Copyright:
       <NuxtLink to="/" class="text-light">
         My forum

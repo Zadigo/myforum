@@ -1,11 +1,11 @@
 from celery import shared_task
-from celery.utils.log import get_logger
+from celery.utils.log import get_task_logger
 from comments.models import Comment
 from django.contrib.auth import get_user_model
 from notifications.models import Notification
 from threads.models import MainThread
 
-logger = get_logger('comments')
+logger = get_task_logger(__name__)
 
 
 @shared_task
@@ -34,6 +34,7 @@ def create_notifications(**kwargs: dict[str, str | int]):
             'notification_type': kwargs['notification_type']
         })
 
+    logger.warning(f"Created notifications for users: {user_ids}")
     return user_ids
 
 

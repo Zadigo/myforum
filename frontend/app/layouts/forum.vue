@@ -1,11 +1,11 @@
 <template>
-  <section id="forum">
+  <section id="forum" class="my-30">
     <!-- Navbar -->
     <base-navbar />
 
     <!-- Header -->
     <headers-forum />
-    
+
     <div class="grid grid-cols-12 px-10 max-w-7xl mx-auto gap-4 my-20" role="main">
       <div class="col-span-8">
         <slot />
@@ -18,7 +18,7 @@
 
     <!-- Footer -->
     <base-footer />
-    
+
     <!-- Modals -->
     <ClientOnly>
       <ModalsLogin />

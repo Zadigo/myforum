@@ -96,7 +96,7 @@ const emit = defineEmits<{ reply: [comment: UserComment], edit: [comment: UserCo
 
 
 const { $nuxtAuthentication, $humanizeDate } = useNuxtApp()
-const { customHandleError } = useErrorHandler()
+// const { customHandleError } = useErrorHandler()
 
 const store = useForums()
 
@@ -125,7 +125,7 @@ async function handleBookmark(comment: UserComment) {
       method: 'POST'
     })
   } catch (e) {
-    customHandleError(e)
+    // customHandleError(e)
   }
 }
 
@@ -140,7 +140,7 @@ async function handleDeletion(comment: UserComment) {
     await $nuxtAuthentication(`comments/${comment.id}`, { method: 'DELETE' })
     store.threadComments = store.threadComments.filter(c => c.id !== comment.id)
   } catch (e) {
-    customHandleError(e)
+    // customHandleError(e)
   }
 }
 

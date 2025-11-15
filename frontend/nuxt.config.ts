@@ -56,7 +56,8 @@ export default defineNuxtConfig({
         refreshEndpoint: '/auth/v1/token/refresh/',
         login: '/',
         bearerTokenType: 'Token',
-        strategy: 'renew'
+        strategy: 'renew',
+        verifyEndpoint: '/auth/v1/token/verify/'
       }
     }
   },

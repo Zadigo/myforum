@@ -17,10 +17,10 @@ class QuoteSerializer(Serializer):
 class CommentSerializer(Serializer):
     """Serializer for the Comment model"""
 
-    id = fields.IntegerField(read_only=True)
+    id = fields.IntegerField()
     thread = fields.CharField(write_only=True)
-    user = UserSerializer(read_only=True)
-    title = fields.CharField(read_only=True, allow_null=True)
+    user = UserSerializer()
+    title = fields.CharField(allow_null=True)
     content = fields.CharField()
     content_delta = fields.JSONField()
     content_html = fields.CharField()
@@ -28,15 +28,15 @@ class CommentSerializer(Serializer):
     # media_contents = MediaContentSerializer(required=False)
     # quote_set = QuoteSerializer(many=True, required=False)
     active = fields.BooleanField(default=True)
-    pinned = fields.BooleanField(read_only=True, default=False)
-    highlighted = fields.BooleanField(read_only=True, default=False)
-    modified_on = fields.DateTimeField(read_only=True)
-    created_on = fields.DateTimeField(read_only=True)
+    pinned = fields.BooleanField(default=False)
+    highlighted = fields.BooleanField(default=False)
+    modified_on = fields.DateTimeField()
+    created_on = fields.DateTimeField()
 
 
 class ValidateComment(Serializer):
     thread = fields.IntegerField()
-    title = fields.CharField(allow_null=True)
+    title = fields.CharField(allow_blank=True, allow_null=True)
     content = fields.CharField()
     content_delta = fields.JSONField()
     content_html = fields.CharField(allow_null=True)
@@ -60,12 +60,13 @@ class ValidateComment(Serializer):
 
         t1 = group(
             [
+                tasks.analyze_comment.s(new_comment.id, new_comment.content),
                 tasks.analyze_comment_with_ai.s(new_comment.id),
                 tasks.moderate_comment.s(new_comment.id)
             ]
         )
 
-        t1.apply_async(countdown=40)
+        t1.apply_async(countdown=30)
 
         quotes = validated_data['quotes']
         if quotes:
@@ -96,7 +97,7 @@ class ValidateComment(Serializer):
             ]
         )
 
-        t1.apply_async(countdown=40)
+        t1.apply_async(countdown=5)
 
         instance.save()
         return instance

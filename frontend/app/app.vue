@@ -27,8 +27,11 @@
 </template>
 
 <script setup lang="ts">
-const { hasToken } = useNuxtAuthentication()
+const { hasToken, verify } = useNuxtAuthentication()
 const { userId, isAuthenticated } = useUser()
+
+
+await verify('token', 'Token is not valid')
 
 await useSession()
 
@@ -44,6 +47,7 @@ onUnmounted(() => { document.body.classList.remove(...tokens) })
 useState<boolean>('loginModal', () => false)
 useState<boolean>('searchModal', () => false)
 useState<boolean>('createCommentModal', () => false)
+useState<boolean>('loadedQuillEditor', () => false)
 </script>
 
 <style>

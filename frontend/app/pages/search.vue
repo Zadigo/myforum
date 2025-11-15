@@ -47,7 +47,7 @@ const links: Pills[] = [
 ]
 
 const config = useRuntimeConfig()
-const { customHandleError } = useErrorHandler()
+// const { customHandleError } = useErrorHandler()
 const searchResult = ref<SearchApiResponse>()
 
 const { q } = useRoute().params as RouteIdParamsGeneric

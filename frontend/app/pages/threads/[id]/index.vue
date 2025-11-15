@@ -6,7 +6,7 @@
         <div v-if="showCreateCommentForm" class="row">
           <!-- Form -->
           <keep-alive>
-            <comments-form @editor-content="handleEditorContent" @created="handleCommentCreated" @close="toggleShowCreateCommentForm" />
+            <comments-create-form @editor-content="handleEditorContent" @created="handleCommentCreated" @close="toggleShowCreateCommentForm" />
           </keep-alive>
         </div>
   

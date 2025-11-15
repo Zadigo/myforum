@@ -22,9 +22,14 @@ import type { EditorData } from '~/types'
 const { vueApp } = useNuxtApp()
 const emit = defineEmits<{ 'editor-content': [data: EditorData] }>()
 
+const loadedQuillEditor = useState<boolean>('loadedQuillEditor')
+
 if (import.meta.browser) {
-  const { QuillEditor } = await import('@vueup/vue-quill')  
-  vueApp.component('QuillEditor', QuillEditor)
+  if (!loadedQuillEditor.value) {
+    const { QuillEditor } = await import('@vueup/vue-quill')  
+    vueApp.component('QuillEditor', QuillEditor)
+    loadedQuillEditor.value = true
+  }
 }
 
 const editorEl = useTemplateRef('editorEl')

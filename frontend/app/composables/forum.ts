@@ -19,7 +19,7 @@ type ValidatedForum = z.infer<typeof ForumSchema>
 
 export function useForumsComposable() {
   const { $nuxtAuthentication } = useNuxtApp()
-  const { customHandleError } = useErrorHandler()
+  // const { customHandleError } = useErrorHandler()
   const { forumsList } = storeToRefs(useForums())
 
   const cachedForums = useSessionStorage('forums', [], {
@@ -49,7 +49,7 @@ export function useForumsComposable() {
       forumsList.value = validatedData
       cachedForums.value = validatedData
     } catch (error) {
-      customHandleError(error)
+      // customHandleError(error)
     }
   }
 

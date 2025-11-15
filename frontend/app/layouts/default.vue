@@ -1,5 +1,5 @@
 <template>
-  <section id="forum">
+  <section id="forum" class="my-30">
     <!-- Navbar -->
     <base-navbar />
 
