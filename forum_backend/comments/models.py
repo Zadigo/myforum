@@ -1,18 +1,14 @@
-from tabnanny import verbose
 from comments.utils import (files_upload_path, images_upload_path,
                             videos_upload_path)
-from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import ExpressionWrapper, F, Q
-from django.db.models.functions import Now
-from django.db.models.signals import post_save, pre_save
+from django.db.models import F, Q
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToCover
-from notifications.choices import NotificationTypes
 from tags.models import Tag
 from threads.models import MainThread, SubThread
 
@@ -71,7 +67,7 @@ class Quote(models.Model):
     quoted_comment = models.ForeignKey(
         'Comment',
         models.CASCADE,
-        related_name='quoted_omment',
+        related_name='quoted_omment', # TODO: Fix typo later
         help_text=_("The comment that is being quoted"),
         blank=True,
         null=True

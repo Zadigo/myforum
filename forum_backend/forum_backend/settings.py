@@ -334,3 +334,11 @@ CHANNEL_LAYERS = {
         }
     }
 }
+
+
+# Graphene
+# https://docs.graphene-python.org/projects/django/en/latest/
+
+GRAPHENE = {
+    'SCHEMA': 'forum_backend.schema.schema'
+}
