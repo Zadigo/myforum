@@ -2,7 +2,7 @@
 from accounts.api.serializers import UserSerializer
 from celery import group
 from comments import tasks
-from comments.models import Comment, Quote
+from comments.models import Comment, Quote, Reply
 from django.shortcuts import get_object_or_404
 from rest_framework import fields
 from rest_framework.response import Response
@@ -101,3 +101,35 @@ class ValidateComment(Serializer):
 
         instance.save()
         return instance
+
+
+class ValidateReply(Serializer):
+    comment_id = fields.IntegerField()
+    content = fields.CharField()
+    content_delta = fields.JSONField()
+    content_html = fields.CharField(allow_null=True)
+    quotes = fields.ListField()
+
+    def create(self, validated_data):
+        user = self._context['request'].user
+        
+        comment = get_object_or_404(Comment, pk=validated_data['comment_id'])
+        
+        validated_data.pop('comment_id')
+        new_reply = Reply.objects.create(
+            user=user,
+            comment=comment, 
+            **validated_data
+        )
+
+        t1 = group(
+            [
+                tasks.analyze_comment.s(new_reply.id, new_reply.content),
+                tasks.analyze_comment_with_ai.s(new_reply.id),
+                tasks.moderate_comment.s(new_reply.id)
+            ]
+        )
+
+        t1.apply_async(countdown=30)
+
+        return new_reply

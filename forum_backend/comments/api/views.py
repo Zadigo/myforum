@@ -86,3 +86,21 @@ class LatestComments(generics.ListAPIView):
             comments = queryset.order_by('-created_on')
             cache.set('latest_comments', comments, (5 * 60))
         return comments[:5]
+
+
+
+class CreateReplyApi(generics.GenericAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = serializers.ValidateReply
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk, *args, **kwargs):
+        parent_comment = get_object_or_404(Comment, pk=pk)
+
+        validator = self.get_serializer(data=request.data)
+        validator.is_valid(raise_exception=True)
+
+        validator.save(parent_comment=parent_comment)
+
+        serializer = CommentSerializer(instance=validator.instance)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)    

@@ -11,6 +11,11 @@ urlpatterns = [
         name='bookmark'
     ),
     re_path(
+        r'^(?P<pk>\d+)/reply$',
+        views.GetUpdateDeleteComment.as_view(),
+        name='get_update_delete_comment'
+    ),
+    re_path(
         r'^(?P<pk>\d+)$',
         views.GetUpdateDeleteComment.as_view(),
         name='get_update_delete_comment'

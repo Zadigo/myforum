@@ -10,5 +10,11 @@
             "cx\\(((?:[^()]|\\([^()]*\\))*)\\)",
             "(?:'|\"|`)([^']*)(?:'|\"|`)"
         ]
-    ]
+    ],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.unusedImports": "explicit",
+            "source.sortImports": "explicit"
+        }
+    }
 }

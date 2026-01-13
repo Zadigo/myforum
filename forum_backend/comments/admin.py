@@ -1,11 +1,20 @@
 from django.contrib import admin
-from comments.models import Comment, MediaContent, Quote, SavedComment
+from comments.models import Comment, MediaContent, Quote, SavedComment, Reply
 
 
 @admin.register(Comment)
 class CommentsAdmin(admin.ModelAdmin):
     list_display = ['user', 'title', 'created_on', 'active']
     search_fields = ['user', 'title', 'content']
+    ordering = ['-created_on']
+    list_max_show_all = 10
+    date_hierarchy = 'created_on'
+
+
+@admin.register(Reply)
+class ReplyAdmin(admin.ModelAdmin):
+    list_display = ['user', 'created_on', 'active']
+    search_fields = ['user', 'content']
     ordering = ['-created_on']
     list_max_show_all = 10
     date_hierarchy = 'created_on'

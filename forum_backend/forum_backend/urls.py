@@ -70,7 +70,7 @@ urlpatterns = [
     ),
     path(
         'v1/comments/',
-        include('comments.api.urls')
+        include('comments.urls')
     ),
     path(
         'v1/threads/',

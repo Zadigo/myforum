@@ -1,26 +1,25 @@
-import os
 from datetime import timedelta
 from pathlib import Path
 
-import dotenv
+import environ
+
+env = environ.Env(DEBUG=(bool, False))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-ENV_PATH = Path('.env').absolute()
-if ENV_PATH.exists():
-    dotenv.load_dotenv(ENV_PATH)
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -50,9 +49,10 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'import_export',
     'django_ckeditor_5',
-
+    'graphene_django',
+    'django_filters',
+    'channels',
     'storages',
-
 
     'accounts',
     'api',
@@ -218,11 +218,11 @@ LOCALE_PATHS = [
 
 # Emailing
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
 
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
 
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 
 EMAIL_USE_TLS = True
 
@@ -260,19 +260,19 @@ CKEDITOR_5_CONFIGS = {
 # Celery
 # https://docs.celeryq.dev/en/stable/
 
-REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
 
-REDIS_USER = os.getenv('REDIS_USER')
+REDIS_USER = env('REDIS_USER', default='')
 
-REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+REDIS_PASSWORD = env('REDIS_PASSWORD', default='')
 
 REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:6379'
 
-RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
+RABBITMQ_HOST = env('RABBITMQ_HOST', default='localhost')
 
-RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER', 'guest')
+RABBITMQ_USER = env('RABBITMQ_DEFAULT_USER', default='guest')
 
-RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS', 'guest')
+RABBITMQ_PASSWORD = env('RABBITMQ_DEFAULT_PASS', default='guest')
 
 CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:5672'
 
@@ -306,7 +306,7 @@ CACHES = {
 
 # HTTPS
 
-if os.getenv('USES_HTTP_SCHEME', 'http') == 'https':
+if env('USES_HTTP_SCHEME', default='http') == 'https':
     SESSION_COOKIE_SECURE = True
 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

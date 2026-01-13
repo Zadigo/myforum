@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from comments.utils import (files_upload_path, images_upload_path,
                             videos_upload_path)
 from django.apps import apps
@@ -101,28 +102,10 @@ class Quote(models.Model):
         return f'Quote: {self.quoted_comment.id}:: {self.comment.id}'
 
 
-class Comment(models.Model):
-    """Represents a comment in
-    a givent thread"""
-
+class AbstractComment(models.Model):
     user = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE
-    )
-    thread = models.ForeignKey(
-        MainThread,
-        on_delete=models.CASCADE
-    )
-    subthread = models.ForeignKey(
-        SubThread,
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
-    title = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True
     )
     content = models.TextField(
         help_text=_("The actual text of the comment"),
@@ -154,11 +137,56 @@ class Comment(models.Model):
         blank=True
     )
     active = models.BooleanField(
-        default=True)
+        default=True
+    )
+    modified_on = models.DateTimeField(
+        auto_now=True
+    )
+    created_on = models.DateTimeField(
+        auto_now_add=True
+    )
 
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f'Reply: {self.user}: {self.pk}'
+
+
+class Reply(AbstractComment):
+    comment = models.ForeignKey(
+        'comments.Comment',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = _('reply')
+        verbose_name_plural = _('replies')
+
+
+class Comment(AbstractComment):
+    """Represents a comment in
+    a givent thread"""
+
+    thread = models.ForeignKey(
+        MainThread,
+        on_delete=models.CASCADE
+    )
+    subthread = models.ForeignKey(
+        SubThread,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    title = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
     pinned = models.BooleanField(
         default=False
     )
+    # Top post of the thread
     original_post = models.BooleanField(
         default=False
     )
@@ -183,12 +211,6 @@ class Comment(models.Model):
     # initial_comment = models.BooleanField(
     #     default=False
     # )
-    modified_on = models.DateTimeField(
-        auto_now=True
-    )
-    created_on = models.DateTimeField(
-        auto_now_add=True
-    )
 
     class Meta:
         ordering = ['created_on', 'pk']
@@ -239,18 +261,3 @@ class SavedComment(models.Model):
 @receiver(pre_save, sender=MediaContent)
 def create_media_content_id(instance, **kwargs):
     instance.media_content_id = utils.create_id('mc')
-
-
-# @receiver(post_save, sender=Comment)
-# def send_notifications(instance, created, **kwargs):
-#     if created:
-#         from notifications.models import Notification
-#         followers = instance.thread.follower_set.all()
-#         notifications = []
-#         for follower in followers:
-#             notification = Notification(
-#                 user=follower,
-#                 message=instance,
-#                 notification_type=NotificationTypes.MESSAGE
-#             )
-#             notifications.append(notification)
