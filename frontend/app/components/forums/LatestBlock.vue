@@ -20,7 +20,5 @@
 <script setup lang="ts">
 import type { UserComment } from '~/types'
 
-const { data: comments } = await useFetch<UserComment[]>('/api/comments/latest', {
-  method: 'GET'
-})
+const comments = await $fetch<UserComment[]>('/api/comments/latest', { method: 'GET' })
 </script>

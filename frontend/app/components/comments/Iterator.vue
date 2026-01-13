@@ -36,11 +36,10 @@
 
     <template #content>
       <div class="mb-4 space-x-1">
-        <span class="font-bold text-surface-200">#{{ comment.id }}</span> 
+        <span class="font-bold text-surface-200">#{{ comment.id }}</span>
         <span>-</span>
-        <span class="font-bold text-primary-700 underline underline-offset-4">@{{ comment.user?.username }}</span> 
+        <span class="font-bold text-primary-700 underline underline-offset-4">@{{ comment.user?.username }}</span>
         <span>-</span>
-        {{ console.log($humanizeDate) }}
         <span v-if="$humanizeDate" class="text-muted">{{ $humanizeDate(comment.created_on) }}</span>
       </div>
 
@@ -56,12 +55,12 @@
         <volt-button variant="tonal" @click="handleQuoteFrom">
           <icon name="i-lucide:quote" class="me-2" />Quote from
         </volt-button>
-        
+
         <volt-button variant="tonal" @click="handleBookmark(comment)">
           <icon v-if="comment.bookmarked_by_user" name="i-lucide:bookmark" class="me-2" />
           <icon v-else name="i-lucide:bookmark" class="me-2" />Bookmark
         </volt-button>
-        
+
         <volt-button variant="tonal" @click="handleShare">
           <icon name="i-lucide:share" class="me-2" />Share
         </volt-button>
@@ -75,11 +74,11 @@
         <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:quote" class="me-2" />Quote from
         </volt-button>
-        
+
         <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:bookmark" class="me-2" />Bookmark
         </volt-button>
-        
+
         <volt-button variant="tonal" @click="loginModal=true">
           <icon name="i-lucide:share" class="me-2" />Share
         </volt-button>

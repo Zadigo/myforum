@@ -14,15 +14,13 @@
         </suspense>
       </div>
 
-      <div class="p-5 bg-secondary">
-        google
-      </div>
-
       <!-- Latest Comments -->
       <client-only>
         <div class="mt-30">
           <suspense>
-            <async-forum-latest-comments-block />
+            <template #efault>
+              <async-forum-latest-comments-block />
+            </template>
 
             <template #fallback>
               <div>

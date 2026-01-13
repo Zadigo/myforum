@@ -67,6 +67,7 @@ export default defineNuxtConfig({
   },
 
   modules: [
+    '@nuxt/hints',
     '@nuxt/eslint',
     '@nuxt/icon',
     '@nuxt/image',
@@ -79,10 +80,11 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/icon',
     '@nuxt/fonts',
+    '@vueuse/motion',
     'nuxt-authentication',
     'pinia-plugin-persistedstate',
     'nuxt-schema-org',
-    'nuxt-vuefire'
+    'nuxt-vuefire',
   ],
 
   vuefire: {

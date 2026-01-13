@@ -5,16 +5,19 @@ function useBaseNotification() {
   if (import.meta.server) {
     return {
       notifications: ref<Arrayable<UserNotification>>([]),
-      count: ref<number>(0)
+      count: ref<number>(0),
+      previousCount: ref<number>(0)
     }
   }
 
   const notifications = ref<Arrayable<UserNotification>>([])
   const count = computed(() => notifications.value.length)
+  const previousCount = usePrevious(count)
   
   return {
     notifications,
     count,
+    previousCount
   }
 }
 
