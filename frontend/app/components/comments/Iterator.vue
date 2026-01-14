@@ -6,31 +6,13 @@
           {{ comment.node.title }}
         </span>
 
-        <!-- <v-btn v-if="authStore.isAuthenticated" variant="text" rounded>
-          <icon icon="ellipsis-vertical" />
-
-          <v-menu activator="parent">
-            <v-list>
-              <v-list-item>
-                <v-list-item-title @click="emit('edit', comment.node)">
-                  Edit
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item @click="handleReport">
-                <v-list-item-title>
-                  Report
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item @click="handleDeletion(comment.node)">
-                <v-list-item-title>
-                  Delete
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn> -->
+        <volt-dropdown v-if="isAuthenticated" id="actions" :items="menuItems">
+          <template #default="{ attrs }">
+            <volt-button @click="attrs.toggle">
+              <icon name="lucide:ellipsis-vertical" />
+            </volt-button>
+          </template>
+        </volt-dropdown>
       </div>
     </template>
 
@@ -48,7 +30,7 @@
 
     <template v-if="showActions" #footer>
       <div v-if="isAuthenticated" class="flex gap-2">
-        <volt-button variant="tonal" @click="emit('reply', comment)">
+        <volt-button variant="tonal" @click="$emit('reply', comment)">
           <icon name="i-lucide:reply" class="me-2" />Reply
         </volt-button>
 
@@ -61,7 +43,7 @@
           <icon v-else name="i-lucide:bookmark" class="me-2" />Bookmark
         </volt-button>
 
-        <volt-button variant="tonal" @click="handleShare">
+        <volt-button variant="tonal" @click="handleShare(comment)">
           <icon name="i-lucide:share" class="me-2" />Share
         </volt-button>
       </div>
@@ -88,10 +70,11 @@
 </template>
 
 <script setup lang="ts">
-import type { LatestComments, UserCommentNode, UserComments } from '~/types';
+import type { MenuItem } from 'primevue/menuitem';
+import type { LatestCommentNode, LatestComments, UserCommentNode, UserComments } from '~/types';
 
 const { showActions = true, comments } = defineProps<{ comments: UserComments | LatestComments, showActions?: boolean }>()
-const emit = defineEmits<{ reply: [comment: UserCommentNode], edit: [comment: UserCommentNode] }>()
+defineEmits<{ reply: [comment: UserCommentNode], edit: [comment: UserCommentNode | LatestCommentNode] }>()
 
 const iteratedComments = computed(() => {
   if ('commentsForThread' in comments.data) {
@@ -103,11 +86,7 @@ const iteratedComments = computed(() => {
   }
 })
 
-
-const { $nuxtAuthentication, $humanizeDate } = useNuxtApp()
-// const { customHandleError } = useErrorHandler()
-
-const store = useForums()
+const { $humanizeDate } = useNuxtApp()
 
 /**
  * Handlers
@@ -128,7 +107,7 @@ async function handleQuoteFrom () {
 }
 
 //
-async function handleBookmark(comment: UserCommentNode) {
+async function handleBookmark(_comment: UserCommentNode | LatestCommentNode) {
   // try {
   //   await $nuxtAuthentication(`comments/${comment.node.id}/bookmark`, {
   //     method: 'POST'
@@ -139,12 +118,12 @@ async function handleBookmark(comment: UserCommentNode) {
 }
 
 //
-async function handleShare () {
+async function handleShare (_comment: UserCommentNode | LatestCommentNode) {
   // pass
 }
 
 //
-async function handleDeletion(comment: UserCommentNode) {
+async function handleDeletion(_comment: UserCommentNode | LatestCommentNode) {
   // try {
   //   await $nuxtAuthentication(`comments/${comment.node.id}`, { method: 'DELETE' })
   //   store.threadComments = store.threadComments.filter(c => c.id !== comment.node.id)
@@ -152,6 +131,31 @@ async function handleDeletion(comment: UserCommentNode) {
   //   // customHandleError(e)
   // }
 }
+
+/**
+ * Menu Items
+ */
+
+const menuItems = ref<MenuItem[]>([
+  {
+    Label: 'Report',
+    command: (_event) => {
+      // emit report event
+    }
+  },
+  {
+    label: 'Edit',
+    command: (_event) => {
+      // emit edit event
+    }
+  },
+  {
+    label: 'Delete',
+    command: (_event) => {
+      // handleDeletion()
+    }
+  }
+])
 
 /**
  * Modals

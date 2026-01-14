@@ -1,24 +1,24 @@
 <template>
   <section id="search" class="my-5">
-    <div class="col-12 mb-3">
-      <ul class="nav nav-pills">
-        <li v-for="link in links" :key="link.name" class="nav-item">
-          <a :class="{ active: currentPill === link.name }" href="#" class="nav-link" aria-current="page" @click.prevent="currentPill=link.name">
+    <div class="mb-3">
+      <volt-tabs v-model:value="currentPill">
+        <volt-tab-list>
+          <volt-tab v-for="link in links" :key="link.name" :value="link.name" as="div" class="nav-item">
             {{ link.name }}
-          </a>
-        </li>
-      </ul>
+          </volt-tab>
+        </volt-tab-list>
+      </volt-tabs>
     </div>
     
     <div>
       <!-- Comments -->
-      <CommentsIterator v-if="searchResult" :comments="searchResult.comments" />
+      <comments-iterator v-if="searchResult" :comments="searchResult.comments" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { RouteIdParamsGeneric, SearchApiResponse } from '~/types';
+import type { RouteIdParamsGeneric, SearchApiResponse } from '~/types'
 
 type Pill = 'Comments' | 'Showcase' | 'Albums' | 'Media' | 'Tags' | string
 type Pills = { name: Pill, active: boolean }

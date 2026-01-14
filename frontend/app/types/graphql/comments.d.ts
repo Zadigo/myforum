@@ -27,4 +27,6 @@ export type UserCommentNode = RelayNode<BaseComment>
 
 export type UserComments = GraphQlData<'commentsForThread', RelayEdge<BaseComment>>
 
+export type LatestCommentNode = RelayNode<Pick<BaseComment, 'id' | 'title' | 'content' | 'contentHtml' | 'createdOn' | 'user'>>
+
 export type LatestComments = GraphQlData<'latestComments', RelayEdge<Pick<BaseComment, 'id' | 'title' | 'content' | 'contentHtml' | 'createdOn' | 'user'>>>
