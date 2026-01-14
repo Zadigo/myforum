@@ -51,6 +51,8 @@ class ReplyType(DjangoObjectType):
 
 
 class CommentNode(DjangoObjectType):
+    bookmarked_by_user = graphene.Boolean(default_value=False)
+
     class Meta:
         model = Comment
         interfaces = (relay.Node,)
@@ -65,10 +67,23 @@ class CommentNode(DjangoObjectType):
             'published': ['exact']
         }
 
+    # @classmethod
+    # def get_queryset(cls, queryset, info):
+    #     logic = When(savedcomment__user=info.context.user, then=True)
+    #     case = Case(logic, default=False)
+    #     qs = queryset.annotate(bookmarked_by_user=case)
+    #     return qs
+
 
 class CommentsQuery(ObjectType):
     comment = relay.Node.Field(CommentNode)
     all_comments = DjangoFilterConnectionField(CommentNode)
+    comments_for_thread = DjangoFilterConnectionField(
+        CommentNode,
+        thread_id=graphene.Int()
+    )
+    latest_comments = DjangoFilterConnectionField(
+        CommentNode, limit=graphene.Int(), default_value=5)
 
     reply = graphene.Field(ReplyType, reply_id=graphene.Int())
     all_replies = graphene.List(ReplyType)
@@ -78,6 +93,9 @@ class CommentsQuery(ObjectType):
     comment_quotes = graphene.List(QuoteType, comment_id=graphene.Int())
 
     all_media_contents = graphene.List(MediaContentType)
+
+    def resolve_all_comments(self, info, **kwargs):
+        return Comment.objects.all()
 
     def resolve_reply(self, info, reply_id):
         return Reply.objects.get(pk=reply_id)
@@ -98,6 +116,15 @@ class CommentsQuery(ObjectType):
 
     def resolve_all_media_contents(self, info):
         return MediaContent.objects.all()
+
+    def resolve_comments_for_thread(self, info, thread_id):
+        return Comment.objects.filter(thread__id=thread_id)
+
+    def resolve_latest_comments(self, info, limit=5):
+        qs = Comment.objects.order_by('-created_on')
+        if limit > 10:
+            limit = 10
+        return qs[:limit]
 
 
 class CreateComment(graphene.Mutation):

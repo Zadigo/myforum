@@ -1,77 +1,82 @@
 <template>
   <section class="threads">
     <div class="flex justify-between items-center my-3">
-      <div class="flex justify-start align-center gap-2">
-        <client-only>
-          <volt-dropdown  id="sort-threads" v-model="sortingMethod" :items="sortMethods">
-            <icon name="i-fa-solid:sort" />
-          </volt-dropdown>
+      <client-only>
+        <volt-dropdown  id="sort-threads" :items="sortMethods">
+          <template #default="{ attrs }">
+            <volt-button @click="attrs.toggle">
+              <icon name="i-fa-solid:sort" />
+              {{ sortingMethod }}
+            </volt-button>
+          </template>
+        </volt-dropdown>
+      </client-only>
 
-          {{ sortingMethod }}
-
-          <!-- Filtering -->
-          <volt-button id="filter">
-            <Icon name="i-fa-solid:filter" />
-          </volt-button>
-        </client-only>
-      </div>
+      <client-only>
+        <!-- Filtering -->
+        <volt-button id="filter">
+          <icon name="i-fa-solid:filter" />
+        </volt-button>
+      </client-only>
     </div>
 
     <!-- Threads -->
-    <Suspense>
-      <AsyncThreadsIterator @load-current-forum="handleLoadForumInfo" />
+    <suspense>
+      <async-threads-iterator />
 
       <template #fallback>
         <volt-skeleton height="5rem" />
       </template>
-    </Suspense>
+    </suspense>
   </section>
 </template>
 
 <script setup lang="ts">
-import { sortMethods, type SortMethodNames } from '~/data'
-import type { RouteIdParamsGeneric, Forum } from '~/types'
+import type { SortMethodNames, SortMenuItem } from '~/data'
 
 definePageMeta({
   name: 'Forum Threads',
   layout: 'forum'
 })
 
-const AsyncThreadsIterator = defineAsyncComponent({
+const asyncThreadsIterator = defineAsyncComponent({
   loader: async () => import('~/components/threads/Iterator.vue')
 })
 
-/**
- * Forums
- */
-
-const forumStore = useForums()
-const { currentForum } = storeToRefs(forumStore)
-
-const { id } = useRoute().params as RouteIdParamsGeneric
-
-// Fetches the forum information based on the ID from the route
-const { data, execute } = useFetch<Forum>(`/api/forums/${id}`, {
-  immediate: false,
-  method: 'GET'
-})
-
-// Load information of the current forum once the threads are loaded
-const handleLoadForumInfo = useDebounceFn(async () => {
-  await execute()
-  
-  console.log('Forum', data.value)
-
-  if (data.value) {
-    currentForum.value = data.value
-  }
-}, 1000)
-
-/**
- * Sorting methods for threads
- */
-
 const sortingMethod = ref<SortMethodNames>('Most recent')
-
 provide('sortingMethod', sortingMethod)
+
+const query = useUrlSearchParams('history') as { sort: SortMethodNames }
+const sortMethods: SortMenuItem[] = [
+  {
+    label: 'Sort alphabetically A-Z',
+    command(event) {
+      sortingMethod.value = event.item.label as SortMethodNames
+      query.sort = event.item.label as SortMethodNames
+    }
+  },
+  {
+    label: 'Sort alphabetically Z-A',
+    command(event) {
+      sortingMethod.value = event.item.label as SortMethodNames
+      query.sort = event.item.label as SortMethodNames
+    }
+  },
+  {
+    label: 'Most recent',
+    command(event) {
+      sortingMethod.value = event.item.label as SortMethodNames
+      query.sort = event.item.label as SortMethodNames
+    },
+  },
+  {
+    label: 'Number of comments',
+    command(event) {
+      sortingMethod.value = event.item.label as SortMethodNames
+      query.sort = event.item.label as SortMethodNames
+    }
+  }
+]
+
+// provide('sortingMethod', sortingMethod)
 </script>

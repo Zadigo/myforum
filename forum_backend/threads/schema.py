@@ -1,8 +1,9 @@
+from django.db.models import Case
+from django.db.models import When
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from threads.models import MainThread, SubThread
-from django.db.models import QuerySet
 
 
 class ThreadMixin:
@@ -21,6 +22,8 @@ class ThreadMixin:
 
 
 class MainThreadNode(ThreadMixin, DjangoObjectType):
+    owned_by_user = graphene.Boolean(default_value=False)
+
     class Meta:
         model = MainThread
         interfaces = (graphene.relay.Node, )
@@ -59,14 +62,25 @@ class SubThreadNode(ThreadMixin, DjangoObjectType):
             'modified_on': ['exact', 'lt', 'gt', 'lte', 'gte']
         }
 
-    @classmethod
-    def get_queryset(cls, queryset: QuerySet[SubThread], info):
-        return queryset.select_related('main_thread').order_by('title', '-created_on')
+    # @classmethod
+    # def get_queryset(cls, queryset: QuerySet[SubThread], info):
+    #     return queryset.select_related('main_thread').order_by('title', '-created_on')
 
 
 class ThreadQuery(graphene.ObjectType):
     main_thread = graphene.relay.Node.Field(MainThreadNode)
     all_main_threads = DjangoFilterConnectionField(MainThreadNode)
 
+    forum_threads = DjangoFilterConnectionField(
+        MainThreadNode,
+        forum_id=graphene.Int()
+    )
+
     sub_thread = graphene.relay.Node.Field(SubThreadNode)
     all_sub_threads = DjangoFilterConnectionField(SubThreadNode)
+
+    def resolve_forum_threads(self, info, forum_id=None, **kwargs):
+        qs = MainThread.objects.filter(forum__id=forum_id, active=True)
+        logic = When(user=info.context.user, then=True)
+        case = Case(logic, default=False)
+        return qs.annotate(owned_by_user=case)

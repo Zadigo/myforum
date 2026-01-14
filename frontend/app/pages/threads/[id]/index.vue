@@ -23,7 +23,10 @@
   
           <!-- Comments -->
           <div>
-            <comments-wrapper :comments="threadComments" @reply="handleReply" />
+            <comments-wrapper v-if="isDefined(threadComments)" :comments="threadComments" :show-actions="true" @reply="handleReply" />
+            <template v-else>
+              <volt-skeleton v-for="i in 5" :key="i" height="100px" width="100%" />
+            </template>
           </div>
         </div>
       </template>
@@ -47,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UserComment, ForumThread, ThreadCommentsApiResponse } from '~/types'
+import type { SingleMainThread, UserCommentNode, UserComments } from '~/types'
 
 definePageMeta({
   name: 'Thread Comments',
@@ -59,20 +62,18 @@ const AsyncPollSection = defineAsyncComponent({
 })
 
 // const cachedResponse = ref<ThreadCommentsApiResponse>()
-const replyingToComment = ref<UserComment>()
 
-provide('replyingToComment', replyingToComment)
 
 /**
  * Comments for the current thread
  */
 
 const { id } = useRoute().params
-const store = useForums()
-const { threadComments, currentThread } = storeToRefs(store)
+
+const threadComments = ref<UserComments>()
 const currentOffset = ref<number>(1)
 
-const { refresh, data } = await useFetch<ThreadCommentsApiResponse>(`/api/threads/${id}/comments`, {
+const { refresh, data } = await useFetch<UserComments>(`/api/threads/${id}/comments`, {
   method: 'GET',
   query: {
     limit: 30,
@@ -80,8 +81,8 @@ const { refresh, data } = await useFetch<ThreadCommentsApiResponse>(`/api/thread
   }
 })
 
-if (data.value) {
-  threadComments.value = data.value.results
+if (isDefined(data)) {
+  threadComments.value = data.value
 }
 
 console.log('Fetched comments:', threadComments)
@@ -90,15 +91,13 @@ console.log('Fetched comments:', threadComments)
  * Current Thread Information
  */
 
-const { execute } = await useFetch<ForumThread>(`/api/threads/${id}`, {
-  immediate: false,
-  transform(data: ForumThread) {
-    currentThread.value = data
-    return data
-  }
-})
+// const { execute, data: currentThread } = await useFetch<SingleMainThread>(`/api/threads/${id}`, {
+//   immediate: false
+// })
 
-await execute()
+// await execute()
+
+const { currentThread, requestComplete } = await useCurrentThreadComposable()
 
 //
 function handleEditorContent(data: { text: string, delta: string, html: string }) {
@@ -124,7 +123,9 @@ const [showCreateCommentForm, toggleShowCreateCommentForm] = useToggle(false)
 
 // TODO: Does not return the last comment that
 // was created in the database
-function handleReply(comment: UserComment) {
+const replyingToComment = ref<UserCommentNode>()
+provide('replyingToComment', replyingToComment)
+function handleReply(comment: UserCommentNode) {
   replyingToComment.value = comment
   toggleShowCreateCommentForm()
 }
@@ -133,7 +134,7 @@ function handleReply(comment: UserComment) {
  * SEO
  */
 
-useHead({
-  title: currentThread.value?.title || '...'
-})
+// useHead({
+//   title: currentThread.value?.data.mainThread.title
+// })
 </script>

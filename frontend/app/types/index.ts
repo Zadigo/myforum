@@ -2,39 +2,16 @@ import type { Delta } from '@vueup/vue-quill'
 import type { RouteParamsGeneric } from 'vue-router'
 import type { RouteMeta } from 'vue-router/dist/router-BbqN7H95.mjs'
 
-export type * from './forums'
-export type * from './user'
-export type * from './threads'
-export type * from './comments'
-export type * from './accounts'
-export type * from './user_notifications'
+export type * from './graphql'
+export type * from './restapi'
 
 export type Arrayable<T> = T[]
 
 export type Nullable<T> = T | null
 
-export type Undefineableable<T> = T | undefined
+export type Undefineable<T> = T | undefined
 
-export type TypeNull<T> = T | Nullable<T> | Undefineableable<T>
-
-/**
- * @deprecated
- */
-export interface LoginAPIResponse {
-  access: string
-  refresh: string
-}
-
-/**
- * @deprecated
- */
-export type RefreshAPIResponse = Exclude<LoginAPIResponse, 'access'>
-
-export interface EditorData {
-  delta: string | Delta | undefined
-  html: string
-  text: string
-}
+export type TypeNull<T> = T | Nullable<T> | Undefineable<T>
 
 export interface UserSearch {
   q?: string
@@ -52,11 +29,10 @@ export interface RouteIdParamsGeneric extends RouteParamsGeneric {
   id: string
 }
 
-export interface BaseApiResponse<R> {
-  count: number
-  next: null
-  previous: null
-  results: R[]
+export interface EditorData {
+  delta: string | Delta | undefined
+  html: string
+  text: string
 }
 
 type RouteMetaNames = 'Create Thread' | 'Edit Thread' | 'Thread Details'

@@ -147,6 +147,9 @@ importers:
         specifier: ^4.3.5
         version: 4.3.5
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^10.2.0
+        version: 10.2.0
       '@iconify-json/fa-solid':
         specifier: ^1.2.2
         version: 1.2.2
@@ -897,6 +900,10 @@ packages:
     peerDependenciesMeta:
       '@exodus/crypto':
         optional: true
+
+  '@faker-js/faker@10.2.0':
+    resolution: {integrity: sha512-rTXwAsIxpCqzUnZvrxVh3L0QA0NzToqWBLAhV+zDV3MIIwiQhAZHMdPCIaj5n/yADu/tyk12wIPgL6YHGXJP+g==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@fastify/accept-negotiator@2.0.1':
     resolution: {integrity: sha512-/c/TW2bO/v9JeEgoD/g1G5GxGeCF1Hafdf79WPmUlgYiBXummY0oX3VVq4yFkKKVBKDNlaDUYoab7g38RpPqCQ==}
@@ -8407,6 +8414,8 @@ snapshots:
       levn: 0.4.1
 
   '@exodus/bytes@1.8.0': {}
+
+  '@faker-js/faker@10.2.0': {}
 
   '@fastify/accept-negotiator@2.0.1':
     optional: true

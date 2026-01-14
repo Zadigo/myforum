@@ -43,11 +43,13 @@
 
 <script setup lang="ts">
 const AsyncForumsIterationBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/IterationBlock.vue')
+  loader: async () => import('~/components/forums/IterationBlock.vue'),
+  delay: 2000
 })
 
 const AsyncForumLatestCommentsBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/LatestBlock.vue')
+  loader: async () => import('~/components/forums/LatestBlock.vue'),
+  delay: 2000
 })
 
 /**

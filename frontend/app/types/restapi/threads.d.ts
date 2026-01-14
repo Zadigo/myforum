@@ -1,6 +1,7 @@
 import type { Delta } from "@vueup/vue-quill"
+import type { BaseThread } from "../graphql"
 
-export type NewThreadCatategories = 'General discussion' | 'Result' | 'WWW' | 'Bombshell' | 'Draw' | 'Poll' 
+export type NewThreadCatategories = 'General discussion' | 'Result' | 'WWW' | 'Bombshell' | 'Draw' | 'Poll'
 
 export type NewPollChoiceSelection = 'Single' | 'Limited'
 
@@ -43,3 +44,5 @@ export interface NewThreadData {
   add_poll: boolean
   poll: PollRequestData | null
 }
+
+export type NewThreadApiResponse = Pick<BaseThread, 'id'>

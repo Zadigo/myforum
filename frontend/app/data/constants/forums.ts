@@ -1,3 +1,5 @@
+import type { MenuItem } from "primevue/menuitem"
+
 export const sortMethodNames = [
   'Sort alphabetically A-Z',
   'Sort alphabetically Z-A',
@@ -7,17 +9,6 @@ export const sortMethodNames = [
 
 export type SortMethodNames = (typeof sortMethodNames)[number]
 
-export const sortMethods: { label: SortMethodNames }[] = [
-  {
-    label: 'Sort alphabetically A-Z'
-  },
-  {
-    label: 'Sort alphabetically Z-A'
-  },
-  {
-    label: 'Most recent'
-  },
-  {
-    label: 'Number of comments'
-  }
-]
+export interface SortMenuItem extends MenuItem {
+  label: SortMethodNames
+}

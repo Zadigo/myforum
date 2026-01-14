@@ -2,15 +2,15 @@
   <section id="create-thread" class="my-5">
     <volt-card class="shadow-sm">
       <template #content>
-        <form id="creation" @submit.prevent>
+        <form v-if="newThread" id="creation" @submit.prevent>
           <!-- Thread Type -->
-          <VoltSelect v-model="newThread.category" :options="threadTypes" label="Select" class="w-6/12" />
+          <volt-select v-model="newThread.category" :options="threadTypes" label="Select" class="w-6/12" />
 
           <!-- Title -->
           <div v-if="newThread.category === 'General discussion' || newThread.category === 'Poll'" class="my-3">
             <volt-input-text v-model="newThread.title" placeholder="Title" class="w-full" />
           </div>
-          <ThreadsCreateResultEditor v-else-if="newThread.category === 'Result'" v-model="newThread" :preview-thread-title="previewThreadTitle" />
+          <threads-create-result-editor v-else-if="newThread.category === 'Result'" v-model="newThread" :preview-thread-title="previewThreadTitle" />
           
           <!-- Base editor -->
           <base-editor @editor-content="(data) => newThread.content = data" />
@@ -42,18 +42,24 @@
           <volt-button @click="() => create()">
             Create
           </volt-button>
+
           <volt-button @click="showSchedulingModal=true">
             Schedule
           </volt-button>
+          
           <volt-button @click="() => create()">
             Save draft
           </volt-button>
+          
           <volt-button>
             Preview
           </volt-button>
-          <volt-button :to="`/forums/${$route.params.id}`">
-            Cancelù
-          </volt-button>
+          
+          <nuxt-link-locale :to="`/forums/${$route.params.id}`">
+            <volt-button>
+              Cancel
+            </volt-button>
+          </nuxt-link-locale>
         </div>
       </template>
     </volt-card>
@@ -86,7 +92,7 @@ definePageMeta({
  * Thread
  */
 
-const { newThread, showSchedulingModal, previewThreadTitle, create } = await useThread()
+const { newThread, showSchedulingModal, previewThreadTitle, create } = await useCreateThread()
 
 /**
  * Poll

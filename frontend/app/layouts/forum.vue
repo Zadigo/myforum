@@ -12,7 +12,9 @@
       </div>
 
       <div class="col-span-4">
-        <forums-aside />
+        <suspense>
+          <async-forums-aside />
+        </suspense>
       </div>
     </div>
 
@@ -28,7 +30,5 @@
 </template>
 
 <script setup lang="ts">
-import type { CustomRouteMeta } from '~/types'
-
-const routeMeta = useRoute().meta as CustomRouteMeta
+const AsyncForumsAside = defineAsyncComponent(() => import('~/components/forums/Aside.vue'))
 </script>

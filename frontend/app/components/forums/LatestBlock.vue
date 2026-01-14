@@ -18,7 +18,5 @@
 </template>
 
 <script setup lang="ts">
-import type { UserComment } from '~/types'
-
-const comments = await $fetch<UserComment[]>('/api/comments/latest', { method: 'GET' })
+const { comments } = await useLatestCommentsComposable()
 </script>

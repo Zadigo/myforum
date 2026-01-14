@@ -1,15 +1,11 @@
 import type { Delta } from '@vueup/vue-quill'
-import type { Arrayable, EditorData, RouteIdParamsGeneric, Undefineableable } from '~/types'
-
-export function useThreadComments() {}
-
-export function useComment() {}
+import type { Arrayable, EditorData, LatestComments, RouteIdParamsGeneric, Undefineable } from '~/types'
 
 export interface NewComment {
   thread: string | number
   title: string
   content: string
-  content_delta: Undefineableable<string | Delta>
+  content_delta: Undefineable<string | Delta>
   content_html: string
   quotes: Arrayable<number>
 }
@@ -37,6 +33,7 @@ export function useCreateCommentComposable() {
       callable?.()
     } catch (e) {
       // customHandleError(e)
+      console.error(e)
     }
   }
 
@@ -46,6 +43,7 @@ export function useCreateCommentComposable() {
       callable?.()
     } catch (e) {
       // customHandleError(e)
+      console.error(e)
     }
   }
 
@@ -78,3 +76,20 @@ export function useCreateCommentComposable() {
     writeEditorContent
   }
 }
+
+export const useLatestCommentsComposable = createGlobalState(async <T extends LatestComments>() => {
+  const requestComplete = ref<boolean>(false)
+  
+  const comments = await $fetch<T>('/api/comments/latest', {
+    method: 'GET',
+    onResponse() {
+      requestComplete.value = true
+    }
+  })
+
+
+  return {
+    comments,
+    requestComplete
+  }
+})

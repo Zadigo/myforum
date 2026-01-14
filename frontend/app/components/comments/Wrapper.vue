@@ -1,7 +1,8 @@
 <template>
-  <article v-for="(comment, i) in comments" :key="comment.id" :class="{ 'mt-6': i >= 1 }" :aria-label="comment.title || `Comment from ${comment.user.username}`">
+  <article v-for="(comment, i) in comments.data.commentsForThread.edges" :key="comment.node.id" :class="{ 'mt-6': i >= 1 }">
     <base-comment-card :comment="comment" @reply="handleReply" />
     
+    <!-- Replies -->
     <div id="replies" class="w-full flex justify-end mt-6">
       <div class="w-5/6">
         <volt-card v-for="x in 3" :key="x" class="shadow-sm mt-1">
@@ -15,28 +16,17 @@
 </template>
 
 <script setup lang="ts">
-import type { UserComment } from '~/types'
-import type { PropType } from 'vue'
+import type { UserCommentNode, UserComments } from '~/types'
 
-const emit = defineEmits({
-  reply(_comment: UserComment) {
-    return true
-  },
-  edit(_comment: UserComment) {
-    return true
-  }
-})
+const emit = defineEmits<{
+  reply: [comment: UserCommentNode],
+  edit: [comment: UserCommentNode]
+}>()
 
-defineProps({
-  comments: {
-    type: Array as PropType<UserComment[]>,
-    required: true
-  },
-  showActions: {
-    type: Boolean,
-    default: true
-  }
-})
+defineProps<{
+  comments: UserComments,
+  showActions: boolean
+}>()
 
 // const { $dayjs } = useNuxtApp()
 // const authStore = useAuthentication()
@@ -66,7 +56,7 @@ defineProps({
  *
  * @param comment The comment for which the reply is to
  */
-function handleReply(comment: UserComment) {
+function handleReply(comment: UserCommentNode) {
   emit('reply', comment)
 }
 </script>

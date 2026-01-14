@@ -1,9 +1,14 @@
+from django.shortcuts import get_object_or_404
+import graphene
+from forums.models import Forum
+from graphene import ObjectType, relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from forums.models import Forum
-from graphene import relay, ObjectType
+
 
 class ForumNode(DjangoObjectType):
+    number_of_threads = graphene.Int()
+
     class Meta:
         model = Forum
         interfaces = (relay.Node,)
@@ -20,3 +25,4 @@ class ForumNode(DjangoObjectType):
 class ForumQuery(ObjectType):
     forum = relay.Node.Field(ForumNode)
     all_forums = DjangoFilterConnectionField(ForumNode)
+    

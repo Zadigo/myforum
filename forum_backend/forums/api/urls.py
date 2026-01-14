@@ -15,6 +15,11 @@ urlpatterns = [
         name='forum'
     ),
     re_path(
+        r'^statistics$',
+        views.ForumStatistics.as_view(),
+        name='forums_statistics'
+    ),
+    re_path(
         r'^$',
         views.ListForums.as_view(),
         name='forums'

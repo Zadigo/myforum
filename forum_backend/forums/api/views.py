@@ -1,16 +1,42 @@
+from django.core.cache import cache
 from django.db.models import Case, Count, Value, When
 from django.shortcuts import get_object_or_404
 from forums.api import serializers
 from forums.models import Forum
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from threads.api import serializers as threads_serializers
 from threads.models import MainThread
-from rest_framework.pagination import PageNumberPagination
 
 
 class BasePagination(PageNumberPagination):
     page_size = 30
+
+
+class ForumStatistics(generics.GenericAPIView):
+    """A view to get basic statistics
+    about forums"""
+    queryset = Forum.objects.filter(active=True)
+
+    def get(self, request, *args, **kwargs):
+        statistics = cache.get('forum_statistics', None)
+        if statistics is None:
+            qs = self.get_queryset()
+
+            statistics = qs.aggregate(
+                total_forums=Count('id'),
+                total_threads=Count('mainthread'),
+                total_comments=Count('mainthread__comment__id'),
+                total_participants=Count('mainthread__comment__user__id')
+            )
+            cache.set(
+                'forum_statistics',
+                statistics,
+                60 * 15
+            )  # Cache for 15 minutes
+
+        return Response(statistics, status=status.HTTP_200_OK)
 
 
 class ForumDetails(generics.RetrieveAPIView):

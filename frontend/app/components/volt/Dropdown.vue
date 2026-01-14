@@ -23,7 +23,7 @@ const menuEl = useTemplateRef('menuEl')
 
 function toggle(event: Event) {
   if (isDefined(menuEl)) {
-    menuEl.value.toggle(event)
+    menuEl.value.toggle(event, event.target as HTMLElement)
   }
 }
 </script>

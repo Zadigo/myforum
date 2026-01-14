@@ -15,7 +15,7 @@ interface Props extends /* @vue-ignore */ BreadcrumbProps { }
 defineProps<Props>()
 
 const theme = ref<BreadcrumbPassThroughOptions>({
-  root: `bg-surface-0 dark:bg-surface-900 p-4 overflow-x-auto`,
+  root: `bg-surface-50 text-primary-950 rounded-md dark:bg-surface-900 p-4 overflow-x-auto`,
   list: `m-0 p-0 list-none flex items-center flex-nowrap gap-2`,
   item: ``,
   itemLink: `no-underline flex items-center gap-2 transition-colors duration-200 rounded-md

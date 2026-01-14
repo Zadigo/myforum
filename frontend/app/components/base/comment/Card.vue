@@ -3,9 +3,9 @@
     <template #content>
       <div id="infos" class="flex justify-between align-center">
         <div class="flex items-center gap-2">
-          <span class="fw-semibold text-muted">#{{ comment.id }}</span>
+          <span class="fw-semibold text-muted">#{{ comment.node.id }}</span>
           <icon name="fa-solid:star-of-life" />
-          <span class="font-bold">{{ comment.user.username }}</span>
+          <span class="font-bold">{{ comment.node.user.username }}</span>
         </div>
 
         <volt-dropdown id="something" :items="actions">
@@ -18,7 +18,7 @@
       </div>
 
       <!-- Content -->
-      <div class="bg-gray-50 p-3 rounded-sm mt-6" v-html="comment.content_html" />
+      <div class="bg-gray-50 dark:bg-primary-800 p-3 rounded-sm mt-6" v-html="comment.node.contentHtml" />
 
       <!-- Actions -->
       <base-comment-card-actions :comment="comment" @reply="handleReply" />
@@ -27,18 +27,16 @@
 </template>
 
 <script setup lang="ts">
-import type { UserComment } from '~/types'
+import type { UserCommentNode } from '~/types'
 
-const props = defineProps<{ comment: UserComment }>()
-const emit = defineEmits<{ reply: [comment: UserComment] }>()
+const props = defineProps<{ comment: UserCommentNode }>()
+const emit = defineEmits<{ reply: [comment: UserCommentNode] }>()
 
 const actions = [
   { label: 'Edit' },
   { label: 'Report' },
   { label: 'Delete' }
 ]
-
-const authStore = useAuthentication()
 
 //
 function handleEdit() {}

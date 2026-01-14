@@ -1,7 +1,7 @@
 <template>
-  <base-page-header class="bg-secondary-200">
+  <base-page-header class="bg-secondary-200 dark:bg-primary-900 dark:text-primary-50">
     <template #title>
-      {{ forumStore.currentThread?.title }}
+      {{ currentThread?.data.mainThread.title }}
     </template>
 
     <template #breadcrumbs>
@@ -25,7 +25,7 @@
           Delete
         </volt-danger-button>
 
-        <volt-button rounded @click="() => createCommentModal=true">
+        <volt-button rounded @click="() => { togglecreateCommentModal() }">
           <icon name="i-lucide:plus" />
           New comment
         </volt-button>
@@ -49,23 +49,26 @@ const emit = defineEmits<{
  */
 
 const createCommentModal = useState<boolean>('createCommentModal')
-const { id } = useRoute().params as RouteIdParamsGeneric
-
+const togglecreateCommentModal = useToggle(createCommentModal)
+  
 /**
  * Breadcrumbs
  */
 
-const forumStore = useForums()
+const { currentThread } = await useCurrentThreadComposable()
 
+console.log('Current Thread in Header:', currentThread)
+  
+const { id } = useRoute().params as RouteIdParamsGeneric
 const breadcrumbs = computed(() => {
   return [
     {
-      label: `${forumStore.currentThread?.forum.title}`,
-      route: '/forums',
+      label: `${currentThread.value?.data.mainThread.forum.title}`,
+      url: '/forums',
     },
     {
-      label: `${forumStore.currentThread?.title}`,
-      route: `/forums/thread/${id}`,
+      label: `${currentThread.value?.data.mainThread.title}`,
+      url: `/forums/thread/${id}`,
     }
   ]
 })

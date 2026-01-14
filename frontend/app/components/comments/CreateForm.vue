@@ -1,7 +1,7 @@
 <template>
   <volt-card class="shadow-sm">
     <template v-if="replyingToComment" #header>
-      Replying to <span class="font-bold">@{{ replyingToComment.user.username }}</span>
+      Replying to <span class="font-bold">@{{ replyingToComment.node.user.username }}</span>
     </template>
 
     <template #content>
@@ -35,12 +35,12 @@
 </template>
 
 <script setup lang="ts">
-import type { EditorData, Undefineableable, UserComment } from '~/types'
+import type { Undefineable, UserCommentNode } from '~/types'
 
 defineEmits<{ close: [], created: [] }>()
 
 
-const replyingToComment = inject<Undefineableable<UserComment>>('replyingToComment', undefined)
+const replyingToComment = inject<Undefineable<UserCommentNode>>('replyingToComment', undefined)
 
 /**
  * Create comment composable

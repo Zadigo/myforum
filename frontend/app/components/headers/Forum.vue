@@ -1,17 +1,23 @@
 <template>
-  <base-page-header class="bg-primary-100 mt-5">
+  <base-page-header class="bg-primary-100 dark:bg-primary-900 dark:text-primary-50 mt-5">
     <template #title>
       <client-only>
-        <h1 v-if="currentForum">
-          {{ currentForum.title }}
-        </h1>
+        <template #default>
+          <h1 v-if="currentForum">
+            {{ currentForum.data.forum.title }}
+          </h1>
+          <volt-skeleton v-else height="2rem" />
+        </template>
 
-        <volt-skeleton v-else height="2rem" />
+        <template #fallback>
+          <volt-skeleton height="2rem" />
+        </template>
       </client-only>
     </template>
 
     <template #breadcrumbs>
-      <volt-breadcrumb :home="{ icon: 'i-lucide:home', route: '/forums' }" :model="breadcrumbs" />
+      <volt-breadcrumb v-if="currentForum" :home="{ icon: 'i-lucide:home', route: '/forums' }" :model="breadcrumbs" />
+      <volt-skeleton v-else height="2rem" width="15rem" />
     </template>
 
     <template #actions>
@@ -23,9 +29,10 @@
 
         <volt-contrast-button>
           <icon name="i-lucide:stars" />
-          <NuxtLink to="/threads/1/create" @click="handleNewThread">
+
+          <nuxt-link-locale :to="`/threads/${currentForum?.data.forum.id}/create`" @click="handleNewThread">
             New thread
-          </NuxtLink>
+          </nuxt-link-locale>
         </volt-contrast-button>
       </div>
     </template>
@@ -33,30 +40,27 @@
 </template>
 
 <script setup lang="ts">
-import type { Forum } from '~/types'
+import type { MenuItem } from 'primevue/menuitem'
+import type { BaseForum, Undefineable } from '~/types'
 
-const emit = defineEmits<{ 'follow': [forum: Forum] }>()
+const emit = defineEmits<{ 'follow': [forum: Undefineable<BaseForum>] }>()
 
-const forumStore = useForums()
-const { currentForum } = storeToRefs(forumStore)
+const { currentForum } = await useForumComposable()
 
-const breadcrumbs = ref([
+const breadcrumbs = ref<MenuItem[]>([
   {
-    label: currentForum.value?.title
+    label: 'Forums',
+    url: '/forums'
+  },
+  {
+    label: currentForum.value?.data?.forum.title,
+    disabled: true
   }
 ])
 
-/**
- * Function to handle the follow forum action
- */
 async function handleFollowForum() {
-  if (currentForum.value !== undefined) {
-    emit('follow', currentForum.value)
-  }
+  emit('follow', currentForum.value?.data?.forum)
 }
 
-/**
- *
- */
 async function handleNewThread() {}
 </script>
