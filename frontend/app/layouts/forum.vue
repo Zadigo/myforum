@@ -19,13 +19,16 @@
     </div>
 
     <!-- Footer -->
-    <base-footer />
+    <lazy-base-footer hydrate-on-visible />
 
     <!-- Modals -->
-    <ClientOnly>
-      <ModalsLogin />
-      <ModalsSearch />
-    </ClientOnly>
+    <client-only>
+      <lazy-modals-login hydrate-on-idle />
+    </client-only>
+
+    <client-only>
+      <lazy-modals-search hydrate-on-idle />
+    </client-only>
   </section>
 </template>
 

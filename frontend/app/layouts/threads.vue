@@ -12,18 +12,23 @@
       </div>
 
       <div class="col-span-4">
-        <threads-aside />
+        <lazy-threads-aside hydrate-on-idle />
       </div>
     </div>
 
     <!-- Footer -->
-    <base-footer />
+    <lazy-base-footer hydrate-on-visible />
 
     <client-only>
-      <!-- Modals -->
-      <modals-login />
-      <modals-search />
-      <modals-comments-create />
+      <lazy-modals-login hydrate-on-idle />
+    </client-only>
+
+    <client-only>
+      <lazy-modals-search hydrate-on-idle />
+    </client-only>
+
+    <client-only>
+      <lazy-modals-comments-create hydrate-on-idle />
     </client-only>
   </section>
 </template>

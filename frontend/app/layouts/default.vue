@@ -8,17 +8,22 @@
         <slot />
       </div>
 
-      <forums-aside class="col-span-4" />
+      <lazy-forums-aside class="col-span-4" hydrate-on-idle />
     </div>
 
     <!-- Footer -->
-    <base-footer />
+    <lazy-base-footer hydrate-on-visible />
     
     <!-- Modals -->
     <client-only>
       <template #default>
-        <modals-login />
-        <modals-search />
+        <lazy-modals-login hydrate-on-idle />
+      </template>
+    </client-only>
+
+    <client-only>
+      <template #default>
+        <lazy-modals-search hydrate-on-idle />
       </template>
     </client-only>
   </section>

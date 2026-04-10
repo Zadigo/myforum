@@ -19,7 +19,6 @@ export default defineNuxtConfig({
       }
     },
     'threads/**/create': {
-      swr: false,
       ssr: false
     },
     'threads/**': {
@@ -33,11 +32,10 @@ export default defineNuxtConfig({
       isr: true
     },
     'search': {
-      ssr: false,
-      swr: false
+      prerender: true
     },
     'whats-new': {
-      swr: true
+      prerender: true
     }
   },
 
@@ -103,7 +101,23 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss(),
-    ]
+    ],
+    optimizeDeps: {
+      include: [
+        'primevue/config',
+        'primevue',
+        'dayjs', // CJS
+        'dayjs/plugin/calendar', // CJS
+        'dayjs/plugin/duration', // CJS
+        'dayjs/plugin/relativeTime', // CJS
+        'dayjs/plugin/timezone', // CJS
+        'dayjs/plugin/utc', // CJS
+        'primevue/card',
+        '@primevue/icons/times',
+        'primevue/toast',
+        'tailwind-merge',
+      ]
+    }
   },
 
     schemaOrg: {
@@ -256,7 +270,6 @@ export default defineNuxtConfig({
     baseUrl: './',
     langDir: './locales',
     defaultLocale: 'fr',
-    lazy: true,
     vueI18n: './i18n.config.ts',
     // bundle: {
     //   // TODELETE:  bundle.optimizeTranslationDirective is enabled by default, we recommend 
