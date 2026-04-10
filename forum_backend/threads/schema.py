@@ -81,6 +81,7 @@ class ThreadQuery(graphene.ObjectType):
 
     def resolve_forum_threads(self, info, forum_id=None, **kwargs):
         qs = MainThread.objects.filter(forum__id=forum_id, active=True)
-        logic = When(user=info.context.user, then=True)
+        print(info.context.user.id)
+        logic = When(user=info.context.user.id, then=True)
         case = Case(logic, default=False)
         return qs.annotate(owned_by_user=case)

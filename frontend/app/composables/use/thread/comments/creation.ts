@@ -1,5 +1,5 @@
 import type { Delta } from '@vueup/vue-quill'
-import type { Arrayable, EditorData, LatestComments, RouteIdParamsGeneric, Undefineable } from '~/types'
+import type { Arrayable, EditorData, RouteIdParamsGeneric, Undefineable } from '~/types'
 
 export interface NewComment {
   thread: string | number
@@ -76,20 +76,3 @@ export function useCreateCommentComposable() {
     writeEditorContent
   }
 }
-
-export const useLatestCommentsComposable = createGlobalState(async <T extends LatestComments>() => {
-  const requestComplete = ref<boolean>(false)
-  
-  const comments = await $fetch<T>('/api/comments/latest', {
-    method: 'GET',
-    onResponse() {
-      requestComplete.value = true
-    }
-  })
-
-
-  return {
-    comments,
-    requestComplete
-  }
-})

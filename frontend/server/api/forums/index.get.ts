@@ -1,7 +1,8 @@
-import { forumsFixture } from '~/data/fixtures'
+// import { forumsFixture } from '~/data/fixtures'
+import type { Forums } from '~/types'
 
 export default defineEventHandler(async _event => {
-  await $fetch('/graphql/', {
+  const data = await $fetch<Forums>('/graphql/', {
     method: 'POST',
     baseURL: useRuntimeConfig().public.prodDomain,
     body: {
@@ -20,7 +21,8 @@ export default defineEventHandler(async _event => {
     }
   })
 
-  return forumsFixture
+  // return forumsFixture
+  return data
 })
 
 // import { FetchError } from 'ofetch'

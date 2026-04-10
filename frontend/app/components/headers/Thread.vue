@@ -1,11 +1,14 @@
 <template>
   <base-page-header class="bg-secondary-200 dark:bg-primary-900 dark:text-primary-50">
     <template #title>
+      {{ currentThread }}
       {{ currentThread?.data.mainThread.title }}
     </template>
 
     <template #breadcrumbs>
-      <volt-breadcrumb :model="breadcrumbs" />
+      {{ breadcrumbs }}
+      <volt-breadcrumb v-if="breadcrumbs" :model="breadcrumbs" />
+      <volt-skeleton v-else height="2rem" />
     </template>
 
     <template #actions>
@@ -50,7 +53,7 @@ const emit = defineEmits<{
 
 const createCommentModal = useState<boolean>('createCommentModal')
 const togglecreateCommentModal = useToggle(createCommentModal)
-  
+
 /**
  * Breadcrumbs
  */
@@ -61,13 +64,15 @@ console.log('Current Thread in Header:', currentThread)
   
 const { id } = useRoute().params as RouteIdParamsGeneric
 const breadcrumbs = computed(() => {
+  if (!isDefined(currentThread)) return
+
   return [
     {
-      label: `${currentThread.value?.data.mainThread.forum.title}`,
+      label: `${currentThread.value?.data.mainThread.title}`,
       url: '/forums',
     },
     {
-      label: `${currentThread.value?.data.mainThread.title}`,
+      label: `${currentThread.value?.data.mainThread.forum.title}`,
       url: `/forums/thread/${id}`,
     }
   ]

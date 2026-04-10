@@ -17,16 +17,19 @@
             <async-poll-section class="mb-3" />
   
             <template #fallback>
-              <volt-skeleton class="h-[200px]" />
+              <volt-skeleton class="h-50" />
             </template>
           </suspense>
   
           <!-- Comments -->
-          <div>
+          <div v-if="threadComments && threadComments?.data.commentsForThread.edges.length > 0">
             <comments-wrapper v-if="isDefined(threadComments)" :comments="threadComments" :show-actions="true" @reply="handleReply" />
             <template v-else>
               <volt-skeleton v-for="i in 5" :key="i" height="100px" width="100%" />
             </template>
+          </div>
+          <div v-else>
+            No comments
           </div>
         </div>
       </template>
@@ -50,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SingleMainThread, UserCommentNode, UserComments } from '~/types'
+import type { UserCommentNode, UserComments } from '~/types'
 
 definePageMeta({
   name: 'Thread Comments',
@@ -70,22 +73,22 @@ const AsyncPollSection = defineAsyncComponent({
 
 const { id } = useRoute().params
 
-const threadComments = ref<UserComments>()
 const currentOffset = ref<number>(1)
-
-const { refresh, data } = await useFetch<UserComments>(`/api/threads/${id}/comments`, {
-  method: 'GET',
-  query: {
+  
+  const { refresh, data } = await useFetch<UserComments>(`/api/threads/${id}/comments`, {
+    method: 'GET',
+    query: {
     limit: 30,
     offset: currentOffset.value 
   }
 })
-
+  
+const threadComments = ref<UserComments>()
 if (isDefined(data)) {
   threadComments.value = data.value
 }
 
-console.log('Fetched comments:', threadComments)
+console.log('Fetched comments:', threadComments.value)
 
 /**
  * Current Thread Information

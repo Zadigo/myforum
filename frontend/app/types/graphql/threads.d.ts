@@ -55,6 +55,7 @@ export type MainThreadNode = RelayNode<BaseThread>
 
 export type SingleMainThread = GraphQlData<'mainThread', BaseThread>
 
+// | GraphQlError<'allMainThreads'>
 export type MainThreads = GraphQlData<'allMainThreads', RelayEdge<BaseThread>>
 
 // TODO: Renamae mainThread to parentThread

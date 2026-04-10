@@ -1,10 +1,11 @@
-import { forumFixture } from '~/data/fixtures'
+// import { forumFixture } from '~/data/fixtures'
+import type { SingleForum } from '~/types'
 
 export default defineEventHandler(async event => {
   // const { sort } = getQuery(event)
   const id = getRouterParam(event, 'id')
   
-  await $fetch('/graphql/', {
+  const data = await $fetch<SingleForum>('/graphql/', {
     method: 'POST',
     baseURL: useRuntimeConfig().public.prodDomain,
     body: {
@@ -29,10 +30,25 @@ export default defineEventHandler(async event => {
       variables: {
         id
       }
+    },
+    onResponse({ response }) {
+      if ('errors' in response._data) {
+        throw createError({
+          statusCode: 500,
+          message: `GraphQL errors: ${JSON.stringify(response._data.errors)}`
+        })
+      }
+    },
+    onRequestError({ error }) {
+      throw createError({
+        statusCode: 500,
+        message: `Failed to fetch forum data: ${error.message}`
+      })
     }
   })
 
-  return forumFixture
+  // return forumFixture
+  return data
 })
 
 

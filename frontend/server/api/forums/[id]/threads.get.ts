@@ -1,9 +1,10 @@
-import { mainThreadsFixture } from "~/data/fixtures"
+// import { mainThreadsFixture } from "~/data/fixtures"
+import type { MainThreads } from "~/types"
 
 export default defineCachedEventHandler(async event => {
   const id = getRouterParam(event, 'id')
 
-  await $fetch(`/graphql/`, {
+  const data = await $fetch<MainThreads>(`/graphql/`, {
     method: 'POST',
     baseURL: useRuntimeConfig().public.prodDomain,
     body: {
@@ -15,9 +16,17 @@ export default defineCachedEventHandler(async event => {
                 id
                 title
                 description
-                numberOfComments
-                ownedByUser
+                category
+                published
                 createdOn
+                modifiedOn
+                numberOfComments
+                pinned
+                published
+                user {
+                  id
+                  username
+                }
               }
             }
           }
@@ -29,7 +38,8 @@ export default defineCachedEventHandler(async event => {
     }
   })
 
-  return mainThreadsFixture
+  // return mainThreadsFixture
+  return data
 })
 
 // import { FetchError } from 'ofetch'

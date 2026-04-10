@@ -1,10 +1,12 @@
-import { commentsFixture } from '~/data/fixtures'
+// import { commentsFixture } from '~/data/fixtures'
+
+import type { UserComments } from "~/types"
 
 export default defineEventHandler(async event => {
   const { sort } = getQuery(event)
   const id = getRouterParam(event, 'id')
 
-  await $fetch('/graphql/', {
+  const data = await $fetch<UserComments>('/graphql/', {
     method: 'POST',
     baseURL: useRuntimeConfig().public.prodDomain,
     body: {
@@ -15,19 +17,25 @@ export default defineEventHandler(async event => {
               node {
                 id
                 title
+                content
+                contentHtml
+                contentDelta
+                bookmarkedByUser
+                user { id username}
               }
             }
           }
         }
       `,
       variables: {
-        threadId: 7,
+        threadId: id,
         // sort: sort || null
       }
     }
   })
 
-  return commentsFixture
+  // return commentsFixture
+  return data
 })
 
 // import type { ThreadApiResponse } from '~/types'

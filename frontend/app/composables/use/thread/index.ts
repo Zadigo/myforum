@@ -8,13 +8,13 @@ export const useCurrentThreadComposable = createGlobalState(async () => {
   const requestComplete = ref<boolean>(false)
   const currentThread = ref<Undefineable<SingleMainThread>>()
 
-  if (!requestComplete.value) {
-    currentThread.value = await $fetch<SingleMainThread>(`/api/threads/${id}`, {
-      onResponse() {
-        requestComplete.value = true
-      }
-    })
-  }
+  currentThread.value = await $fetch<SingleMainThread>(`/api/threads/${id}`, {
+    onResponse() {
+      requestComplete.value = true
+    }
+  })
+  // if (!requestComplete.value) {
+  // }
   
   return {
     currentThread,

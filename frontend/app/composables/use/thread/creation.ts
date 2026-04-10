@@ -1,7 +1,5 @@
 import type { Arrayable, NewPollData, NewThreadApiResponse, NewThreadData, RouteIdParamsGeneric, TagApiResponse } from '~/types'
 
-export * from './comments'
-
 /**
  * Composable to create a new poll
  * @param newThread The new thread data
@@ -120,7 +118,7 @@ interface SearchEvent extends Event {
 /**
  * Composable to manage search tags
  */
-export async function useSearchTags(newThread: Ref<NewThreadData>) {
+export async function useSearchTags(_newThread: Ref<NewThreadData>) {
   const search = ref<string>('')
   const tags = ref<Arrayable<string>>([])
 

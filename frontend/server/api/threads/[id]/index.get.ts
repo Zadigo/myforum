@@ -1,7 +1,9 @@
-import { mainThreadFixture } from "~/data/fixtures"
+// import { mainThreadFixture } from "~/data/fixtures"
+import type { SingleMainThread } from '~/types'
 
-export default defineEventHandler(async _event => {
-  await $fetch('/graphql/', {
+export default defineEventHandler(async event => {
+  const id = getRouterParam(event, 'id')
+  const data = await $fetch<SingleMainThread>('/graphql/', {
     method: 'POST',
     baseURL: useRuntimeConfig().public.prodDomain,
     body: {
@@ -11,16 +13,28 @@ export default defineEventHandler(async _event => {
             id
             title
             description
+            user { id username }
+            forum { id title }
+            category
+            pinned
+            highlighted
+            published
+            numberOfComments
+            ownedByUser
+            active
+            modifiedOn
+            createdOn
           }
         }
       `,
       variables: {
-        id: getRouterParam(_event, 'id')
+        id
       }
     }
   })
 
-  return mainThreadFixture
+  // return mainThreadFixture
+  return data
 })
 
 

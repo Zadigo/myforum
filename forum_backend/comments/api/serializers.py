@@ -1,13 +1,14 @@
 
+from base64 import urlsafe_b64decode
 from accounts.api.serializers import UserSerializer
 from celery import group
 from comments import tasks
 from comments.models import Comment, Quote, Reply
 from django.shortcuts import get_object_or_404
 from rest_framework import fields
-from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from threads.models import MainThread
+from rest_framework.exceptions import ValidationError
 
 
 class QuoteSerializer(Serializer):
@@ -34,8 +35,23 @@ class CommentSerializer(Serializer):
     created_on = fields.DateTimeField()
 
 
+class CustomIdField(fields.Field):
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        if isinstance(data, int):
+            return data
+
+        value = urlsafe_b64decode(data).decode()
+        _, rhv = value.split(':')
+        if not rhv.isdigit():
+            raise ValidationError("Invalid ID format.")
+        return int(rhv)
+
+
 class ValidateComment(Serializer):
-    thread = fields.IntegerField()
+    thread = CustomIdField()
     title = fields.CharField(allow_blank=True, allow_null=True)
     content = fields.CharField()
     content_delta = fields.JSONField()
@@ -112,13 +128,13 @@ class ValidateReply(Serializer):
 
     def create(self, validated_data):
         user = self._context['request'].user
-        
+
         comment = get_object_or_404(Comment, pk=validated_data['comment_id'])
-        
+
         validated_data.pop('comment_id')
         new_reply = Reply.objects.create(
             user=user,
-            comment=comment, 
+            comment=comment,
             **validated_data
         )
 
