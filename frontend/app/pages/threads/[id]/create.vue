@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { threadTypes } from '~/data/constants/threads'
+import { threadTypes } from '~/utils/constants/threads'
 
 definePageMeta({
   name: 'Create Thread'

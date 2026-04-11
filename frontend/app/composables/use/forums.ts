@@ -1,8 +1,10 @@
 import type { BaseForum, Forums, SingleForum, Undefineable } from '~/types'
 
 export const useForumsComposable = createGlobalState(async () => {
-  const _forumsList = await $fetch<Forums>('/api/forums', { method: 'GET' })
-  const forumsList = computed(() => _forumsList.data.allForums.edges)
+  const forumsList = computedAsync(async () => {
+    const data = await $fetch<Forums>('/api/forums', { method: 'GET' })
+    return data.data.allForums.edges
+  })
 
   if (import.meta.server) {
     return {
@@ -16,19 +18,23 @@ export const useForumsComposable = createGlobalState(async () => {
   const forumsByCategory = computed(() => {
     const groupedForums: Record<string, BaseForum[]> = {}
 
-    forumsList.value.forEach(item => {
-      groupedForums[item.node.category] = []
-    })
-
-    forumsList.value.forEach(item => {
-      const container = groupedForums[item.node.category]
-      
-      if (isDefined(container)) {
-        container.push(item.node)
-      }
-    })
-
-    return groupedForums
+    if (isDefined(forumsList)) {
+      forumsList.value.forEach(item => {
+        groupedForums[item.node.category] = []
+      })
+  
+      forumsList.value.forEach(item => {
+        const container = groupedForums[item.node.category]
+        
+        if (isDefined(container)) {
+          container.push(item.node)
+        }
+      })
+  
+      return groupedForums
+    } else {
+      return {}
+    }
   })
 
   const forumCategories = computed(() => {
@@ -39,7 +45,13 @@ export const useForumsComposable = createGlobalState(async () => {
     }
   })
 
-  const hasForums = computed(() => forumsList.value.length > 0)
+  const hasForums = computed(() => {
+    if (isDefined(forumsList)) {
+      return forumsList.value.length > 0
+    } else {
+      return false
+    }
+  })
 
   return {
     forumsList,

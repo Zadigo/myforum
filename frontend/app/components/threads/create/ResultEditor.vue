@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { roundTypes } from '~/data/constants/threads'
+import { roundTypes } from '~/utils/constants/threads'
 
 import type { NewThreadData } from '~/types'
 

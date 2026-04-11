@@ -6,7 +6,7 @@
       <!-- Forums -->
       <div class="my-3">
         <suspense>
-          <AsyncForumsIterationBlock />
+          <async-forums-iteration-block />
 
           <template #fallback>
             <volt-skeleton height="4rem" />
@@ -18,7 +18,7 @@
       <client-only>
         <div class="mt-30">
           <suspense>
-            <template #efault>
+            <template #default>
               <async-forum-latest-comments-block />
             </template>
 

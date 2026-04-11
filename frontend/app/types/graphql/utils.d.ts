@@ -71,6 +71,6 @@ export interface GraphQlData<K extends string, R> {
 
 export interface GraphQlMultiData<T extends Record<string, unknown>> {
   data: {
-    [key in keyof T]: T[key]
+    [K in keyof T]: T[K]
   }
 }

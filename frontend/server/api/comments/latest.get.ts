@@ -1,4 +1,4 @@
-import { latestCommentsFixture } from '~/data/fixtures'
+import { latestCommentsFixture } from '~/utils/fixtures'
 
 export default defineCachedEventHandler(async _event => {
   await $fetch('/graphql/', {

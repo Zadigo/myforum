@@ -39,16 +39,21 @@
         </article>
       </template>
     </article>
+
+    <dev-only>
+      <lazy-dev-container hydrate-on-idle>
+        <pre vocab="json" class="overflow-scroll h-70 w-full p-2 rounded-lg inset-shadow-2xs bg-slate-50/60 backdrop-blur-3xl">
+          {{ forumsByCategory }}
+        </pre>
+
+        <pre class="overflow-scroll h-70 w-full p-2 rounded-lg inset-shadow-2xs bg-slate-50/60 backdrop-blur-3xl">
+          {{ forumCategories }}
+        </pre>
+      </lazy-dev-container>
+    </dev-only>
   </div>
 </template>
 
 <script setup lang="ts">
-// import type { ForumNode } from '~/types'
-
-// const { forumsList, forumCategories, forumsByCategory } = storeToRefs(useForums())
-
-// const data = await $fetch<ForumNode>('/api/forums', { method: 'GET' })
-// forumsList.value = data.value
-
 const { forumCategories, forumsByCategory } = await useForumsComposable()
 </script>
