@@ -1,0 +1,9 @@
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@parcel/watcher'
+  - esbuild
+  - nuxt-openapi-docs-module
+  - protobufjs
+  - sharp
+  - unrs-resolver
+  - vue-demi

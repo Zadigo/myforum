@@ -8,35 +8,14 @@ export default defineNuxtConfig({
   ssr: true,
 
   routeRules: {
-    '/': {
-      redirect: '/forums'
-    },
-    'forums/**': {
-      swr: true,
-      cache: {
-        swr: true,
-        maxAge: 1 * 60
-      }
-    },
-    'threads/**/create': {
-      ssr: false
-    },
-    'threads/**': {
-      swr: true
-    },
-    'user/**': {
-      ssr: false,
-      swr: false
-    },
-    'rules': {
-      isr: true
-    },
-    'search': {
-      prerender: true
-    },
-    'whats-new': {
-      prerender: true
-    }
+    '/': {redirect: '/forums'},
+    'forums/**': {},
+    'threads/**/create': { ssr: false },
+    'threads/**': {},
+    'user/**': { ssr: false },
+    'rules': { isr: true },
+    'search': { prerender: true },
+    'whats-new': { prerender: true }
   },
 
   app: {
@@ -116,6 +95,7 @@ export default defineNuxtConfig({
         '@primevue/icons/times',
         'primevue/toast',
         'tailwind-merge',
+        'primevue/skeleton',
       ]
     }
   },

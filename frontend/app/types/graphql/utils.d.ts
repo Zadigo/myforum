@@ -1,3 +1,11 @@
+type GraphQlError = {
+  errors: Array<{
+    message: string
+    locations?: Array<{ line: number; column: number }>
+    path?: Array<string | number>
+    extensions?: Record<string, unknown>
+  }>
+}
 
 /**
  * Type for GraphQL pagination info using Relay-style pagination
@@ -69,8 +77,41 @@ export interface GraphQlData<K extends string, R> {
   }
 }
 
+/**
+ * Type for GraphQL response data where the data can have multiple keys 
+ * based on the query, and may also include errors
+ * @example
+ * ```ts
+ * // With multiple data keys
+ * const response = $fetch<GraphQlMultiData<{ allvideos: RelayEdge<Video>, videoDetails: VideoDetails }>>(...)
+ * ```
+ */
 export interface GraphQlMultiData<T extends Record<string, unknown>> {
   data: {
     [K in keyof T]: T[K]
   }
+}
+
+/**
+ * Type for GraphQL response data where the data can be located under
+ * different keys based on the query, and may also include errors
+ * @example
+ * ```ts
+ * // With relay nodes (edges)
+ * const response = $fetch<GraphQlVariableData<'allvideos' | 'searchvideos', RelayEdge<Video>>>(...)
+ * 
+ * // With single data
+ * const response = $fetch<GraphQlVariableData<'videoDetails' | 'videoSummary', VideoDetails>>(...)
+ * 
+ * // With array of data
+ * const response = $fetch<GraphQlVariableData<'searchvideos' | 'relatedvideos', Video[]>>(...)
+ * ```
+ */
+export interface GraphQlVariableData<K extends string, R> {
+  errors?: GraphQlError['errors']
+  data: Partial<
+    {
+      [ key in K ]: R
+    }
+  >
 }

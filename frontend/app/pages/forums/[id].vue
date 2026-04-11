@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SortMethodNames, SortMenuItem } from '~/data'
+import type { SortMenuItem, SortMethodNames } from '~/types'
 
 definePageMeta({
   name: 'Forum Threads',
@@ -77,6 +77,4 @@ const sortMethods: SortMenuItem[] = [
     }
   }
 ]
-
-// provide('sortingMethod', sortingMethod)
 </script>

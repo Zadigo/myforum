@@ -1,6 +1,6 @@
 import type { Arrayable, BaseForum } from ".."
 import type { BaseUser } from "./accounts"
-import type { GraphQlData, RelayEdge } from "./utils"
+import type { GraphQlData, GraphQlVariableData, RelayEdge } from "./utils"
 
 export interface PossibilitySet {
 	id: string
@@ -55,8 +55,7 @@ export type MainThreadNode = RelayNode<BaseThread>
 
 export type SingleMainThread = GraphQlData<'mainThread', BaseThread>
 
-// | GraphQlError<'allMainThreads'>
-export type MainThreads = GraphQlData<'allMainThreads', RelayEdge<BaseThread>>
+export type MainThreads = GraphQlVariableData<'allMainThreads' | 'forumThreads', RelayEdge<BaseThread>>
 
 // TODO: Renamae mainThread to parentThread
 export type SubThreads = GraphQlData<'allMainThreads', RelayEdge<BaseThread & { mainThread: Pick<BaseThread, 'id' | 'title'> }>>

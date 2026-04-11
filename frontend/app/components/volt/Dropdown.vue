@@ -11,10 +11,12 @@
 </template>
 
 <script setup lang="ts">
+import type { MenuItemCommandEvent } from 'primevue/menuitem';
+
 interface MenuItem {
   label: string
   icon?: string
-  command?: () => void
+  command?: (event: MenuItemCommandEvent) => void
 }
 
 const { id, isPopover = false, items = [] } = defineProps<{ id: string, isPopover?: boolean, items?: MenuItem[] }>()

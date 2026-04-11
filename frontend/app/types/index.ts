@@ -1,9 +1,10 @@
 import type { Delta } from '@vueup/vue-quill'
 import type { RouteParamsGeneric } from 'vue-router'
-import type { RouteMeta } from 'vue-router/dist/router-BbqN7H95.mjs'
+import type { RouteMeta } from '#vue-router'
 
 export type * from './graphql'
 export type * from './restapi'
+export { SortMethods, type SortMethodNames, type SortMenuItem, sortMethodNames } from './forums'
 
 export type Arrayable<T> = T[]
 
