@@ -5,6 +5,7 @@ from graphene import ObjectType, relay
 from graphene_django.filter import DjangoFilterConnectionField
 from base64 import b64decode
 from comments.graphql.types import CommentNode, ReplyType, QuoteType, MediaContentType
+from comments.utils import OrderingMethods
 
 class CommentsQuery(ObjectType):
     all_comments = DjangoFilterConnectionField(
@@ -15,7 +16,8 @@ class CommentsQuery(ObjectType):
     )
     comments_for_thread = DjangoFilterConnectionField(
         CommentNode,
-        thread_id=graphene.String()
+        thread_id=graphene.String(),
+        ordering=graphene.String()
     )
     latest_comments = DjangoFilterConnectionField(
         CommentNode, 
@@ -69,9 +71,22 @@ class CommentsQuery(ObjectType):
     def resolve_all_media_contents(self, info: GraphQLResolveInfo):
         return MediaContent.objects.all()
 
-    def resolve_comments_for_thread(self, info: GraphQLResolveInfo, thread_id: str):
+    def resolve_comments_for_thread(self, info: GraphQLResolveInfo, thread_id: str, ordering: str = None):
         thread_id = int(b64decode(thread_id).decode().split(":")[1])
-        return Comment.objects.filter(thread__id=thread_id)
+        qs = Comment.objects.filter(thread__id=thread_id)
+
+        if ordering is not None:
+            match ordering:
+                case OrderingMethods.MOST_RECENT.value:
+                    qs = qs.order_by('-created_on')
+                case OrderingMethods.NUMBER_OF_COMMENTS.value:
+                    qs = qs.order_by('-replies_count')
+                case OrderingMethods.MOST_LIKED.value:
+                    qs = qs.order_by('-likes_count')
+                case OrderingMethods.LEAST_LIKED.value:
+                    qs = qs.order_by('likes_count')
+        
+        return qs
 
     def resolve_latest_comments(self, info: GraphQLResolveInfo, limit=5):
         qs = Comment.objects.order_by('-created_on')

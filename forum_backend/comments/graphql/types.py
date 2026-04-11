@@ -1,8 +1,9 @@
 import graphene
+from graphql import GraphQLResolveInfo
 from comments.models import Comment, MediaContent, Quote, Reply
 from graphene import relay
 from graphene_django import DjangoObjectType
-
+from django.db.models import QuerySet   
 
 class MediaContentType(DjangoObjectType):
     class Meta:
@@ -65,3 +66,7 @@ class CommentNode(DjangoObjectType):
             'publish_on': ['exact', 'lt', 'gt'],
             'published': ['exact']
         }
+
+    @classmethod
+    def get_queryset(cls, queryset: QuerySet[Comment], info: GraphQLResolveInfo):
+        return queryset.prefetch_related('media_contents', 'tags', 'user').all()

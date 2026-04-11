@@ -1,3 +1,4 @@
+import enum
 import secrets
 
 from django.shortcuts import get_object_or_404
@@ -42,3 +43,10 @@ def parse_quotes(new_comment, quotes: list[int]) -> list[int]:
         quotes = Quote.objects.bulk_create(quote_objs)
         return quotes
     return []
+
+
+class OrderingMethods(enum.Enum):
+    MOST_RECENT = 'Most recent'
+    NUMBER_OF_COMMENTS = 'Number of comments'
+    MOST_LIKED = 'Most liked'
+    LEAST_LIKED = 'Least liked'
