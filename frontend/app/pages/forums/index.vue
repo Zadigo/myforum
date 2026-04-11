@@ -19,7 +19,7 @@
         <div class="mt-30">
           <suspense>
             <template #default>
-              <async-forum-latest-comments-block />
+              <lazy-forum-latest-comments-block />
             </template>
 
             <template #fallback>
@@ -47,10 +47,10 @@ const AsyncForumsIterationBlock = defineAsyncComponent({
   delay: 2000
 })
 
-const AsyncForumLatestCommentsBlock = defineAsyncComponent({
-  loader: async () => import('~/components/forums/LatestBlock.vue'),
-  delay: 2000
-})
+const LazyForumLatestCommentsBlock = defineLazyHydrationComponent(
+  'idle',
+  () => import('~/components/forums/LatestBlock.vue')
+)
 
 /**
  * SEO

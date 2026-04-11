@@ -1,4 +1,3 @@
-// import { forumsFixture } from '~/data/fixtures'
 import type { Forums } from '~/types'
 
 export default defineEventHandler(async _event => {
@@ -13,6 +12,10 @@ export default defineEventHandler(async _event => {
               node {
                 id
                 title
+                category
+                description
+                numberOfThreads
+                createdOn
               }
             }
           }
@@ -21,7 +24,6 @@ export default defineEventHandler(async _event => {
     }
   })
 
-  // return forumsFixture
   return data
 })
 

@@ -13,7 +13,7 @@
 <script setup lang="ts">
 const containerEl = useTemplateRef('containerEl')
 
-const coordinates = useLocalStorage('dev-container-coordinates', { x: 0, y: 0 }, {
+const coordinates = useLocalStorage('dev-container-coordinates', { x: 20, y: 20 }, {
   serializer: {
     read: (value) => JSON.parse(value),
     write: (value) => JSON.stringify(value)
