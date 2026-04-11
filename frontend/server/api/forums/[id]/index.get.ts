@@ -2,6 +2,11 @@ import type { SingleForum } from '~/types'
 
 export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')
+  let sort = getQuery(event).sort as string | undefined
+  
+  if (!sort) {
+    sort = 'latest'
+  }
   
   const data = await $fetch<SingleForum>('/graphql/', {
     method: 'POST',

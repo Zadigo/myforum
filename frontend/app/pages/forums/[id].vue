@@ -46,34 +46,34 @@ const asyncThreadsIterator = defineAsyncComponent({
 const sortingMethod = ref<SortMethodNames>('Most recent')
 provide('sortingMethod', sortingMethod)
 
-const query = useUrlSearchParams('history') as { sort: SortMethodNames }
+const query = useUrlSearchParams('history') as { ordering: SortMethodNames }
 const sortMethods: SortMenuItem[] = [
   {
     label: 'Sort alphabetically A-Z',
     command(event) {
       sortingMethod.value = event.item.label as SortMethodNames
-      query.sort = event.item.label as SortMethodNames
+      query.ordering = event.item.label as SortMethodNames
     }
   },
   {
     label: 'Sort alphabetically Z-A',
     command(event) {
       sortingMethod.value = event.item.label as SortMethodNames
-      query.sort = event.item.label as SortMethodNames
+      query.ordering = event.item.label as SortMethodNames
     }
   },
   {
     label: 'Most recent',
     command(event) {
       sortingMethod.value = event.item.label as SortMethodNames
-      query.sort = event.item.label as SortMethodNames
+      query.ordering = event.item.label as SortMethodNames
     },
   },
   {
     label: 'Number of comments',
     command(event) {
       sortingMethod.value = event.item.label as SortMethodNames
-      query.sort = event.item.label as SortMethodNames
+      query.ordering = event.item.label as SortMethodNames
     }
   }
 ]

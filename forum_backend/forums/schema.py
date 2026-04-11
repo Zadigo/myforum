@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 import graphene
 from forums.models import Forum
 from graphene import ObjectType, relay
@@ -15,7 +14,7 @@ class ForumNode(DjangoObjectType):
         filter_fields = {
             'title': ['exact', 'icontains', 'istartswith'],
             'category': ['exact'],
-            'description': ['icontains'],
+            'description': ['exact', 'icontains', 'istartswith'],
             'admin': ['exact'],
             'active': ['exact'],
             'created_on': ['exact', 'lt', 'gt'],
@@ -23,6 +22,10 @@ class ForumNode(DjangoObjectType):
 
 
 class ForumQuery(ObjectType):
-    forum = relay.Node.Field(ForumNode)
-    all_forums = DjangoFilterConnectionField(ForumNode)
+    all_forums = DjangoFilterConnectionField(
+        ForumNode
+    )
+    forum = relay.Node.Field(
+        ForumNode
+    )
     

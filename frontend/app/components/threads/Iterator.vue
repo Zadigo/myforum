@@ -7,7 +7,6 @@
 
   <template v-else>
     <article v-for="(thread, i) in iteratedThreads" :key="thread.node.id" :class="{ 'mt-1': i > 0 }" role="article">
-      {{ thread.node }}
       <nuxt-link-locale :to="`/threads/${thread.node.id}`" class="text-dark">
         <volt-card class="card shadow-sm">
           <template #content>
@@ -53,12 +52,14 @@ import type { MainThreads, RouteIdParamsGeneric, SortMethodNames } from '~/types
 const { id } = useRoute().params as RouteIdParamsGeneric
 
 const sortingMethod = inject<Ref<SortMethodNames>>('sortingMethod',  ref(SortMethods.MostRecent))
+
+console.log('Sorting method in iterator:', sortingMethod)
   
 const { data: cachedResponse } = await useFetch<MainThreads>(`/api/forums/${id}/threads`, {
   method: 'GET',
   watch: [sortingMethod],
   query: {
-    sort: sortingMethod.value
+    ordering: sortingMethod
   }
 })
 

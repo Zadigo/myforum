@@ -1,3 +1,5 @@
+import enum
+
 from django.db import models
 
 
@@ -15,3 +17,9 @@ class ForumCategories(models.Choices):
     NEWS = 'News'
     MISCELLANEOUS = 'Miscellaneous'
     
+
+class OrderingMethods(enum.Enum):
+    AZ = 'Sort alphabetically A-Z'
+    ZA = 'Sort alphabetically Z-A'
+    MOST_RECENT = 'Most recent'
+    NUMBER_OF_COMMENTS = 'Number of comments'

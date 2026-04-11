@@ -2,14 +2,15 @@ import type { MainThreads } from "~/types"
 
 export default defineCachedEventHandler(async event => {
   const id = getRouterParam(event, 'id')
+  const ordering = getQuery(event).ordering as string | undefined
 
   const data = await $fetch<MainThreads>(`/graphql/`, {
     method: 'POST',
     baseURL: useRuntimeConfig().public.prodDomain,
     body: {
       query: `
-        query ($id: Int!) {
-          forumThreads(forumId: $id) {
+        query ($id: String!, $ordering: String!) {
+          forumThreads(forumId: $id, ordering: $ordering) {
             edges {
               node {
                 id
@@ -32,12 +33,12 @@ export default defineCachedEventHandler(async event => {
         }
       `,
       variables: {
-        id: 1
+        id,
+        ordering: ordering ? ordering : undefined
       }
     }
   })
 
-  // return mainThreadsFixture
   return data
 })
 

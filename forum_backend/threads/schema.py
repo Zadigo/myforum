@@ -1,10 +1,13 @@
 from django.db.models import Case
 from django.db.models import When
 import graphene
+from django.db.models import Count
+import base64
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
+from graphql import GraphQLResolveInfo
 from threads.models import MainThread, SubThread
-
+from threads.choices import OrderingMethods
 
 class ThreadMixin:
     number_of_comments = graphene.Int()
@@ -22,6 +25,7 @@ class ThreadMixin:
 
 
 class MainThreadNode(ThreadMixin, DjangoObjectType):
+    number_of_comments = graphene.Int(source='num_comments')
     owned_by_user = graphene.Boolean(default_value=False)
 
     class Meta:
@@ -62,26 +66,46 @@ class SubThreadNode(ThreadMixin, DjangoObjectType):
             'modified_on': ['exact', 'lt', 'gt', 'lte', 'gte']
         }
 
-    # @classmethod
-    # def get_queryset(cls, queryset: QuerySet[SubThread], info):
-    #     return queryset.select_related('main_thread').order_by('title', '-created_on')
-
 
 class ThreadQuery(graphene.ObjectType):
-    main_thread = graphene.relay.Node.Field(MainThreadNode)
-    all_main_threads = DjangoFilterConnectionField(MainThreadNode)
-
+    all_main_threads = DjangoFilterConnectionField(
+        MainThreadNode
+    )
+    main_thread = graphene.relay.Node.Field(
+        MainThreadNode
+    )
     forum_threads = DjangoFilterConnectionField(
         MainThreadNode,
-        forum_id=graphene.Int()
+        forum_id=graphene.String(),
+        ordering=graphene.String()
     )
 
-    sub_thread = graphene.relay.Node.Field(SubThreadNode)
-    all_sub_threads = DjangoFilterConnectionField(SubThreadNode)
+    all_sub_threads = DjangoFilterConnectionField(
+        SubThreadNode
+    )
+    sub_thread = graphene.relay.Node.Field(
+        SubThreadNode
+    )
 
-    def resolve_forum_threads(self, info, forum_id=None, **kwargs):
+    def resolve_forum_threads(self, info: GraphQLResolveInfo, forum_id: str=None, **kwargs):
+        forum_id = base64.b64decode(forum_id).decode('utf-8').split(':')[-1]
         qs = MainThread.objects.filter(forum__id=forum_id, active=True)
-        print(info.context.user.id)
+        
         logic = When(user=info.context.user.id, then=True)
         case = Case(logic, default=False)
-        return qs.annotate(owned_by_user=case)
+
+        qs = qs.annotate(owned_by_user=case, num_comments=Count('comment'))
+
+        ordering = kwargs.get('ordering')
+        if ordering is not None:
+            match ordering:
+                case OrderingMethods.AZ.value:
+                    qs = qs.order_by('title')
+                case OrderingMethods.ZA.value:
+                    qs = qs.order_by('-title')
+                case OrderingMethods.MOST_RECENT.value:
+                    qs = qs.order_by('-created_on')
+                case OrderingMethods.NUMBER_OF_COMMENTS.value:
+                    qs = qs.order_by('-num_comments')
+        
+        return qs
