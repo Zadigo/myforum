@@ -22,7 +22,9 @@
         <span>-</span>
         <span class="font-bold text-primary-700 underline underline-offset-4">@{{ comment.node.user.username }}</span>
         <span>-</span>
-        <span v-if="$humanizeDate" class="text-muted">{{ $humanizeDate(comment.node.createdOn) }}</span>
+        <span class="text-muted">
+          <nuxt-time :datetime="comment.node.createdOn" relative />
+        </span>
       </div>
 
       <div v-html="comment.node.contentHtml" />
@@ -70,11 +72,18 @@
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from 'primevue/menuitem';
-import type { LatestCommentNode, LatestComments, UserCommentNode, UserComments } from '~/types';
+import type { MenuItem } from 'primevue/menuitem'
+import type { LatestCommentNode, LatestComments, UserCommentNode, UserComments } from '~/types'
 
-const { showActions = true, comments } = defineProps<{ comments: UserComments | LatestComments, showActions?: boolean }>()
-defineEmits<{ reply: [comment: UserCommentNode], edit: [comment: UserCommentNode | LatestCommentNode] }>()
+const { showActions = true, comments } = defineProps<{ 
+  comments: UserComments | LatestComments, 
+  showActions?: boolean
+}>()
+
+defineEmits<{ 
+  reply: [comment: UserCommentNode], 
+  edit: [comment: UserCommentNode | LatestCommentNode]
+}>()
 
 const iteratedComments = computed(() => {
   if ('commentsForThread' in comments.data) {
@@ -85,8 +94,6 @@ const iteratedComments = computed(() => {
     return []
   }
 })
-
-const { $humanizeDate } = useNuxtApp()
 
 /**
  * Handlers

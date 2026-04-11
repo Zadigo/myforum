@@ -1,5 +1,5 @@
 <template>
-  <div ref="containerEl" :style="style" class="fixed top-0 left-0 rounded-lg bg-primary-500/10 backdrop-blur-3xl w-100 h-auto p-10 z-50">
+  <div ref="containerEl" :style="style" class="fixed top-0 left-0 rounded-lg shadow-sm bg-primary-500/10 dark:bg-primary-100/10 backdrop-blur-3xl w-100 h-auto py-2 px-10 z-50">
     <volt-button @click="() => { toggleWrapper() }">
       <icon name="i-lucide:x" />
     </volt-button>

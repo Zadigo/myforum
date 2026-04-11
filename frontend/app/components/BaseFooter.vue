@@ -18,7 +18,7 @@
 
     <!-- Copyright -->
     <div class="text-center text-light p-3 bg-primary-700 dark:bg-primary-800">
-      © {{ currentYear }} Copyright:
+      © <nuxt-time :datetime="new Date()" year="numeric" /> Copyright:
       <NuxtLink to="/" class="text-light">
         My forum
       </NuxtLink>
@@ -27,6 +27,4 @@
 </template>
 
 <script setup lang="ts">
-const { $dayjs } = useNuxtApp()
-const currentYear = ref<number>($dayjs().year())
 </script>

@@ -18,5 +18,8 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Fetch
+ */
 const { comments } = await useLatestCommentsComposable()
 </script>

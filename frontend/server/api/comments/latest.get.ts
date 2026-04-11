@@ -8,13 +8,17 @@ export default defineCachedEventHandler(async _event => {
       query: `
         query LatestComments($limit: Int) {
           latestComments(limit: $limit) {
-            id
-            content
-            content_html
-            created_on
-            user {
-              id
-              username
+            edges {
+              node {
+                id
+                content
+                contentHtml
+                createdOn
+                user {
+                  id
+                  username
+                }
+              }
             }
           }
         }
