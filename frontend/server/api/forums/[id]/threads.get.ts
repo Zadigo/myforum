@@ -1,4 +1,3 @@
-// import { mainThreadsFixture } from "~/data/fixtures"
 import type { MainThreads } from "~/types"
 
 export default defineCachedEventHandler(async event => {

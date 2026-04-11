@@ -1,8 +1,6 @@
-// import { forumFixture } from '~/data/fixtures'
 import type { SingleForum } from '~/types'
 
 export default defineEventHandler(async event => {
-  // const { sort } = getQuery(event)
   const id = getRouterParam(event, 'id')
   
   const data = await $fetch<SingleForum>('/graphql/', {

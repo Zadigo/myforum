@@ -5,37 +5,43 @@ import type { UserComments } from "~/types"
 export default defineEventHandler(async event => {
   const { sort } = getQuery(event)
   const id = getRouterParam(event, 'id')
-
-  const data = await $fetch<UserComments>('/graphql/', {
-    method: 'POST',
-    baseURL: useRuntimeConfig().public.prodDomain,
-    body: {
-      query: `
-        query($threadId: Int!) {
-          commentsForThread(threadId: $threadId) {
-            edges {
-              node {
-                id
-                title
-                content
-                contentHtml
-                contentDelta
-                bookmarkedByUser
-                user { id username}
+  
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      message: 'Thread ID is required'
+    })
+  } else {
+    const data = await $fetch<UserComments>('/graphql/', {
+      method: 'POST',
+      baseURL: useRuntimeConfig().public.prodDomain,
+      body: {
+        query: `
+          query($threadId: String!) {
+            commentsForThread(threadId: $threadId) {
+              edges {
+                node {
+                  id
+                  title
+                  content
+                  contentHtml
+                  contentDelta
+                  bookmarkedByUser
+                  user { id username }
+                }
               }
             }
           }
+        `,
+        variables: {
+          threadId: id,
+          // sort: sort || null
         }
-      `,
-      variables: {
-        threadId: id,
-        // sort: sort || null
       }
-    }
-  })
-
-  // return commentsFixture
-  return data
+    })
+  
+    return data
+  }
 })
 
 // import type { ThreadApiResponse } from '~/types'

@@ -3,6 +3,7 @@ from graphql import GraphQLResolveInfo
 from comments.models import Comment, MediaContent, Quote, Reply
 from graphene import ObjectType, relay
 from graphene_django.filter import DjangoFilterConnectionField
+from base64 import b64decode
 from comments.graphql.types import CommentNode, ReplyType, QuoteType, MediaContentType
 
 class CommentsQuery(ObjectType):
@@ -14,7 +15,7 @@ class CommentsQuery(ObjectType):
     )
     comments_for_thread = DjangoFilterConnectionField(
         CommentNode,
-        thread_id=graphene.Int()
+        thread_id=graphene.String()
     )
     latest_comments = DjangoFilterConnectionField(
         CommentNode, 
@@ -68,7 +69,8 @@ class CommentsQuery(ObjectType):
     def resolve_all_media_contents(self, info: GraphQLResolveInfo):
         return MediaContent.objects.all()
 
-    def resolve_comments_for_thread(self, info: GraphQLResolveInfo, thread_id):
+    def resolve_comments_for_thread(self, info: GraphQLResolveInfo, thread_id: str):
+        thread_id = int(b64decode(thread_id).decode().split(":")[1])
         return Comment.objects.filter(thread__id=thread_id)
 
     def resolve_latest_comments(self, info: GraphQLResolveInfo, limit=5):

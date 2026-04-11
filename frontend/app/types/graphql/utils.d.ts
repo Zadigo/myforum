@@ -1,10 +1,15 @@
 type GraphQlError = {
-  errors: Array<{
-    message: string
-    locations?: Array<{ line: number; column: number }>
-    path?: Array<string | number>
-    extensions?: Record<string, unknown>
-  }>
+  error: boolean,
+  url: string,
+  statusCode: number,
+  statusMessage: string,
+  message: string,
+  data: {
+    errors: Array<{
+      message: string
+      locations?: Array<{ line: number; column: number }>
+    }>
+  }
 }
 
 /**
@@ -108,7 +113,7 @@ export interface GraphQlMultiData<T extends Record<string, unknown>> {
  * ```
  */
 export interface GraphQlVariableData<K extends string, R> {
-  errors?: GraphQlError['errors']
+  errors?: GraphQlError['data']['errors']
   data: Partial<
     {
       [ key in K ]: R
