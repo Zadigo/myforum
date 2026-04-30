@@ -75,9 +75,9 @@ const { id } = useRoute().params
 
 const currentOffset = ref<number>(1)
   
-  const { refresh, data } = await useFetch<UserComments>(`/api/threads/${id}/comments`, {
-    method: 'GET',
-    query: {
+const { refresh, data } = await useFetch<UserComments>(`/api/threads/${id}/comments`, {
+  method: 'GET',
+  query: {
     limit: 30,
     offset: currentOffset.value 
   }

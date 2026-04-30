@@ -101,11 +101,16 @@ export interface ForumStatistics {
 export const useForumStatisticsComposable = createGlobalState(async () => {
   const requestComplete = ref<boolean>(false)
 
-  const statistics = await $fetch<ForumStatistics>('/v1/forums/statistics', {
+  let statistics = {}
+  
+  statistics = await $fetch<ForumStatistics>('/v1/forums/statistics', {
     method: 'GET',
     baseURL: useRuntimeConfig().public.prodDomain,
     onResponse() {
       requestComplete.value = true
+    },
+    onRequestError() {
+      console.log('Failed to fetch forum statistics')
     }
   })
 

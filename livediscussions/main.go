@@ -47,6 +47,6 @@ func main() {
 		handlers.LiveDiscussionsHandler(w, r, serverRegistry)
 	})
 
-	log.Println("🚀 Live Discussions Server is running on :8080")
-	http.ListenAndServe(":8080", router)
+	log.Println("🚀 Live Discussions Server is running on :9000")
+	http.ListenAndServe(":9000", router)
 }
