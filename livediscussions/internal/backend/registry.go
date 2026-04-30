@@ -15,6 +15,14 @@ type ServerRegistry struct {
 	mu          sync.Mutex
 }
 
+func (r *ServerRegistry) AddDiscussionSpace(discussionSpace DiscussionSpaceInterface) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	r.Discussions[discussionSpace.(*DiscussionSpace).ID] = discussionSpace.(*DiscussionSpace)
+	return nil
+}
+
 func (r *ServerRegistry) GetClient(client WebsocketClientInterface) (*WebsocketClient, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -66,11 +74,12 @@ func (r *ServerRegistry) GetDiscussion(discussionId string) (*DiscussionSpace, e
 
 type ServerRegistryInterface interface {
 	AddClient(client WebsocketClientInterface) error
+	GetClient(client WebsocketClientInterface) (*WebsocketClient, error)
 	RemoveClient(client WebsocketClientInterface) error
 	BroadcastMessage(message WebsocketMessage)
 	GetDiscussion(discussionId string) (*DiscussionSpace, error)
 	GetRegistry() *ServerRegistry
-	GetClient(client WebsocketClientInterface) (*WebsocketClient, error)
+	AddDiscussionSpace(discussionSpace DiscussionSpaceInterface) error
 }
 
 func NewServerRegistry(redisClient *redis.Client) ServerRegistryInterface {

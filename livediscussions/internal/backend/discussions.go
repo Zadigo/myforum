@@ -1,6 +1,10 @@
 package backend
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/google/uuid"
+)
 
 type DiscussionSpace struct {
 	ID      string                     `json:"id"`
@@ -44,9 +48,9 @@ func (d *DiscussionSpace) BroadcastMessage(message WebsocketMessage) {
 	}
 }
 
-func NewDiscussionSpace(id string) DiscussionSpaceInterface {
+func NewDiscussionSpace() DiscussionSpaceInterface {
 	return &DiscussionSpace{
-		ID:      id,
+		ID:      uuid.NewString(),
 		Clients: []WebsocketClientInterface{},
 	}
 }
