@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -8,13 +9,16 @@ import (
 	"github.com/Zadigo/livediscussions/internal/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-co-op/gocron"
 )
 
-func preStartup(r *backend.ServerRegistry) {}
-
 func main() {
+	log.Println("🚀 Starting Live Discussions Server...")
+
 	// Create Redis client and server registry
 	redisClient := backend.CreateRedisClient("redis://localhost:6379")
+	log.Println("✅ Connected to Redis")
+
 	serverRegistry := backend.NewServerRegistry(redisClient)
 
 	// Create the main general discussion space
@@ -24,6 +28,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Global scheduler
+	scheduler := gocron.NewScheduler(time.UTC)
+	go backend.StartCleanupRouting(scheduler)
+	serverRegistry.GetRegistry().SetScheduler(scheduler)
+	log.Print("⚡️ Started cleanup scheduler")
 
 	router := chi.NewRouter()
 
@@ -37,5 +47,6 @@ func main() {
 		handlers.LiveDiscussionsHandler(w, r, serverRegistry)
 	})
 
+	log.Println("🚀 Live Discussions Server is running on :8080")
 	http.ListenAndServe(":8080", router)
 }

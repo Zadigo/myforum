@@ -4,15 +4,23 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/go-co-op/gocron"
 	"github.com/redis/go-redis/v9"
 )
 
 type ServerRegistry struct {
-	Clients     map[string]*WebsocketClient
-	Discussions map[string]*DiscussionSpace
-	RedisClient *redis.Client
-	broadcast   chan WebsocketMessage
-	mu          sync.Mutex
+	Clients     map[string]*WebsocketClient         `json:"clients"`
+	Discussions map[string]DiscussionSpaceInterface `json:"discussions"`
+	RedisClient *redis.Client                       `json:"-"`
+	scheduler   *gocron.Scheduler                   `json:"-"`
+	broadcast   chan WebsocketMessage               `json:"-"`
+	mu          sync.Mutex                          `json:"-"`
+}
+
+// SetScheduler sets the scheduler for the server registry. This is used for 
+// scheduling cleanup tasks and other periodic operations.
+func (r *ServerRegistry) SetScheduler(scheduler *gocron.Scheduler) {
+	r.scheduler = scheduler
 }
 
 func (r *ServerRegistry) AddDiscussionSpace(discussionSpace DiscussionSpaceInterface) error {
@@ -49,12 +57,12 @@ func (r *ServerRegistry) RemoveClient(client WebsocketClientInterface) error {
 
 	delete(r.Clients, client.(*WebsocketClient).ID)
 
-	// IMPORTANT: Also remove client from any 
+	// IMPORTANT: Also remove client from any
 	// discussions they are part of
 	for _, discussion := range r.Discussions {
 		discussion.RemoveClient(client)
 	}
-	
+
 	return nil
 }
 
@@ -67,7 +75,7 @@ func (r *ServerRegistry) GetRegistry() *ServerRegistry {
 }
 
 // GetDiscussion returns the list of clients in a discussion. If the discussion doesn't exist, it returns nil.
-func (r *ServerRegistry) GetDiscussion(discussionId string) (*DiscussionSpace, error) {
+func (r *ServerRegistry) GetDiscussion(discussionId string) (DiscussionSpaceInterface, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -84,7 +92,7 @@ type ServerRegistryInterface interface {
 	GetClient(client WebsocketClientInterface) (*WebsocketClient, error)
 	RemoveClient(client WebsocketClientInterface) error
 	BroadcastMessage(message WebsocketMessage)
-	GetDiscussion(discussionId string) (*DiscussionSpace, error)
+	GetDiscussion(discussionId string) (DiscussionSpaceInterface, error)
 	GetRegistry() *ServerRegistry
 	AddDiscussionSpace(discussionSpace DiscussionSpaceInterface) error
 }
@@ -92,7 +100,7 @@ type ServerRegistryInterface interface {
 func NewServerRegistry(redisClient *redis.Client) ServerRegistryInterface {
 	return &ServerRegistry{
 		Clients:     make(map[string]*WebsocketClient),
-		Discussions: make(map[string]*DiscussionSpace),
+		Discussions: make(map[string]DiscussionSpaceInterface),
 		broadcast:   make(chan WebsocketMessage, 100),
 		RedisClient: redisClient,
 	}

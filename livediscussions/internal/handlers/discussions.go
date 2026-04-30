@@ -42,7 +42,17 @@ func authenticationHandler(client backend.WebsocketClientInterface, message back
 func discussionHandler(client backend.WebsocketClientInterface, message backend.WebsocketMessage, serverRegistry backend.ServerRegistryInterface) {
 	switch message.Action {
 	case "get_discussions":
-		// Do something
+		discussionSpaces := serverRegistry.GetRegistry().Discussions
+		
+		err := client.SendJsonMessage(backend.WebsocketMessage{
+			Action:           "available_discussions",
+			DiscussionSpaces: discussionSpaces,
+		})
+		
+		if err != nil {
+			ErrorMessage(client, err.Error())
+			return
+		}
 
 	case "send_message":
 		// Broadcast message to all clients in the discussion
@@ -111,7 +121,7 @@ func LiveDiscussionsHandler(w http.ResponseWriter, r *http.Request, serverRegist
 	client := backend.NewWebsocketClient(uuid.NewString(), conn)
 	err = serverRegistry.AddClient(client)
 
-	// Ensure client is removed from registry 
+	// Ensure client is removed from registry
 	// and connection is closed when handler exits
 	defer func() {
 		serverRegistry.RemoveClient(client)
@@ -124,14 +134,13 @@ func LiveDiscussionsHandler(w http.ResponseWriter, r *http.Request, serverRegist
 	}
 
 	client.SendJsonMessage(backend.WebsocketMessage{
-		Action: "must_identify",
+		Action:   "must_identify",
+		ClientId: client.GetClient().ID,
 	})
 
 	for {
-		_, _, err := conn.ReadMessage()
-
 		var message backend.WebsocketMessage
-		err = client.ReadJsonMessage(&message)
+		err := conn.ReadJSON(&message)
 
 		if err != nil {
 			if IsWebsocketClose(err) {

@@ -16,14 +16,6 @@ type DiscussionSpace struct {
 	mu           sync.Mutex                    `json:"-"`
 }
 
-type DiscussionSpaceInterface interface {
-	AddClient(client WebsocketClientInterface) error
-	RemoveClient(client WebsocketClientInterface) error
-	BroadcastMessage(message WebsocketMessage)
-	StartBroadcaster()
-	GetID() string
-}
-
 func (d *DiscussionSpace) GetID() string {
 	return d.ID
 }
@@ -71,14 +63,26 @@ func (d *DiscussionSpace) StartBroadcaster() {
 }
 
 func (d *DiscussionSpace) BroadcastMessage(message WebsocketMessage) {
-	d.mu.Lock()
-	defer d.mu.Unlock()
+	d.broadcast <- message
 
-	for _, client := range d.Participants {
-		client.SendJsonMessage(message)
-	}
+	// d.mu.Lock()
+	// defer d.mu.Unlock()
+
+	// for _, client := range d.Participants {
+	// 	client.SendJsonMessage(message)
+	// }
 }
 
+type DiscussionSpaceInterface interface {
+	AddClient(client WebsocketClientInterface) error
+	RemoveClient(client WebsocketClientInterface) error
+	BroadcastMessage(message WebsocketMessage)
+	StartBroadcaster()
+	GetID() string
+}
+
+// NewDiscussionSpace creates a new discussion space with a unique ID
+// and starts its broadcaster goroutine.
 func NewDiscussionSpace(name string) DiscussionSpaceInterface {
 	ds := &DiscussionSpace{
 		ID:           uuid.NewString(),

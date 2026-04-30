@@ -48,8 +48,10 @@ func NewWebsocketClient(id string, conn *websocket.Conn) WebsocketClientInterfac
 }
 
 type WebsocketMessage struct {
-	Action       string `json:"action"`
-	Username     string `json:"username,omitempty"`
-	DiscussionId string `json:"discussion_id,omitempty"`
-	Message      string `json:"message,omitempty"`
+	Action           string                              `json:"action"`
+	Username         string                              `json:"username,omitempty"`
+	DiscussionId     string                              `json:"discussionId,omitempty"`
+	Message          string                              `json:"message,omitempty"`
+	DiscussionSpaces map[string]DiscussionSpaceInterface `json:"discussionSpaces,omitempty"`
+	ClientId         string                              `json:"clientId,omitempty"`
 }
