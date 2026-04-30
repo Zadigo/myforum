@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -19,6 +20,20 @@ func authenticationHandler(client backend.WebsocketClientInterface, message back
 			return
 		}
 
+		registeredClient, err := serverRegistry.GetClient(client)
+		if err != nil {
+			ErrorMessage(client, err.Error())
+			return
+		}
+
+		registeredClient.User.Username = username
+		log.Printf("✅ Client %s identified as %s\n", registeredClient.ID, username)
+
+		registeredClient.SendJsonMessage(backend.WebsocketMessage{
+			Action:  "identified",
+			Message: fmt.Sprintf("Identification successful as %s", username),
+		})
+
 	default:
 		// Do something
 	}
@@ -30,7 +45,17 @@ func discussionHandler(client backend.WebsocketClientInterface, message backend.
 		// Do something
 
 	case "send_message":
-		// Do something
+		// Broadcast message to all clients in the discussion
+		discussion, err := serverRegistry.GetDiscussion(message.DiscussionId)
+		if err != nil {
+			ErrorMessage(client, err.Error())
+			return
+		}
+
+		discussion.BroadcastMessage(backend.WebsocketMessage{
+			Action:  "new_message",
+			Message: message.Message,
+		})
 
 	case "join_discussion":
 		discussionId := message.DiscussionId
@@ -39,6 +64,17 @@ func discussionHandler(client backend.WebsocketClientInterface, message backend.
 			return
 		}
 
+		discussion, err := serverRegistry.GetDiscussion(discussionId)
+		if err != nil {
+			ErrorMessage(client, err.Error())
+			return
+		}
+
+		discussion.AddClient(client)
+		discussion.BroadcastMessage(backend.WebsocketMessage{
+			Action:  "new_client",
+			Message: fmt.Sprintf("A new client has joined the discussion %s", client.GetClient().ID),
+		})
 	default:
 		// Do something
 	}
@@ -97,7 +133,7 @@ func LiveDiscussionsHandler(w http.ResponseWriter, r *http.Request, serverRegist
 
 		if err != nil {
 			if IsWebsocketClose(err) {
-				log.Println("🔌 Client disconnected:", client.(*backend.WebsocketClient).ID)
+				log.Println("🔌 Client disconnected:", client.GetClient().ID)
 			} else {
 				log.Println("❌ Read error:", err)
 			}

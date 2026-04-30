@@ -8,14 +8,9 @@ type User struct {
 }
 
 type WebsocketClient struct {
-	User
+	User User            `json:"user"`
 	ID   string          `json:"id"`
 	Conn *websocket.Conn `json:"-"`
-}
-
-type WebsocketClientInterface interface {
-	SendJsonMessage(message WebsocketMessage) error
-	ReadJsonMessage(v any) error
 }
 
 func (c *WebsocketClient) SendJsonMessage(message WebsocketMessage) error {
@@ -24,6 +19,21 @@ func (c *WebsocketClient) SendJsonMessage(message WebsocketMessage) error {
 
 func (c *WebsocketClient) ReadJsonMessage(v any) error {
 	return c.Conn.ReadJSON(v)
+}
+
+func (c *WebsocketClient) GetClient() *WebsocketClient {
+	return c
+}
+
+func (c *WebsocketClient) GetUser() *User {
+	return &c.User
+}
+
+type WebsocketClientInterface interface {
+	SendJsonMessage(message WebsocketMessage) error
+	ReadJsonMessage(v any) error
+	GetUser() *User
+	GetClient() *WebsocketClient
 }
 
 func NewWebsocketClient(id string, conn *websocket.Conn) WebsocketClientInterface {

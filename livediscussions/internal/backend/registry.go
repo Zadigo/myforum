@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/redis/go-redis/v9"
@@ -8,16 +9,22 @@ import (
 
 type ServerRegistry struct {
 	Clients     map[string]*WebsocketClient
-	Discussions map[string][]*WebsocketClient
+	Discussions map[string]*DiscussionSpace
 	RedisClient *redis.Client
 	broadcast   chan WebsocketMessage
 	mu          sync.Mutex
 }
 
-type ServerRegistryInterface interface {
-	AddClient(client WebsocketClientInterface) error
-	RemoveClient(client WebsocketClientInterface) error
-	BroadcastMessage(message WebsocketMessage)
+func (r *ServerRegistry) GetClient(client WebsocketClientInterface) (*WebsocketClient, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	c, exists := r.Clients[client.(*WebsocketClient).ID]
+	if !exists {
+		return nil, fmt.Errorf("Client with ID %s does not exist", client.(*WebsocketClient).ID)
+	}
+
+	return c, nil
 }
 
 func (r *ServerRegistry) AddClient(client WebsocketClientInterface) error {
@@ -40,10 +47,36 @@ func (r *ServerRegistry) BroadcastMessage(message WebsocketMessage) {
 	r.broadcast <- message
 }
 
+func (r *ServerRegistry) GetRegistry() *ServerRegistry {
+	return r
+}
+
+// GetDiscussion returns the list of clients in a discussion. If the discussion doesn't exist, it returns nil.
+func (r *ServerRegistry) GetDiscussion(discussionId string) (*DiscussionSpace, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	discussion, exists := r.Discussions[discussionId]
+	if !exists {
+		return nil, fmt.Errorf("Discussion with ID %s does not exist", discussionId)
+	}
+
+	return discussion, nil
+}
+
+type ServerRegistryInterface interface {
+	AddClient(client WebsocketClientInterface) error
+	RemoveClient(client WebsocketClientInterface) error
+	BroadcastMessage(message WebsocketMessage)
+	GetDiscussion(discussionId string) (*DiscussionSpace, error)
+	GetRegistry() *ServerRegistry
+	GetClient(client WebsocketClientInterface) (*WebsocketClient, error)
+}
+
 func NewServerRegistry(redisClient *redis.Client) ServerRegistryInterface {
 	return &ServerRegistry{
 		Clients:     make(map[string]*WebsocketClient),
-		Discussions: make(map[string][]*WebsocketClient),
+		Discussions: make(map[string]*DiscussionSpace),
 		broadcast:   make(chan WebsocketMessage, 100),
 		RedisClient: redisClient,
 	}

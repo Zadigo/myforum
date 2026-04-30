@@ -3,18 +3,18 @@ package backend
 import "sync"
 
 type DiscussionSpace struct {
-	ID      string             `json:"id"`
-	Clients []*WebsocketClient `json:"clients"`
-	mu      sync.Mutex         `json:"-"`
+	ID      string                     `json:"id"`
+	Clients []WebsocketClientInterface `json:"clients"`
+	mu      sync.Mutex                 `json:"-"`
 }
 
 type DiscussionSpaceInterface interface {
-	AddClient(client *WebsocketClient) error
-	RemoveClient(client *WebsocketClient) error
+	AddClient(client WebsocketClientInterface) error
+	RemoveClient(client WebsocketClientInterface) error
 	BroadcastMessage(message WebsocketMessage)
 }
 
-func (d *DiscussionSpace) AddClient(client *WebsocketClient) error {
+func (d *DiscussionSpace) AddClient(client WebsocketClientInterface) error {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
@@ -22,12 +22,12 @@ func (d *DiscussionSpace) AddClient(client *WebsocketClient) error {
 	return nil
 }
 
-func (d *DiscussionSpace) RemoveClient(client *WebsocketClient) error {
+func (d *DiscussionSpace) RemoveClient(client WebsocketClientInterface) error {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
 	for i, c := range d.Clients {
-		if c.ID == client.ID {
+		if c.GetClient().ID == client.GetClient().ID {
 			d.Clients = append(d.Clients[:i], d.Clients[i+1:]...)
 			break
 		}
@@ -47,6 +47,6 @@ func (d *DiscussionSpace) BroadcastMessage(message WebsocketMessage) {
 func NewDiscussionSpace(id string) DiscussionSpaceInterface {
 	return &DiscussionSpace{
 		ID:      id,
-		Clients: []*WebsocketClient{},
+		Clients: []WebsocketClientInterface{},
 	}
 }
