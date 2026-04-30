@@ -1,5 +1,5 @@
 <template>
-  <volt-dialog v-model:visible="createCommentModal" class="md:w-[700px]" :dismissable-mask="false" modal>
+  <volt-dialog v-model:visible="createCommentModal" class="md:w-175" :dismissable-mask="false" modal>
     <volt-input-text placeholder="Title" />
     <base-editor @editor-content="writeEditorContent" />
 
