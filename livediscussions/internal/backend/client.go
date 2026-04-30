@@ -53,5 +53,6 @@ type WebsocketMessage struct {
 	DiscussionId     string                              `json:"discussionId,omitempty"`
 	Message          string                              `json:"message,omitempty"`
 	DiscussionSpaces map[string]DiscussionSpaceInterface `json:"discussionSpaces,omitempty"`
+	DiscussionSpace  DiscussionSpaceInterface            `json:"discussionSpace,omitempty"`
 	ClientId         string                              `json:"clientId,omitempty"`
 }

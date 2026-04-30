@@ -42,6 +42,11 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  name: 'Forums',
+  layout: 'design'
+})
+
 const AsyncForumsIterationBlock = defineAsyncComponent({
   loader: async () => import('~/components/forums/IterationBlock.vue'),
   delay: 2000

@@ -85,7 +85,8 @@
 import { threadTypes } from '~/utils/constants/threads'
 
 definePageMeta({
-  name: 'Create Thread'
+  name: 'Create Thread',
+  layout: 'design'
 })
 
 /**

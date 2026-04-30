@@ -52,7 +52,22 @@ func (d *DiscussionSpace) StartBroadcaster() {
 		for {
 			select {
 			case message := <-d.broadcast:
-				d.BroadcastMessage(message)
+				d.mu.Lock()
+				for _, client := range d.Participants {
+					client.SendJsonMessage(message)
+				}
+				d.mu.Unlock()
+				
+				// case message := <-d.privateMessages:
+				// 	// Handle private messages if needed
+				// 	// This can be implemented by including a recipient ID in the message and sending it only to the intended recipient
+				// 	recipientID := message.RecipientId
+				// 	for _, client := range d.Participants {
+				// 		if client.GetClient().ID == recipientID {
+				// 			client.SendJsonMessage(message)
+				// 			break
+				// 		}
+				// 	}
 			case client := <-d.register:
 				d.AddClient(client)
 			case client := <-d.unregister:

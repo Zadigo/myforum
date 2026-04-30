@@ -11,7 +11,12 @@ export function useWWebsocketMessages2() {
     return JSON.stringify({ action, ...args[ 0 ] })
   }
 
+  const messages = ref<string[]>([])
+  const history = useRefHistory(messages)
+  
   function decode<R extends Record<string, unknown>>(message: string) {
+    messages.value.push(message)
+    
     /**
      * A decoder function that listens to messages from the websocket by matching the specified
      * action. The callback function will be called with the decoded data if the action matches,
@@ -20,6 +25,7 @@ export function useWWebsocketMessages2() {
      * @param callback - A callback function that will be called with the decoded data if the action matches, or undefined if it doesn't match
      */
     return function <K extends keyof R>(action: K, callback: (data: DecodedData<R, K> | undefined) => void) {
+
       try {
         const wsData = JSON.parse(message) as DecodedData<R, K>
 
@@ -46,6 +52,16 @@ export function useWWebsocketMessages2() {
      * Return a new decoder function that can be used to decode messages from the websocket.
      * @param message - The message to be decoded
      */
-    decode
+    decode,
+    /**
+     * A reactive array that stores all the raw messages received from the websocket. 
+     * This can be used for debugging purposes or to display the raw message data in the UI if needed.
+     */
+    messages,
+    /**
+     * A history object that allows you to navigate through the received messages. 
+     * This can be useful for debugging or for implementing features like message history in the UI.
+     */
+    history
   }
 }

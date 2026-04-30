@@ -6,7 +6,7 @@
     <!-- Header -->
     <headers-forum />
 
-    <div class="grid grid-cols-12 max-w-7xl mx-auto gap-4 my-20" role="main">
+    <main class="grid grid-cols-12 max-w-7xl mx-auto gap-4 my-20" role="main">
       <div class="col-span-8">
         <slot />
       </div>
@@ -16,7 +16,7 @@
           <async-forums-aside />
         </suspense>
       </div>
-    </div>
+    </main>
 
     <!-- Footer -->
     <lazy-base-footer hydrate-on-visible />

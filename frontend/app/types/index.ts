@@ -4,6 +4,8 @@ import type { RouteMeta } from '#vue-router'
 
 export type * from './graphql'
 export type * from './restapi'
+export * from './motions'
+export type * from './live_discussions'
 export { SortMethods, type SortMethodNames, type SortMenuItem, sortMethodNames } from './forums'
 
 export type Arrayable<T> = T[]

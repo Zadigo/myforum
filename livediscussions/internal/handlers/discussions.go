@@ -43,12 +43,12 @@ func discussionHandler(client backend.WebsocketClientInterface, message backend.
 	switch message.Action {
 	case "get_discussions":
 		discussionSpaces := serverRegistry.GetRegistry().Discussions
-		
+
 		err := client.SendJsonMessage(backend.WebsocketMessage{
 			Action:           "available_discussions",
 			DiscussionSpaces: discussionSpaces,
 		})
-		
+
 		if err != nil {
 			ErrorMessage(client, err.Error())
 			return
@@ -82,8 +82,9 @@ func discussionHandler(client backend.WebsocketClientInterface, message backend.
 
 		discussion.AddClient(client)
 		discussion.BroadcastMessage(backend.WebsocketMessage{
-			Action:  "new_client",
-			Message: fmt.Sprintf("A new client has joined the discussion %s", client.GetClient().ID),
+			Action:          "new_client",
+			DiscussionSpace: discussion,
+			Message:         fmt.Sprintf("A new client has joined the discussion %s", client.GetClient().ID),
 		})
 	default:
 		// Do something

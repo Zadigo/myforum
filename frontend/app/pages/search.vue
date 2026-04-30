@@ -20,6 +20,11 @@
 <script setup lang="ts">
 import type { RouteIdParamsGeneric, SearchApiResponse } from '~/types'
 
+definePageMeta({
+  title: 'Search Results',
+  layout: 'design'
+})
+
 type Pill = 'Comments' | 'Showcase' | 'Albums' | 'Media' | 'Tags' | string
 type Pills = { name: Pill, active: boolean }
 

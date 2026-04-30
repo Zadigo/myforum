@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { useSessionStorage } from '@vueuse/core';
-import type { User } from '~/types';
+import { useSessionStorage } from '@vueuse/core'
+import type { User } from '~/types'
 
 const { $nuxtAuthentication } = useNuxtApp()
 
