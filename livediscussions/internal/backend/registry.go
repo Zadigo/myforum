@@ -48,6 +48,13 @@ func (r *ServerRegistry) RemoveClient(client WebsocketClientInterface) error {
 	defer r.mu.Unlock()
 
 	delete(r.Clients, client.(*WebsocketClient).ID)
+
+	// IMPORTANT: Also remove client from any 
+	// discussions they are part of
+	for _, discussion := range r.Discussions {
+		discussion.RemoveClient(client)
+	}
+	
 	return nil
 }
 

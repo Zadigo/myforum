@@ -111,6 +111,8 @@ func LiveDiscussionsHandler(w http.ResponseWriter, r *http.Request, serverRegist
 	client := backend.NewWebsocketClient(uuid.NewString(), conn)
 	err = serverRegistry.AddClient(client)
 
+	// Ensure client is removed from registry 
+	// and connection is closed when handler exits
 	defer func() {
 		serverRegistry.RemoveClient(client)
 		conn.Close()

@@ -34,7 +34,6 @@ type WebsocketClientInterface interface {
 	ReadJsonMessage(v any) error
 	GetUser() *User
 	GetClient() *WebsocketClient
-	
 }
 
 func NewWebsocketClient(id string, conn *websocket.Conn) WebsocketClientInterface {

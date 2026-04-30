@@ -18,7 +18,7 @@ func main() {
 	serverRegistry := backend.NewServerRegistry(redisClient)
 
 	// Create the main general discussion space
-	discussionSpace := backend.NewDiscussionSpace()
+	discussionSpace := backend.NewDiscussionSpace("General Discussion")
 	err := serverRegistry.AddDiscussionSpace(discussionSpace)
 
 	if err != nil {
