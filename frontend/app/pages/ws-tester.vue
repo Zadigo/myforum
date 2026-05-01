@@ -26,10 +26,8 @@
         </div>
       </div>
 
-      <div class="bg-primary-700 dark:bg-primary-950 p-10 space-y-2 h-screen">
-        <pre v-for="(message, idx) in messages" :key="idx" class="bg-red-700/10 backdrop-blur-3xl overflow-y-scroll rounded-2xl text-primary-900 dark:text-primary-50 p-3">
-          {{ JSON.stringify(JSON.parse(message), null, 2) }}
-        </pre>
+      <div class="bg-primary-700 dark:bg-primary-950 p-5 space-y-2 h-screen overflow-y-scroll rounded-2xl">
+        <wstesting-message v-for="(message, idx) in messages" :key="idx" :message="message" />   
       </div>
     </div>
   </section>

@@ -18,6 +18,10 @@ type ServerRegistry struct {
 	mu          sync.Mutex                          `json:"-"`
 }
 
+func (r *ServerRegistry) GetRedis() *redis.Client {
+	return r.RedisClient
+}
+
 // SetScheduler sets the scheduler for the server registry. This is used for
 // scheduling cleanup tasks and other periodic operations.
 func (r *ServerRegistry) SetScheduler(scheduler *gocron.Scheduler) {
@@ -99,6 +103,7 @@ type ServerRegistryInterface interface {
 	GetDiscussion(discussionId string) (DiscussionSpaceInterface, error)
 	GetRegistry() *ServerRegistry
 	AddDiscussionSpace(discussionSpace DiscussionSpaceInterface) error
+	GetRedis() *redis.Client
 }
 
 func NewServerRegistry(redisClient *redis.Client) ServerRegistryInterface {

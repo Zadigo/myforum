@@ -69,9 +69,16 @@ func discussionHandler(client backend.WebsocketClientInterface, message backend.
 			return
 		}
 
-		discussion.BroadcastMessage(backend.WebsocketMessage{
-			Action:  "new_message",
-			Message: message.Message,
+		// discussion.BroadcastMessage(backend.WebsocketMessage{
+		// 	Action:  "new_message",
+		// 	Message: message.Message,
+		// })
+		discussion.BroadcastMessage2(serverRegistry.GetRedis(), backend.RedisWebsocketMessage{
+			From: client.GetClient().ID,
+			Payload: backend.WebsocketMessage{
+				Action:  "new_message",
+				Message: message.Message,
+			},
 		})
 
 	case "join_discussion":
@@ -88,11 +95,21 @@ func discussionHandler(client backend.WebsocketClientInterface, message backend.
 		}
 
 		discussion.AddClient(client)
-		discussion.BroadcastMessage(backend.WebsocketMessage{
-			Action:          "new_client",
-			DiscussionSpace: discussion,
-			Message:         fmt.Sprintf("A new client has joined the discussion %s", client.GetClient().ID),
+
+		// discussion.BroadcastMessage(backend.WebsocketMessage{
+		// 	Action:          "new_client",
+		// 	DiscussionSpace: discussion,
+		// 	Message:         fmt.Sprintf("A new client has joined the discussion %s", client.GetClient().ID),
+		// })
+
+		discussion.BroadcastMessage2(serverRegistry.GetRedis(), backend.RedisWebsocketMessage{
+			From: client.GetClient().ID,
+			Payload: backend.WebsocketMessage{
+				Action:  "new_client",
+				Message: fmt.Sprintf("A new client has joined the discussion %s", client.GetClient().ID),
+			},
 		})
+
 	default:
 		// Do something
 	}
