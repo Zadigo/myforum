@@ -55,4 +55,10 @@ type WebsocketMessage struct {
 	DiscussionSpaces map[string]DiscussionSpaceInterface `json:"discussionSpaces,omitempty"`
 	DiscussionSpace  DiscussionSpaceInterface            `json:"discussionSpace,omitempty"`
 	ClientId         string                              `json:"clientId,omitempty"`
+	Payload          any                                 `json:"payload,omitempty"`
+}
+
+type RedisWebsocketMessage struct {
+	From    string           `json:"from"`
+	Payload WebsocketMessage `json:"payload"`
 }

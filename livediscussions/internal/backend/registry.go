@@ -12,12 +12,13 @@ type ServerRegistry struct {
 	Clients     map[string]*WebsocketClient         `json:"clients"`
 	Discussions map[string]DiscussionSpaceInterface `json:"discussions"`
 	RedisClient *redis.Client                       `json:"-"`
+	PubSub      *redis.PubSub                       `json:"-"`
 	scheduler   *gocron.Scheduler                   `json:"-"`
 	broadcast   chan WebsocketMessage               `json:"-"`
 	mu          sync.Mutex                          `json:"-"`
 }
 
-// SetScheduler sets the scheduler for the server registry. This is used for 
+// SetScheduler sets the scheduler for the server registry. This is used for
 // scheduling cleanup tasks and other periodic operations.
 func (r *ServerRegistry) SetScheduler(scheduler *gocron.Scheduler) {
 	r.scheduler = scheduler
@@ -66,6 +67,9 @@ func (r *ServerRegistry) RemoveClient(client WebsocketClientInterface) error {
 	return nil
 }
 
+// DEPRECATED: This is the old BroadcastMessage function that uses the Golang channel for
+// broadcasting messages to clients. It is now replaced by the Redis Pub/Sub mechanism,
+// but we keep it here for reference and potential fallback.
 func (r *ServerRegistry) BroadcastMessage(message WebsocketMessage) {
 	r.broadcast <- message
 }

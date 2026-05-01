@@ -4,12 +4,19 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/Zadigo/livediscussions/internal/backend"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
+
+func checkActionHandler(client backend.WebsocketClientInterface, message backend.WebsocketMessage, actions ...string) {
+	if !slices.Contains(actions, message.Action) {
+		ErrorMessage(client, fmt.Sprintf("Action does not exist %s", message.Action))
+	}
+}
 
 func authenticationHandler(client backend.WebsocketClientInterface, message backend.WebsocketMessage, serverRegistry backend.ServerRegistryInterface) {
 	switch message.Action {
@@ -152,6 +159,7 @@ func LiveDiscussionsHandler(w http.ResponseWriter, r *http.Request, serverRegist
 			break
 		}
 
+		checkActionHandler(client, message, "identify", "get_discussions", "send_message", "join_discussion")
 		authenticationHandler(client, message, serverRegistry)
 		discussionHandler(client, message, serverRegistry)
 	}

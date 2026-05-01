@@ -7,9 +7,10 @@ import (
 	"github.com/Zadigo/livediscussions/internal/backend"
 	"github.com/Zadigo/livediscussions/internal/handlers"
 	"github.com/gorilla/websocket"
+	"github.com/redis/go-redis/v9"
 )
 
-func GetNewConnection() (*websocket.Conn, *httptest.Server, backend.ServerRegistryInterface) {
+func GetNewConnection() (*websocket.Conn, *httptest.Server, backend.ServerRegistryInterface, *redis.Client) {
 	redisClient := backend.CreateRedisClient("redis://@localhost:6379/0")
 	serverRegistry := backend.NewServerRegistry(redisClient)
 
@@ -25,5 +26,6 @@ func GetNewConnection() (*websocket.Conn, *httptest.Server, backend.ServerRegist
 	if err != nil {
 		panic(err)
 	}
-	return conn, server, serverRegistry
+	serverRegistry.AddClient(backend.NewWebsocketClient("alice", conn))
+	return conn, server, serverRegistry, redisClient
 }

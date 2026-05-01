@@ -9,7 +9,7 @@ import (
 )
 
 func TestLiveDiscussionsHandler(t *testing.T) {
-	conn, server, serverRegistry := GetNewConnection()
+	conn, server, serverRegistry, _ := GetNewConnection()
 	defer server.Close()
 	defer conn.Close()
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"time"
@@ -28,6 +29,16 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Context with shutdown signal for broadcasters
+	// This will allow us to gracefully shut down the broadcasters when the server is stopped
+	// and prevent any potential memory leaks or dangling goroutines.
+	shutdownContext, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Start the global broadcaster for the general discussion space
+	discussionSpace.StartBroadcaster2(shutdownContext, redisClient, serverRegistry)
+	log.Print("⚡️ Started broadcaster for General Discussion")
 
 	// Global scheduler
 	scheduler := gocron.NewScheduler(time.UTC)
