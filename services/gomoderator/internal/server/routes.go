@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+// Creates and loads the router for chi
 func loadroutes() *chi.Mux {
 	router := chi.NewRouter()
 
@@ -15,6 +16,7 @@ func loadroutes() *chi.Mux {
 	return router
 }
 
+// Loads the routes for message
 func loadMessageRoutes(router chi.Router) {
 	message := handlers.Message{}
 	router.Post("/", message.Moderate)
