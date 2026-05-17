@@ -7,17 +7,17 @@ import (
 )
 
 // Creates and loads the router for chi
-func loadroutes() *chi.Mux {
+func (a *App) loadroutes() {
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger)
-	router.Route("/messages", loadMessageRoutes)
+	router.Route("/messages", a.loadMessageRoutes)
 
-	return router
+	a.router = router
 }
 
 // Loads the routes for message
-func loadMessageRoutes(router chi.Router) {
-	message := handlers.Message{}
+func (a *App) loadMessageRoutes(router chi.Router) {
+	message := handlers.MessageApi{}
 	router.Post("/", message.Moderate)
 }

@@ -9,16 +9,19 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-// Base structure for the application
+// Base app struct that holds the 
+// router and any dependencies such as the 
+// redis client and config
 type App struct {
 	router      http.Handler
 	redisClient *redis.Client
+	config      *Config
 }
 
 // Start runs the new server and its dependencies
 func (a *App) Start(ctx context.Context) error {
 	server := http.Server{
-		Addr:    ":3000",
+		Addr:    "localhost:5379",
 		Handler: a.router,
 	}
 
@@ -34,6 +37,8 @@ func (a *App) Start(ctx context.Context) error {
 		}
 	}()
 
+	// Create a channel to listen for any
+	// errors from the server
 	ch := make(chan error, 1)
 
 	// Start the server in new goroutine
@@ -43,7 +48,6 @@ func (a *App) Start(ctx context.Context) error {
 		if err != nil {
 			ch <- fmt.Errorf("Failed to start error %w", err)
 		}
-		// When the server is stopped, close the channel
 		close(ch)
 	}()
 
@@ -51,19 +55,23 @@ func (a *App) Start(ctx context.Context) error {
 	case err := <-ch:
 		return err
 	case <-ctx.Done():
+		// Create a new context with a timeout to allow the server to shutdown gracefully
+		// If the server does not shutdown within the timeout, it will be forcefully closed
+		// This is to ensure that the server does not hang indefinitely if it is unable to shutdown
 		timeoutCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		return server.Shutdown(timeoutCtx)
 	}
 }
 
-func NewApp() *App {
+func NewApp(config *Config) *App {
 	app := &App{
-		router: loadroutes(),
+		config: config,
 		redisClient: redis.NewClient(&redis.Options{
 			Addr: "localhost:6379",
 			DB:   0,
 		}),
 	}
+	app.loadroutes()
 	return app
 }

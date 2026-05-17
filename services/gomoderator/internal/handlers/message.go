@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-type Message struct{}
+type MessageApi struct{}
 
-func (m *Message) Moderate(w http.ResponseWriter, r *http.Request) {
+func (m *MessageApi) Moderate(w http.ResponseWriter, r *http.Request) {
 	log.Print("POST called")
 }
