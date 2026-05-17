@@ -2,11 +2,17 @@ package backend
 
 import (
 	"context"
+	"os"
 
 	"github.com/redis/go-redis/v9"
 )
 
-func CreateRedisClient(url string) *redis.Client {
+func CreateRedisClient() *redis.Client {
+	url := os.Getenv("REDIS_URL")
+	if url == "" {
+		panic("REDIS_URL environment variable is not set")
+	}
+
 	options, err := redis.ParseURL(url)
 
 	if err != nil {

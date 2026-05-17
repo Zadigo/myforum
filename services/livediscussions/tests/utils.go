@@ -11,7 +11,7 @@ import (
 )
 
 func GetNewConnection() (*websocket.Conn, *httptest.Server, backend.ServerRegistryInterface, *redis.Client) {
-	redisClient := backend.CreateRedisClient("redis://@localhost:6379/0")
+	redisClient := backend.CreateRedisClient()
 	serverRegistry := backend.NewServerRegistry(redisClient)
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

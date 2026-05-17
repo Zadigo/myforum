@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"context"
 	"fmt"
 	"sync"
 
@@ -71,15 +72,49 @@ func (r *ServerRegistry) RemoveClient(client WebsocketClientInterface) error {
 	return nil
 }
 
+func (r *ServerRegistry) GetRegistry() *ServerRegistry {
+	return r
+}
+
 // DEPRECATED: This is the old BroadcastMessage function that uses the Golang channel for
 // broadcasting messages to clients. It is now replaced by the Redis Pub/Sub mechanism,
 // but we keep it here for reference and potential fallback.
 func (r *ServerRegistry) BroadcastMessage(message WebsocketMessage) {
-	r.broadcast <- message
+	// r.broadcast <- message
+	if r.RedisClient == nil {
+		fmt.Println("Redis client is not initialized. Cannot broadcast message.")
+		return
+	} else {
+		r.RedisClient.Publish(context.Background(), "discussion_broadcasts", message)
+	}
 }
 
-func (r *ServerRegistry) GetRegistry() *ServerRegistry {
-	return r
+func (r *ServerRegistry) CreateRedisBroadcastChannel(ctx context.Context) {
+	pubSub := r.RedisClient.Subscribe(ctx, "discussion_broadcasts")
+
+	go func() {
+		// defer pubSub.Close()
+
+		for {
+			select {
+			case msg := <-pubSub.Channel():
+				for _, client := range r.Clients {
+					err := client.SendJsonMessage(WebsocketMessage{
+						Action:  "new_message",
+						Message: msg.Payload,
+					})
+					if err != nil {
+						fmt.Printf("Error sending message to client %s: %v\n", client.ID, err)
+					}
+				}
+			case <-ctx.Done():
+				fmt.Println("Shutting down Redis Pub/Sub listener...")
+				return
+			}
+		}
+	}()
+
+	// <-ctx.Done()
 }
 
 // GetDiscussion returns the list of clients in a discussion. If the discussion doesn't exist, it returns nil.
@@ -104,6 +139,7 @@ type ServerRegistryInterface interface {
 	GetRegistry() *ServerRegistry
 	AddDiscussionSpace(discussionSpace DiscussionSpaceInterface) error
 	GetRedis() *redis.Client
+	CreateRedisBroadcastChannel(ctx context.Context)
 }
 
 func NewServerRegistry(redisClient *redis.Client) ServerRegistryInterface {

@@ -11,13 +11,15 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-co-op/gocron"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	log.Println("🚀 Starting Live Discussions Server...")
+	godotenv.Load(".env")
 
 	// Create Redis client and server registry
-	redisClient := backend.CreateRedisClient("redis://localhost:6379")
+	redisClient := backend.CreateRedisClient()
 	log.Println("✅ Connected to Redis")
 
 	serverRegistry := backend.NewServerRegistry(redisClient)

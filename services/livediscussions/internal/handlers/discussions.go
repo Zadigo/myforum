@@ -163,6 +163,10 @@ func LiveDiscussionsHandler(w http.ResponseWriter, r *http.Request, serverRegist
 		ClientId: client.GetClient().ID,
 	})
 
+	go func() {
+		
+	}()
+
 	for {
 		var message backend.WebsocketMessage
 		err := conn.ReadJSON(&message)
