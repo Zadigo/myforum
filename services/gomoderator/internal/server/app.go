@@ -3,14 +3,15 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
-// Base app struct that holds the 
-// router and any dependencies such as the 
+// Base app struct that holds the
+// router and any dependencies such as the
 // redis client and config
 type App struct {
 	router      http.Handler
@@ -44,6 +45,7 @@ func (a *App) Start(ctx context.Context) error {
 	// Start the server in new goroutine
 	// on a new thread
 	go func() {
+		log.Print("🟢 Server ready to receive requests...")
 		err = server.ListenAndServe()
 		if err != nil {
 			ch <- fmt.Errorf("Failed to start error %w", err)
