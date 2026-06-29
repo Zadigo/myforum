@@ -25,21 +25,20 @@ func AuthMessageProcessor(options ProcessorOptions) {
 	}
 }
 
-func GameMessageProcessor(options ProcessorOptions) {
-	gameId := options.Ctx.Value("gameId")
+func ChatMessageProcessor(options ProcessorOptions) {
+	chatId := options.Ctx.Value("chatId")
 
 	switch options.Message.Action {
 	case models.JOIN:
-		// Handle join game logic here
-		options.App.GetServerApp().JoinChat(options.Conn, gameId.(string))
+		// Handle join chat logic here
+		options.App.GetServerApp().JoinChat(options.Conn, chatId.(string))
 	case models.SEND_MESSAGE:
-		// Handle start game logic here
-		// options.App.GetServerApp().NotifyAll("game-uuid")
+		// Handle send message logic here
+		// options.App.GetServerApp().NotifyAll("chat-uuid")
 	default:
-		options.Errors = append(options.Errors, "Unrecognized action for GameMessageProcessor")
+		options.Errors = append(options.Errors, "Unrecognized action for ChatMessageProcessor")
 	}
 }
-
 
 func ErrorProcessor(conn *websocket.Conn, errors []string) {
 	if len(errors) > 0 {

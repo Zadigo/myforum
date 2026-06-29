@@ -46,18 +46,6 @@ func Authorization(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-// ServiceIdMiddleware is a middleware that retrieves the service ID
-// from the URL parameters and adds it to the request context.
-func ServiceIdMiddleware(next http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, r *http.Request) {
-		serviceUuid := chi.URLParam(r, "serviceUuid")
-		var ctx context.Context
-		ctx = context.WithValue(r.Context(), "serviceUuid", serviceUuid)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	}
-	return http.HandlerFunc(fn)
-}
-
 func JsonHeartbeat(endpoint string) func(http.Handler) http.Handler {
 	f := func(h http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {

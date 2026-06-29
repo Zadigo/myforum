@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-func (g *GenericHandler) CreateGameHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: Implement the logic for creating a game
-	log.Print("CreateGameHandler called")
-	// g.app.GetServerApp().CreateGame(games.STANDARD)
-	// g.app.GetServerApp().CreateGame(games.EXTENSION)
+func (g *GenericHandler) CreateChatHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO: Implement the logic for creating a chat
+	log.Print("CreateChatHandler called")
+	// g.app.GetServerApp().CreateChat(games.STANDARD)
+	// g.app.GetServerApp().CreateChat(games.EXTENSION)
 }

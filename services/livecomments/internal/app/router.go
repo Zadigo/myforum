@@ -29,12 +29,11 @@ func (app *App) loadServerRoutes(r chi.Router) {
 	genericHandler := handlers.GenericHandler{}
 	genericHandler.SetApp(app)
 
-	r.Post("/create", genericHandler.CreateGameHandler)
+	r.Post("/create", genericHandler.CreateChatHandler)
 
 	r.Route("/{chatId}", func(r chi.Router) {
 		r.Use(ChatIdMiddleware)
 
-		r.Get("/join", genericHandler.JoinGameHandler)
-		r.Get("/observe", genericHandler.ObserveGameHandler)
+		r.Get("/join", genericHandler.JoinChatHandler)
 	})
 }
