@@ -51,11 +51,18 @@ func (c *ChatApp) Start() {
 		if !c.IsRunning.Load() {
 			break
 		}
+
+		select {
+		case <-c.ctx.Done():
+			c.Stop()
+			return
+		default:
+			// Here you can add logic to manage chat sessions, handle user interactions, etc.
+		}
 	}
 }
 
 func (c *ChatApp) Stop() {
-	log.Printf("🔴 Stopping chat server...")
 	c.IsRunning.Store(false)
 }
 
