@@ -11,6 +11,7 @@ import (
 
 	"github.com/Zadigo/livecomments/internal/app"
 	"github.com/Zadigo/livecomments/internal/chat"
+	"github.com/Zadigo/livecomments/internal/chat/chats"
 	"github.com/Zadigo/livecomments/internal/models"
 	"github.com/gorilla/websocket"
 	"github.com/redis/go-redis/v9"
@@ -68,7 +69,7 @@ func (s *ServerApp) Start(rootDir string) error {
 		panic(cmd.Err())
 	}
 
-	appErrors := make(chan error)
+	httpErrors := make(chan error)
 
 	// Start the HTTP server application
 	go func() {
@@ -77,43 +78,26 @@ func (s *ServerApp) Start(rootDir string) error {
 			ServerApp:   s,
 		})
 		s.httpApp = httpApp
-		appErrors <- httpApp.Start()
+		httpErrors <- httpApp.Start()
 	}()
 
-	// Start the game server application
-	gameChError := make(chan error)
-
-	// go func() {
-	// 	log.Printf("🔵 Starting %s standard game application...", os.Getenv("SERVICE_NAME"))
-	// 	gameApp := game.NewGameApp(s.ctx, absPath, models.GameAppOptions{
-	// 		GameType: games.STANDARD,
-	// 		AppOptions: models.AppOptions{
-	// 			ServerApp:   s,
-	// 			RedisClient: s.redisClient,
-	// 		},
-	// 	})
-	// 	gameChError <- gameApp.Start()
-	// }()
-
-	// go func() {
-	// 	log.Printf("🔵 Starting %s extension game application...", os.Getenv("SERVICE_NAME"))
-	// 	gameApp := game.NewGameApp(s.ctx, absPath, models.GameAppOptions{
-	// 		GameType: games.EXTENSION,
-	// 		AppOptions: models.AppOptions{
-	// 			ServerApp:   s,
-	// 			RedisClient: s.redisClient,
-	// 		},
-	// 	})
-	// 	gameChError <- gameApp.Start()
-	// }()
+	go func() {
+		log.Printf("🔵 Starting %s chat server...", os.Getenv("SERVICE_NAME"))
+		chatApp := chat.NewChatServer(s.ctx, absPath, models.ChatAppOptions{
+			ChatType: chats.STANDARD,
+			AppOptions: models.AppOptions{
+				ServerApp:   s,
+				RedisClient: s.redisClient,
+			},
+		})
+		s.chatApp = chatApp
+		chatApp.Start()
+	}()
 
 	select {
-	case gameErr := <-gameChError:
-		log.Printf("🔴 %s game application error: %v", os.Getenv("SERVICE_NAME"), gameErr)
-		return gameErr
-	case appErr := <-appErrors:
-		log.Printf("🔴 %s HTTP application error: %v", os.Getenv("SERVICE_NAME"), appErr)
-		return appErr
+	case httpErr := <-httpErrors:
+		log.Printf("🔴 %s HTTP application error: %v", os.Getenv("SERVICE_NAME"), httpErr)
+		return httpErr
 	case <-s.ctx.Done():
 		s.redisClient.Close()
 
@@ -122,18 +106,20 @@ func (s *ServerApp) Start(rootDir string) error {
 	}
 }
 
-func (s *ServerApp) JoinChat(conn *websocket.Conn, gameUUID string) error {
-	return s.chatApp.AddUser(chat.NewWebsocketClient(conn))
+func (s *ServerApp) JoinChat(conn *websocket.Conn, gameUUID string) {
+	s.chatApp.AddUser(chats.NewWebsocketClient(conn))
 }
 
-func (s *ServerApp) CreateChat(gameType string) error {
-	s.chatApp.Create(models.ChatOptions{
-		GameType: gameType,
-		AppOptions: models.AppOptions{
-			ServerApp:   s,
-			RedisClient: s.redisClient,
+func (s *ServerApp) CreateChat(chatType string) error {
+	s.chatApp.Create(
+		models.ChatAppOptions{
+			ChatType: chatType,
+			AppOptions: models.AppOptions{
+				ServerApp:   s,
+				RedisClient: s.redisClient,
+			},
 		},
-	})
+	)
 	return nil
 }
 

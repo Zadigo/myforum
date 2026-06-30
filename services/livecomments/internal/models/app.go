@@ -9,8 +9,8 @@ type AppOptions struct {
 	RedisClient *redis.Client
 }
 
-type ChatOptions struct {
+type ChatAppOptions struct {
 	AppOptions
-	GameType string
+	ChatType string
 	Debug    bool
 }

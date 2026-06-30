@@ -1,4 +1,4 @@
-package chat
+package chats
 
 import (
 	"sync"
@@ -13,12 +13,12 @@ import (
 // abstraction over the raw websocket connection, allowing for
 // easier message handling and communication with the client.
 type WebsocketClient struct {
-	Uuid   string          `json:"uuid"`
-	Player *User           `json:"user"`
-	conn   *websocket.Conn `json:"-"`
-	mu     sync.Mutex      `json:"-"`
+	Uuid string          `json:"uuid"`
+	User *User           `json:"user"`
+	conn *websocket.Conn `json:"-"`
+	mu   sync.Mutex      `json:"-"`
 	// The send channel is used to queue messages that need to
-	// be sent to the client.
+	// be sent specifically to the client.
 	send chan models.WebsocketMessage `json:"-"`
 }
 
@@ -46,8 +46,8 @@ func (c *WebsocketClient) ReceiveJsonMessage() (models.WebsocketMessage, error) 
 
 func NewWebsocketClient(conn *websocket.Conn) *WebsocketClient {
 	return &WebsocketClient{
-		Uuid:   uuid.NewString(),
-		conn:   conn,
-		Player: &User{},
+		Uuid: uuid.NewString(),
+		conn: conn,
+		User: &User{},
 	}
 }

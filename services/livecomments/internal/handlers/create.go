@@ -1,13 +1,11 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/Zadigo/livecomments/internal/chat/chats"
 )
 
 func (g *GenericHandler) CreateChatHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: Implement the logic for creating a chat
-	log.Print("CreateChatHandler called")
-	// g.app.GetServerApp().CreateChat(games.STANDARD)
-	// g.app.GetServerApp().CreateChat(games.EXTENSION)
+	g.app.GetServerApp().CreateChat(chats.STANDARD)
 }

@@ -25,5 +25,6 @@ type AppInterface interface {
 }
 
 type ServerAppInterface interface {
-	JoinChat(conn *websocket.Conn, gameUUID string) error
+	JoinChat(conn *websocket.Conn, gameUUID string)
+	CreateChat(chatType string) error
 }
