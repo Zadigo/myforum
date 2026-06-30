@@ -110,8 +110,8 @@ func (s *ServerApp) JoinChat(conn *websocket.Conn, gameUUID string) {
 	s.chatApp.AddUser(chats.NewWebsocketClient(conn))
 }
 
-func (s *ServerApp) CreateChat(chatType string) error {
-	s.chatApp.Create(
+func (s *ServerApp) CreateChat(chatType string) chats.ChatInterface {
+	return s.chatApp.Create(
 		models.ChatAppOptions{
 			ChatType: chatType,
 			AppOptions: models.AppOptions{
@@ -120,7 +120,6 @@ func (s *ServerApp) CreateChat(chatType string) error {
 			},
 		},
 	)
-	return nil
 }
 
 func NewServerApp(ctx context.Context) *ServerApp {
